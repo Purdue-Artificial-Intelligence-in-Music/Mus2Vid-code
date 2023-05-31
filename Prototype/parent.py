@@ -6,6 +6,9 @@ import tensorflow as tf
 from basic_pitch.inference import predict
 from basic_pitch import ICASSP_2022_MODEL_PATH
 BASIC_PITCH_MODEL = tf.saved_model.load(str(ICASSP_2022_MODEL_PATH))
+from diffusers import StableDiffusionPipeline
+import torch
+stable_diffusion_model_id = "runwayml/stable-diffusion-v1-5"
 
 # Parameters
 STD_ONSET = 0.3
@@ -36,13 +39,13 @@ def predict(filestr):
     ) # midi_data is the PrettyMIDI object corresponding to the prediction
     return midi_data
 
-with open('../Max NN/matched_midi.pkl', 'rb') as f:
+with open('./pickles/matched_midi.pkl', 'rb') as f:
     matched_midi_df = pickle.load(f)
 
-with open('../Max NN/labeled_features.pkl', 'rb') as f:
+with open('./pickles/labeled_features.pkl', 'rb') as f:
     labeled_features = pickle.load(f)
 
-with open('../Max NN/my_model.pkl', 'rb') as f:
+with open('./pickles/my_model.pkl', 'rb') as f:
     model = pickle.load(f)
 
 def get_genres(path):
@@ -150,7 +153,7 @@ def get_features(midi_obj):
                     ts_2, melody_complexity, melody_range] + list(pitch_class_hist)) # + list(melody_contour))
     
 # genre_path: path of the unzipped "CD1" file
-genre_path = "../Max NN/msd_tagtraum_cd1.cls"
+genre_path = "./datasets/msd_tagtraum_cd1.cls"
 # creates the genres data frame
 genre_df = get_genres(genre_path)
 
@@ -160,48 +163,64 @@ label_list = list(set(genre_df.Genre))
 # Create a dictionary mapping genre labels to their index
 label_dict = {lbl: label_list.index(lbl) for lbl in label_list}
 
-# define path for input mp3
-mp3_path = 'song.mp3'
-# generate pretty midi object
-midi_object = predict(mp3_path)
-# extract and format features
-midi_features = np.asarray(get_features(midi_objects))
+midi_path = "test.mid"
+midi_features = np.asarray(get_features(midi_path))
 midi_features = np.expand_dims(midi_features, axis = 0)
 
-# Predict genre and get genre string
 prediction = model.predict(midi_features)
-# print(prediction)
+
+print(prediction)
+
 genre = np.argmax(prediction)
 genre_str = label_list[genre]
 
-# generate prompt based on genre prediction
 prompt = ''
 match genre_str:
-    case: 'Folk':
+    case 'Folk':
         prompt = 'a folk band playing a concert in a meadow'
-    case: 'Country':
+    case 'Country':
         prompt = 'a cowboy hearding in the southern united states'
-    case: 'Pop_Rock':
+    case 'Pop_Rock':
         prompt = 'Pink from pink floyds the wall during dont leave me now'
-    case: 'International':
+    case 'International':
         prompt = '99 luftballoons'
-    case: 'Vocal':
+    case 'Vocal':
         prompt = 'A solo vocalist recording in a studio'
-    case: 'RnB':
+    case 'RnB':
         prompt = 'a rhythm and blues music video'
-    case: 'New Age':
+    case 'New Age':
         prompt = 'a relaxing zen garden on an urban rooftop'
-    case: 'Blues':
+    case 'Blues':
         prompt = 'blues street performer'
-    case: 'Latin':
+    case 'Latin':
         prompt = 'a lively parade in argentina'
-    case: 'Jazz':
+    case 'Jazz':
         prompt = 'a pianist playing and singing on stage in a moody bar'
-    case: 'Reggae':
+    case 'Reggae':
         prompt = 'marijuana'
-    case: 'Rap':
+    case 'Rap':
         prompt = 'eminem smoking marijuana'
-    case: 'Electronic':
+    case 'Electronic':
         prompt = 'Daft punk performing live from the top of the eiffel tower'
     case other: 
         prompt = 'a stop sign'
+
+pipe = StableDiffusionPipeline.from_pretrained(stable_diffusion_model_id, torch_dtype=torch.float16)
+pipe = pipe.to("cuda")
+
+def get_pic(prompt, inference = 50, guidance_scale = 7.5):
+    """
+    Creates an image using stable diffusion pipeline
+
+    Parameters:
+        prompt: string of the prompt
+        inference: number of inference step, around 50 for a high quality image
+        guidance scale: a way to increase the adherence to the conditional signal that guides the generation (text, in this case) as well as overall sample quality
+
+    Returns:
+        images: images
+    """
+    return pipe(prompt,num_inference_steps=inference,guidance_scale=guidance_scale).images[0]
+
+image = get_pic(prompt)
+image.save("image.png")
