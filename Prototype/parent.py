@@ -138,7 +138,35 @@ prediction = model.predict(midi_features)
 print(prediction)
 
 genre = np.argmax(prediction)
-print(label_list[genre])
+genre_str = label_list[genre]
 
-with open('./pickles/my_model.pkl', 'rb') as f:
-    model = pickle.load(f)
+prompt = ''
+match genre_str:
+    case: 'Folk':
+        prompt = 'a folk band playing a concert in a meadow'
+    case: 'Country':
+        prompt = 'a cowboy hearding in the southern united states'
+    case: 'Pop_Rock':
+        prompt = 'Pink from pink floyds the wall during dont leave me now'
+    case: 'International':
+        prompt = '99 luftballoons'
+    case: 'Vocal':
+        prompt = 'A solo vocalist recording in a studio'
+    case: 'RnB':
+        prompt = 'a rhythm and blues music video'
+    case: 'New Age':
+        prompt = 'a relaxing zen garden on an urban rooftop'
+    case: 'Blues':
+        prompt = 'blues street performer'
+    case: 'Latin':
+        prompt = 'a lively parade in argentina'
+    case: 'Jazz':
+        prompt = 'a pianist playing and singing on stage in a moody bar'
+    case: 'Reggae':
+        prompt = 'marijuana'
+    case: 'Rap':
+        prompt = 'eminem smoking marijuana'
+    case: 'Electronic':
+        prompt = 'Daft punk performing live from the top of the eiffel tower'
+    case other: 
+        prompt = 'a stop sign'
