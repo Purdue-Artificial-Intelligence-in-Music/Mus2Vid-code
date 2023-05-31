@@ -1,9 +1,5 @@
 # imports
 import tensorflow as tf
-import pretty_midi as pm
-import matplotlib.pyplot as plt
-import mido as m
-import numpy as np
 from basic_pitch.inference import predict
 from basic_pitch import ICASSP_2022_MODEL_PATH
 BASIC_PITCH_MODEL = tf.saved_model.load(str(ICASSP_2022_MODEL_PATH))
