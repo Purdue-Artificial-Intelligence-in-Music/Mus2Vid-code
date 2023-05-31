@@ -181,7 +181,7 @@ match genre_str:
     case 'Country':
         prompt = 'a cowboy hearding in the southern united states'
     case 'Pop_Rock':
-        prompt = 'Pink from pink floyds the wall during dont leave me now'
+        prompt = 'roger waters riding a bike with a clan of gingerbread men in the sidecar'
     case 'International':
         prompt = '99 luftballoons'
     case 'Vocal':
@@ -197,9 +197,9 @@ match genre_str:
     case 'Jazz':
         prompt = 'a pianist playing and singing on stage in a moody bar'
     case 'Reggae':
-        prompt = 'marijuana'
+        prompt = 'A bunch of chillers chilling'
     case 'Rap':
-        prompt = 'eminem smoking marijuana'
+        prompt = 'A gift underneath a christmas tree'
     case 'Electronic':
         prompt = 'Daft punk performing live from the top of the eiffel tower'
     case other: 
