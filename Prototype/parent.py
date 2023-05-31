@@ -39,13 +39,13 @@ def predict(filestr):
     ) # midi_data is the PrettyMIDI object corresponding to the prediction
     return midi_data
 
-with open('../Max NN/matched_midi.pkl', 'rb') as f:
-    matched_midi_df = pickle.load(f)
+# with open('../Max NN/matched_midi.pkl', 'rb') as f:
+#     matched_midi_df = pickle.load(f)
 
-with open('../Max NN/labeled_features.pkl', 'rb') as f:
+with open('Max NN/labeled_features.pkl', 'rb') as f:
     labeled_features = pickle.load(f)
 
-with open('../Max NN/my_model.pkl', 'rb') as f:
+with open('Max NN/my_model.pkl', 'rb') as f:
     model = pickle.load(f)
 
 def get_genres(path):
@@ -153,7 +153,7 @@ def get_features(midi_obj):
                     ts_2, melody_complexity, melody_range] + list(pitch_class_hist)) # + list(melody_contour))
     
 # genre_path: path of the unzipped "CD1" file
-genre_path = "../Max NN/msd_tagtraum_cd1.cls"
+genre_path = "Max NN/msd_tagtraum_cd1.cls"
 # creates the genres data frame
 genre_df = get_genres(genre_path)
 
