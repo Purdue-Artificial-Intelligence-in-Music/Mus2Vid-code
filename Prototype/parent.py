@@ -1,13 +1,13 @@
-import pandas as pd
 import pickle
-import numpy as np
+import torch
 import pretty_midi
+import pandas as pd
+import numpy as np
 import tensorflow as tf
-from basic_pitch.inference import predict
+from basic_pitch.inference import predict as bp_predict
 from basic_pitch import ICASSP_2022_MODEL_PATH
 BASIC_PITCH_MODEL = tf.saved_model.load(str(ICASSP_2022_MODEL_PATH))
 from diffusers import StableDiffusionPipeline
-import torch
 stable_diffusion_model_id = "runwayml/stable-diffusion-v1-5"
 
 # Parameters
@@ -28,7 +28,7 @@ def predict(filestr):
         PrettyMIDI object containing predicted MIDI notes.
     """
     # Run prediction
-    model_output, midi_data, note_events = predict(
+    model_output, midi_data, note_events = bp_predict(
         filestr,
         BASIC_PITCH_MODEL,
         STD_ONSET,
