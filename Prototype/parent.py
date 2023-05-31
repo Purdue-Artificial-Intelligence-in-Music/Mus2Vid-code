@@ -36,13 +36,13 @@ def predict(filestr):
     ) # midi_data is the PrettyMIDI object corresponding to the prediction
     return midi_data
 
-with open('./pickles/matched_midi.pkl', 'rb') as f:
+with open('Max NN/matched_midi.pkl', 'rb') as f:
     matched_midi_df = pickle.load(f)
 
-with open('./pickles/labeled_features.pkl', 'rb') as f:
+with open('Max NN/labeled_features.pkl', 'rb') as f:
     labeled_features = pickle.load(f)
 
-with open('./pickles/my_model.pkl', 'rb') as f:
+with open('Max NN/my_model.pkl', 'rb') as f:
     model = pickle.load(f)
 
 def get_genres(path):
@@ -150,7 +150,7 @@ def get_features(midi_obj):
                     ts_2, melody_complexity, melody_range] + list(pitch_class_hist)) # + list(melody_contour))
     
 # genre_path: path of the unzipped "CD1" file
-genre_path = "./datasets/msd_tagtraum_cd1.cls"
+genre_path = "Max NN/msd_tagtraum_cd1.cls"
 # creates the genres data frame
 genre_df = get_genres(genre_path)
 
@@ -160,17 +160,21 @@ label_list = list(set(genre_df.Genre))
 # Create a dictionary mapping genre labels to their index
 label_dict = {lbl: label_list.index(lbl) for lbl in label_list}
 
-midi_path = "test.mid"
-midi_features = np.asarray(get_features(midi_path))
+# define path for input mp3
+mp3_path = 'song.mp3'
+# generate pretty midi object
+midi_object = predict(mp3_path)
+# extract and format features
+midi_features = np.asarray(get_features(midi_objects))
 midi_features = np.expand_dims(midi_features, axis = 0)
 
+# Predict genre and get genre string
 prediction = model.predict(midi_features)
-
-print(prediction)
-
+# print(prediction)
 genre = np.argmax(prediction)
 genre_str = label_list[genre]
 
+# generate prompt based on genre prediction
 prompt = ''
 match genre_str:
     case: 'Folk':
