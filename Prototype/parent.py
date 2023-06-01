@@ -151,7 +151,7 @@ def get_features(midi_obj):
 
     return normalize_features([tempo, num_sig_changes, resolution, ts_1,
                     ts_2, melody_complexity, melody_range] + list(pitch_class_hist)) # + list(melody_contour))
-    
+   
 # genre_path: path of the unzipped "CD1" file
 genre_path = "Max NN/msd_tagtraum_cd1.cls"
 # creates the genres data frame
@@ -163,8 +163,9 @@ label_list = list(set(genre_df.Genre))
 # Create a dictionary mapping genre labels to their index
 label_dict = {lbl: label_list.index(lbl) for lbl in label_list}
 
-midi_path = 'blind comp render E-PIANO ONLY.mp3'
-midi_features = np.asarray(get_features(midi_path))
+midi_path = 'Prototype/blind comp render E-PIANO ONLY.mp3'
+midi_object = predict(midi_path)
+midi_features = np.asarray(get_features(midi_object))
 midi_features = np.expand_dims(midi_features, axis = 0)
 
 prediction = model.predict(midi_features)
@@ -204,6 +205,8 @@ match genre_str:
         prompt = 'Daft punk performing live from the top of the eiffel tower'
     case other: 
         prompt = 'a stop sign'
+
+print(prompt)
 
 pipe = StableDiffusionPipeline.from_pretrained(stable_diffusion_model_id, torch_dtype=torch.float16)
 pipe = pipe.to("cuda")
