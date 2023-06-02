@@ -204,11 +204,11 @@ match genre_str:
     case 'Jazz':
         prompt = 'a pianist playing and singing on stage in a moody bar'
     case 'Reggae':
-            prompt = 'A bunch of chillers chilling'
+            prompt = 'Reggae music video band'
     case 'Rap':
-        prompt = 'A gift underneath a christmas tree'
+        prompt = 'Soulja Boy rapping with Snoop Dogg'
     case 'Electronic':
-        prompt = 'Daft punk performing live from the top of the eiffel tower'
+        prompt = 'EDM concert huge lights'
     case other: 
         prompt = 'a stop sign'
 
