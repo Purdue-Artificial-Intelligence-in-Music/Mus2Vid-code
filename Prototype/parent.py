@@ -10,6 +10,8 @@ BASIC_PITCH_MODEL = tf.saved_model.load(str(ICASSP_2022_MODEL_PATH))
 from diffusers import StableDiffusionPipeline
 stable_diffusion_model_id = "runwayml/stable-diffusion-v1-5"
 
+print("Hi")
+
 # Parameters
 STD_ONSET = 0.3
 STD_FRAME = 0.2
@@ -42,11 +44,13 @@ def predict(filestr):
 # with open('../Max NN/matched_midi.pkl', 'rb') as f:
 #     matched_midi_df = pickle.load(f)
 
-with open('Max NN/labeled_features.pkl', 'rb') as f:
+with open('Max NN\\labeled_features.pkl', 'rb') as f:
     labeled_features = pickle.load(f)
 
-with open('Max NN/my_model.pkl', 'rb') as f:
+with open('Max NN\\my_model.pkl', 'rb') as f:
     model = pickle.load(f)
+
+print("Hi1")    
 
 def get_genres(path):
     """
@@ -151,6 +155,8 @@ def get_features(midi_obj):
 
     return normalize_features([tempo, num_sig_changes, resolution, ts_1,
                     ts_2, melody_complexity, melody_range] + list(pitch_class_hist)) # + list(melody_contour))
+
+print("Hi2")
    
 # genre_path: path of the unzipped "CD1" file
 genre_path = "Max NN/msd_tagtraum_cd1.cls"
@@ -198,11 +204,11 @@ match genre_str:
     case 'Jazz':
         prompt = 'a pianist playing and singing on stage in a moody bar'
     case 'Reggae':
-        prompt = 'A bunch of chillers chilling'
+            prompt = 'Reggae music video band'
     case 'Rap':
-        prompt = 'A gift underneath a christmas tree'
+        prompt = 'Soulja Boy rapping with Snoop Dogg'
     case 'Electronic':
-        prompt = 'Daft punk performing live from the top of the eiffel tower'
+        prompt = 'EDM concert huge lights'
     case other: 
         prompt = 'a stop sign'
 
@@ -211,19 +217,32 @@ print(prompt)
 pipe = StableDiffusionPipeline.from_pretrained(stable_diffusion_model_id, torch_dtype=torch.float16)
 pipe = pipe.to("cuda")
 
-def get_pic(prompt, inference = 50, guidance_scale = 7.5):
+def get_pic(prompt, inference = 50, guidance_scale = 7.5, num_images_per_prompt = 3, seed = 0):
     """
     Creates an image using stable diffusion pipeline
-
     Parameters:
         prompt: string of the prompt
         inference: number of inference step, around 50 for a high quality image
         guidance scale: a way to increase the adherence to the conditional signal that guides the generation (text, in this case) as well as overall sample quality
-
     Returns:
-        images: images
+        output: stable diffusion pipeline output
     """
-    return pipe(prompt,num_inference_steps=inference,guidance_scale=guidance_scale).images[0]
+    generator_list = []
+    for i in range(num_images_per_prompt):
+        generator_list.append(torch.Generator("cuda").manual_seed(seed + i))
 
+    return pipe(
+        prompt,
+        num_inference_steps = inference,
+        guidance_scale = guidance_scale,
+        num_images_per_prompt = num_images_per_prompt,
+        generator = generator_list
+    )
+
+def display_images(pipe):
+    for i in range(len(pipe[0])):
+        image = pipe.images[i]
+        image.show()
+        
 image = get_pic(prompt)
-image.save("image.png")
+display_images(image)
