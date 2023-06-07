@@ -1,1 +1,5 @@
 **.ipynb_checkpoints**
+*.pkl
+*.midi
+maestro-v3.0.0
+*.h5
