@@ -9,8 +9,8 @@ from basic_pitch import ICASSP_2022_MODEL_PATH
 BASIC_PITCH_MODEL = tf.saved_model.load(str(ICASSP_2022_MODEL_PATH))
 from diffusers import StableDiffusionPipeline
 stable_diffusion_model_id = "runwayml/stable-diffusion-v1-5"
+# from ..Basic_Pitch.chordfuncs import *
 
-print("Hi")
 
 # Parameters
 STD_ONSET = 0.3
@@ -40,49 +40,6 @@ def predict(filestr):
         STD_MAX_FREQ
     ) # midi_data is the PrettyMIDI object corresponding to the prediction
     return midi_data
-
-# with open('../Max NN/matched_midi.pkl', 'rb') as f:
-#     matched_midi_df = pickle.load(f)
-
-with open('Max NN\\labeled_features.pkl', 'rb') as f:
-    labeled_features = pickle.load(f)
-
-with open('Max NN\\my_model.pkl', 'rb') as f:
-    model = pickle.load(f)
-
-print("Hi1")    
-
-def get_genres(path):
-    """
-    Stores the genre labels into a pandas data frame.
-    
-    Parameters:
-        path (str): The path to the genre label file.
-        
-    Returns:
-        pandas.DataFrame: A data frame containing the genres and MIDI IDs.
-    """
-    ids = []
-    genres = []
-    
-    with open(path) as f:
-        for line in f:
-            # Skip lines starting with '#'
-            if not line.startswith('#'):
-                # Splits the line by the tab character ('\t') and unpacks the resulting values 
-                # into variables x and y. The strip() function removes leading and trailing whitespace from the line.
-                x, y, *_ = line.strip().split("\t")
-                # Appends the value of x (track ID) to the ids list.
-                ids.append(x)
-                # Appends the value of y (genre) to the genres list.
-                genres.append(y)
-    
-    # Constructs a data frame with two columns, "Genre" and "TrackID", using a dictionary. 
-    # The "Genre" column contains the genres stored in the genres list, and the "TrackID" column 
-    # contains the track IDs stored in the ids list.
-    genre_df = pd.DataFrame(data={"Genre": genres, "TrackID": ids})
-
-    return genre_df
 
 def normalize_features(features):
     """
@@ -156,61 +113,30 @@ def get_features(midi_obj):
     return normalize_features([tempo, num_sig_changes, resolution, ts_1,
                     ts_2, melody_complexity, melody_range] + list(pitch_class_hist)) # + list(melody_contour))
 
-print("Hi2")
-   
-# genre_path: path of the unzipped "CD1" file
-genre_path = "Max NN/msd_tagtraum_cd1.cls"
-# creates the genres data frame
-genre_df = get_genres(genre_path)
-
-# Get unique genre labels
-label_list = list(set(genre_df.Genre))
-
-# Create a dictionary mapping genre labels to their index
-label_dict = {lbl: label_list.index(lbl) for lbl in label_list}
-
 midi_path = 'Prototype/blind comp render E-PIANO ONLY.mp3'
 midi_object = predict(midi_path)
 midi_features = np.asarray(get_features(midi_object))
 midi_features = np.expand_dims(midi_features, axis = 0)
 
-prediction = model.predict(midi_features)
+model = tf.keras.models.load_model('Max NN\my_model.h5')
 
-print(prediction)
+comp_year = model.predict(midi_features)
 
-genre = np.argmax(prediction)
-genre_str = label_list[genre]
+print(comp_year)
 
 prompt = ''
-match genre_str:
-    case 'Folk':
-        prompt = 'a folk band playing a concert in a meadow'
-    case 'Country':
-        prompt = 'a cowboy hearding in the southern united states'
-    case 'Pop_Rock':
-        prompt = 'roger waters riding a bike with a clan of gingerbread men in the sidecar'
-    case 'International':
-        prompt = '99 luftballoons'
-    case 'Vocal':
-        prompt = 'A solo vocalist recording in a studio'
-    case 'RnB':
-        prompt = 'a rhythm and blues music video'
-    case 'New Age':
-        prompt = 'a relaxing zen garden on an urban rooftop'
-    case 'Blues':
-        prompt = 'blues street performer'
-    case 'Latin':
-        prompt = 'a lively parade in argentina'
-    case 'Jazz':
-        prompt = 'a pianist playing and singing on stage in a moody bar'
-    case 'Reggae':
-            prompt = 'Reggae music video band'
-    case 'Rap':
-        prompt = 'Soulja Boy rapping with Snoop Dogg'
-    case 'Electronic':
-        prompt = 'EDM concert huge lights'
-    case other: 
-        prompt = 'a stop sign'
+if (comp_year < 1400):
+    prompt = 'A painting in the style of Giotto di Bondone of a musician in an italian town square'
+elif (comp_year < 1600):
+    prompt = 'A painting in the style of Leonardo Da Vinci of a lute player performing for the royal family'
+elif (comp_year < 1750):
+    prompt = 'A painting in the style of Johannes Vermeer of the girl with a pearl earing playing piano'
+elif (comp_year < 1830):
+    prompt = 'A painting in the style of Jacque-Louis David of two knights dueling in the French country'
+elif (comp_year < 1920):
+    prompt = 'A painting in the style of Claude Monet of a peaceful koi pond in a park in Argentina'
+else:
+    prompt = 'A painting in the style of Andy Worhol of a cello player on stage'
 
 print(prompt)
 
