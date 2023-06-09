@@ -16,6 +16,3 @@ def generate_picture(midi_path, image_name):
 
 def main():
     generate_picture(sys.argv[1], sys.argv[2])
-
-if __name__ == "__main__":
-    main()
