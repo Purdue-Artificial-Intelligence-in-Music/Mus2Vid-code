@@ -109,13 +109,14 @@ def get_features(midi_path):
 
     features = normalize_features([tempo, num_sig_changes, resolution, ts_1,
                             ts_2, melody_complexity, melody_range])
-    features.append(list(pitch_class_hist))
+    features += list(pitch_class_hist)
     # features.append(chords)
     # features.append(changes)
     # features.append(grams)
     
     features = np.asarray(features, dtype=object)
     features = np.expand_dims(features, axis = 0)
+    print (normalize_features)
     print(features.shape)
 
     return features
