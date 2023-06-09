@@ -117,8 +117,9 @@ midi_path = 'Prototype/blind comp render E-PIANO ONLY.mp3'
 midi_object = predict(midi_path)
 midi_features = np.asarray(get_features(midi_object))
 midi_features = np.expand_dims(midi_features, axis = 0)
+print(midi_features, midi_features.shape)
 
-model = tf.keras.models.load_model('Max NN\my_model.h5')
+model = tf.keras.models.load_model('Genre_NN\my_model.h5')
 
 comp_year = model.predict(midi_features)
 
@@ -143,7 +144,7 @@ print(prompt)
 pipe = StableDiffusionPipeline.from_pretrained(stable_diffusion_model_id, torch_dtype=torch.float16)
 pipe = pipe.to("cuda")
 
-def get_pic(prompt, inference = 50, guidance_scale = 7.5, num_images_per_prompt = 3, seed = 0):
+def get_pic(prompt, inference = 50, guidance_scale = 7.5, num_images_per_prompt = 1, seed = 0):
     """
     Creates an image using stable diffusion pipeline
     Parameters:
