@@ -8,11 +8,17 @@ def generate_picture(midi_path, image_name):
 
     model = tf.keras.models.load_model('utils\my_model.h5')
     comp_year = model.predict(midi_features)
+    print(comp_year)
 
     prompt = get_prompt(comp_year)
+    print(prompt)
 
     image = get_pic(prompt)
     display_images(image)
+    image.images[0].save(image_name)
 
 def main():
     generate_picture(sys.argv[1], sys.argv[2])
+
+if __name__ == "__main__":
+    main()

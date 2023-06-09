@@ -26,7 +26,6 @@ def get_pic(prompt, inference = 50, guidance_scale = 7.5, num_images_per_prompt 
         num_inference_steps = inference,
         guidance_scale = guidance_scale,
         num_images_per_prompt = num_images_per_prompt,
-        generator = generator_list
     )
 
 def display_images(pipe):
