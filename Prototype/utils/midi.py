@@ -21,6 +21,7 @@ def predict(filestr):
     STD_MIN_NOTE_LEN = 50
     STD_MIN_FREQ = None
     STD_MAX_FREQ = 3000
+    
     model_output, midi_data, note_events = bp_predict(
         filestr,
         BASIC_PITCH_MODEL,
@@ -116,7 +117,7 @@ def get_features(midi_path):
     
     features = np.asarray(features, dtype=object)
     features = np.expand_dims(features, axis = 0)
-    print (normalize_features)
+    print (features)
     print(features.shape)
 
     return features
