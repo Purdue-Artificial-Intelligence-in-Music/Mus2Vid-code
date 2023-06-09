@@ -7,7 +7,7 @@ def get_pipe():
     pipe = pipe.to("cuda")
     return pipe
 
-def get_pic(prompt, inference = 50, guidance_scale = 7.5, num_images_per_prompt = 3, seed = 0):
+def get_pic(prompt, inference = 50, guidance_scale = 7.5, num_images_per_prompt = 1):
     """
     Creates an image using stable diffusion pipeline
     Parameters:
@@ -19,8 +19,7 @@ def get_pic(prompt, inference = 50, guidance_scale = 7.5, num_images_per_prompt 
     """
     generator_list = []
     for i in range(num_images_per_prompt):
-        generator_list.append(torch.Generator("cuda").manual_seed(seed + i))
-
+        generator_list.append(torch.Generator("cuda"))
     pipe = get_pipe()
     return pipe(
         prompt,
