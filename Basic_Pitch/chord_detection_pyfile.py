@@ -149,7 +149,6 @@ def get_chords(notes,
         actual = time + offset
         for note in notes:
             if note.start < actual and note.end >= time:
-                song.instruments[0].notes
                 playing_notes.append(note)
         chords.append(playing_notes)
     return chords
