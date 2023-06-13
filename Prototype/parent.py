@@ -18,7 +18,8 @@ def generate_picture(midi_path, image_name):
     image.images[0].save(image_name)
 
 def main():
-    generate_picture(sys.argv[1], sys.argv[2])
+    # generate_picture(sys.argv[1], sys.argv[2])
+    generate_picture('test_mp3/moonlight_sonata.mp3', 'image.png')
 
 if __name__ == "__main__":
     main()

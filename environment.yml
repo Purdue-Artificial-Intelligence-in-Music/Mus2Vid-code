@@ -132,8 +132,11 @@ dependencies:
       - audioread==3.0.0
       - basic-pitch==0.2.5
       - cachetools==5.3.1
+      - contourpy==1.0.7
+      - cycler==0.11.0
       - diffusers==0.16.1
       - flatbuffers==23.5.26
+      - fonttools==4.39.4
       - fsspec==2023.5.0
       - future==0.18.3
       - gast==0.4.0
@@ -145,11 +148,13 @@ dependencies:
       - huggingface-hub==0.15.1
       - joblib==1.2.0
       - keras==2.11.0
+      - kiwisolver==1.4.4
       - lazy-loader==0.2
       - libclang==16.0.0
       - librosa==0.10.0.post2
       - llvmlite==0.40.0
       - markdown==3.4.3
+      - matplotlib==3.7.1
       - mido==1.2.10
       - mir-eval==0.7
       - msgpack==1.0.5
@@ -163,6 +168,7 @@ dependencies:
       - protobuf==3.19.6
       - pyasn1==0.5.0
       - pyasn1-modules==0.3.0
+      - pyparsing==3.0.9
       - pytz==2023.3
       - pyyaml==6.0
       - regex==2023.5.5
@@ -171,6 +177,7 @@ dependencies:
       - rsa==4.9
       - scikit-learn==1.2.2
       - scipy==1.10.1
+      - sklearn==0.0.post5
       - soundfile==0.12.1
       - soxr==0.3.5
       - tensorboard==2.11.2
