@@ -5,6 +5,10 @@ from basic_pitch.inference import predict as bp_predict
 from basic_pitch import ICASSP_2022_MODEL_PATH
 BASIC_PITCH_MODEL = tf.saved_model.load(str(ICASSP_2022_MODEL_PATH))
 
+def get_genre(num):
+    genre_list = ['20th Century', 'Romantic', 'Classical', 'Baroque']
+    return genre_list[num]
+
 def predict(filestr):
     """
     Makes a Basic Pitch prediction with the global parameters above given an input audio file.
@@ -56,23 +60,21 @@ def normalize_features(features):
     pitch_class_hist = [((f - 0) / 100) for f in features[7:-1]]
 
     # Return the normalized feature vector
-    return [tempo, resolution, time_sig_1, time_sig_2, melody_complexity, melody_range] + pitch_class_hist
+    return [tempo, num_sig_changes, resolution, time_sig_1, time_sig_2, melody_complexity, melody_range] + pitch_class_hist
 
-def get_features(midi_path):
+def get_features(midi_obj):
     """
     Extracts specific features from a PrettyMIDI object given its path using the pretty_midi library.
     Handle any potential errors with MIDI files appropriately.
 
     Parameters:
-        midi_path: path to an audio file
+        midi_obj: the PrettyMIDI object
 
     Returns:
         list of float: The extracted features.
     """
     
     # tempo: the estimated tempo of the audio file
-    midi_obj = predict(midi_path)
-
     tempo = midi_obj.estimate_tempo()
 
     # num_sig_changes: the number of time signature changes in the audio file
@@ -113,7 +115,7 @@ def get_features(midi_path):
     # features.append(chords)
     # features.append(changes)
     # features.append(grams)
-    
+
     features = np.asarray(features)
     features = np.expand_dims(features, axis = 0)
 

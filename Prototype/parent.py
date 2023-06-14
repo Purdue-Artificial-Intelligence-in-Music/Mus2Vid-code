@@ -4,13 +4,16 @@ from utils.diffusion import *
 from utils.prompting import *
 
 def generate_picture(midi_path, image_name):
-    midi_features = get_features(midi_path)
+    midi_obj = predict(midi_path)
+    midi_features = get_features(midi_obj)
+    print(midi_features.shape)
 
-    model = tf.keras.models.load_model('utils\my_model.h5')
-    comp_year = model.predict(midi_features)
-    print(comp_year)
+    model = tf.keras.models.load_model('utils\_best_model.h5')
+    subgenre_num = np.argmax(model.predict(midi_features))
+    subgenre = get_genre(subgenre_num)
+    print(subgenre)
 
-    prompt = get_prompt(comp_year)
+    prompt = get_prompt(subgenre)
     print(prompt)
 
     image = get_pic(prompt)
