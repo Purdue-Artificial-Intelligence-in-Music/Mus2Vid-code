@@ -100,7 +100,7 @@ def parse_chord(root, number_string):
         out += ")"
     return out
 
-def generate_chord_list(filepath = "Genre_NN\chord_detection\chords without names.txt"):
+def generate_chord_list(filepath = "chords without names.txt"):
     """
     Outputs a dictionary of chords mapped to the notes they contain based on a list of chord types in a text file.
     Parameters:
