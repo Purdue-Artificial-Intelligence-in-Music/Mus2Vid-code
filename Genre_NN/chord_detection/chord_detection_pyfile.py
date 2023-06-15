@@ -1,4 +1,4 @@
-import pretty_midi as pm
+
 # Env variables
 chrom_notes = ['C', 'Db', 'D', 'Eb', 'E', 'F', 'Gb', 'G', 'Ab', 'A', 'Bb', 'B'] # A list of all the notes/pitch classes with
                                                                                 # indices corresponding to 
@@ -21,7 +21,6 @@ offsets = { # A list of chord intervals with their corresponding MIDI note value
     '12': 19,
     '13': 21
 }
-
 
 def first_note(notes):
     """
@@ -216,7 +215,7 @@ def get_note_scores(notes,
     last_end = last_note(notes).end
     overall_dur = last_end - first_start
     overall_dur_minus_last = last_start - first_start
-    print(f"Start time = %f" % last_start)
+    #print(f"Start time = %f" % last_start)
     for i in range(0, 12):
         note_scores_octave_agn.append(0) # Create bins for each note
     for note in notes:
@@ -228,14 +227,14 @@ def get_note_scores(notes,
             octave_multiplier = max(0, 1 - (max(0, (round(note.pitch / 12) - 2) / 10000.0)))
         if end_multiplier_on and overall_dur_minus_last > 0: # Reduce the score of the note the farther away it is from the last note
             end_multiplier = (note.start - first_start) / overall_dur_minus_last
-            print(end_multiplier)
+            #print(end_multiplier)
         score *= octave_multiplier
         score *= end_multiplier
         note_scores_octave_agn[note.pitch % 12] += score # Add the note scores by pitch class
     for i in range(0, 12):
         if note_scores_octave_agn[i] != 0:
             note_scores_octave_agn_dict[i] = note_scores_octave_agn[i]
-    print("------------")
+    #print("------------")
 
     return note_scores_octave_agn_dict, overall_dur, last_end, first_start, last_start
     
@@ -289,20 +288,23 @@ def get_chord_scores(chord_list,
                                                                                                     # by score
     return chord_scores_dict_sorted
 
-def calculate_song_chords_with_times(notes,
-                                     min_chord_switch_time = 0.1
-                                    ):
+def calculate_song_chords(notes,
+                          all_chords = None,
+                          min_chord_switch_time = 0.1
+                          ):
     """
     Makes a list of all the chords in a song using the above methods, and returns the chords and the times at which they occur.
     Parameters:
         song: a PrettyMIDI song object
+        all_chords: the chord list
         min_chord_switch_time: a parameter that changes the minimum amount of time between chords to avoid too fast changes
     Returns:
         chord_list_raw: a list of tuples with the following info:
             A string containing the chord name
             The time at which it occurs
     """
-    all_chords = generate_chord_list()
+    if all_chords == None:
+        all_chords = generate_chord_list()
     chord_list_raw = []
     for chord in get_chords_window(notes):
         note_dict, overall_dur, last_end, first_start, last_start = get_note_scores(chord)
@@ -316,43 +318,31 @@ def calculate_song_chords_with_times(notes,
                                                                                       # the list
                 chord_with_time = [chord[0], chord[1], last_start]
                 chord_list_raw.append(chord_with_time)
-    chord_list_raw.sort(key=lambda x: int(x[2]))
+    chord_list_raw = sorted(chord_list_raw, key=lambda x:x[2]) # Sort the chords by last_start time          
     chord_list_raw_new = []
     for tup in chord_list_raw:
         if chord_list_raw_new == [] \
-        or tup[2] - chord_list_raw_new[len(chord_list_raw_new) - 1][2] >= min_chord_switch_time:
+           or tup[2] - chord_list_raw_new[len(chord_list_raw_new) - 1][2] >= min_chord_switch_time:
             chord_list_raw_new.append(tup)
-    return chord_list_raw_new
+    chord_list_raw = []
+    for tup in chord_list_raw_new:
+        if chord_list_raw == [] \
+           or chord_list_raw[len(chord_list_raw) - 1][0] != tup[0]: # Dedupe list
+            chord_list_raw.append(tup)
+    return chord_list_raw
 
-def calculate_song_chords_chord_list(song, all_chords):
+def simplify_chord_list(chord_list_raw):
     """
-    Makes a list of all the chords in a song using the above methods.
+    Simplies a chord list into a list of chord names.
     Parameters:
-        song: a PrettyMIDI song object
-        all_chords: the chord list
+        chord_list_raw: the output from calculate_song_chords()
     Returns:
-        chord_list: a list of strings (names of chords in the song)
+        chord_list: a list of strings (containing chord names)
     """
     chord_list = []
-    for chord in get_chords(song.instruments[0].notes):
-        note_dict, overall_dur, last_end, first_start, last_start = get_note_scores(chord)
-        chord_scores = get_chord_scores(all_chords, note_dict, last_end)
-        if chord_scores != []:
-            chord = chord_scores[:1][0][0] # Grab the top detected chord for each chord event
-            if chord != "" and (chord_list == [] or chord_list[len(chord_list) - 1] != chord):
-                chord_list.append(chord)
+    for chord in chord_list_raw:
+        chord_list.append(chord[0])
     return chord_list
-
-def calculate_song_chords(song):
-    """
-    Makes a list of all the chords in a song using the above methods.
-    Parameters:
-        song: a PrettyMIDI song object
-    Returns:
-        chord_list: a list of strings (names of chords in the song)
-    """
-    all_chords = generate_chord_list()
-    return calculate_song_chords(song, all_chords)
 
 def n_grams(my_list, n):
     """
@@ -389,7 +379,10 @@ def chord_changes(chord_list, song):
 def estimate_key(chord_list_raw,
                  aug_mult = 0.5,
                  dim_mult = -0.5,
-                 seven_mult = -0.25
+                 seven_mult = -0.25,
+                 minor_mult = 0.5,
+                 overlap = 0.3,
+                 minor_overlap = 0.5
                 ):
     """
     Returns an empirical estimate of the key of the song.
@@ -399,8 +392,11 @@ def estimate_key(chord_list_raw,
                         this multiplies the time of any augmented chord
                         before adding it to the major/minor time count
         dim_mult: same as aug_mult but for diminished chords
+        minor_mult: same as aug_mult but for minor chords
         seven_mult: same as aug_mult but for seventh chords other than pure
                     seventh
+        overlap: a parameter that controls how much minor/major chords affect their counterparts
+        minor_overlap: multiplies overlap for minor chords specifically
     Returns:
         key: a string containing the estimated key of the song
     """
@@ -423,12 +419,16 @@ def estimate_key(chord_list_raw,
         elif "o" in modifier or "0" in modifier:
             major_minor += dim_mult * time
         elif "7" in modifier and not (modifier == "7"):
+            root_times[(chrom_notes.index(name) + 4) % 12] += overlap * time
             major_minor += seven_mult * time
         elif modifier == "" or \
            "M" in modifier and not ("m" in modifier):
+            root_times[(chrom_notes.index(name) - 3) % 12] += overlap * minor_overlap * time
             major_minor += time
         elif "m" in modifier and not ("M" in modifier):
-            major_minor -= time
+            root_times[(chrom_notes.index(name) + 3) % 12] += overlap * time
+            major_minor -= minor_mult * time
+
     key_pitch_class = get_note(root_times.index(max(root_times)))
     major_minor_string = " minor" if major_minor < 0 else " major"
     key = key_pitch_class + major_minor_string
