@@ -2,3 +2,4 @@
 *.pkl
 *.midi
 maestro-v3.0.0
+*.pyc

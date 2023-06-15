@@ -8,7 +8,7 @@ def get_pipe():
     pipe = pipe.to("cuda")
     return pipe
 
-def get_pic(prompt,negative_prompt = "ugly, tiling, poorly drawn hands, poorly drawn feet, poorly drawn face, out of frame, mutation, mutated, extra limbs, extra legs, extra arms, disfigured, deformed, cross-eye, body out of frame, blurry, bad art, bad anatomy, blurred, text, watermark, grainy"
+def get_pic(prompt, negative_prompt = "ugly, tiling, poorly drawn hands, poorly drawn feet, poorly drawn face, out of frame, mutation, mutated, extra limbs, extra legs, extra arms, disfigured, deformed, cross-eye, body out of frame, blurry, bad art, bad anatomy, blurred, text, watermark, grainy, low resolution, cropped, beginner, amateur, oversaturated"
             , inference = 10, guidance_scale = 7.5, num_images_per_prompt = 1):
     """
     Creates an image using stable diffusion pipeline
