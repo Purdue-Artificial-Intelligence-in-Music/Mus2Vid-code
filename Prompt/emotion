@@ -104,8 +104,4 @@ def emotion(emotion_input):
     return emotion_prompt
 
 
-## Example
-emotion_prompt = "surprised"
-result = emotion(emotion_prompt)
-output = ', '.join(result).replace(', ', ',')
-print(output)
+
