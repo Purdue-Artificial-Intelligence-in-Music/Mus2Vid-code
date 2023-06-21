@@ -6,3 +6,7 @@ maestro-v3.0.0-wav
 *.pyc
 *.png
 *.zip
+*.wav
+*.mp3
+*.xz
+audio
