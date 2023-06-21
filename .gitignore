@@ -1,10 +1,12 @@
 **.ipynb_checkpoints**
 *.pkl
 *.midi
+maestro-v3.0.0
+maestro-v3.0.0-wav
 *.pyc
 *.png
 *.zip
 *.wav
 *.mp3
 *.xz
-*.h5
+audio
