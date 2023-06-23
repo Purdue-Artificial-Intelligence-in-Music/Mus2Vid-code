@@ -9,6 +9,7 @@ maestro-v3.0.0-wav
 *.wav
 *.mp3
 *.xz
+*.csv
 audio
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -86,9 +87,6 @@ target/
 
 # Jupyter NB Checkpoints
 .ipynb_checkpoints/
-
-# exclude data from source control by default
-/data/
 
 # Mac OS-specific storage files
 .DS_Store
