@@ -5,7 +5,7 @@ from basic_pitch.inference import predict as bp_predict
 from basic_pitch import ICASSP_2022_MODEL_PATH
 BASIC_PITCH_MODEL = tf.saved_model.load(str(ICASSP_2022_MODEL_PATH))
 
-def get_genre(num):
+def get_subgenre(num):
     genre_list = ['20th Century', 'Romantic', 'Classical', 'Baroque']
     return genre_list[num]
 
