@@ -26,11 +26,12 @@ def merger(genre, emotion):
     modify = modifier_selector.perspectiveRandom()
     return genre,emotion,modify
 
+## Example
 ## the specific genre and emotion 
 subgenre = ['Baroque','Classical', 'Romantic','20th Century']
 no = random.randint(0,3)
-genre = get_genre(subgenre[no])
-emotion = Emotion_Prompt.emotion_from_value(0.5)
+genre = get_genre('Baroque')
+emotion = Emotion_Prompt.emotion_from_values(arousal = .2,valence = -.2)
 
 ## send to SD and display images 
 
