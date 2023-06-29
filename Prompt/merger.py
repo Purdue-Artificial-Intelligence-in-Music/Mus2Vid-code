@@ -12,7 +12,7 @@ def get_genre(subgenre):
     if subgenre == 'Baroque':
         prompt = 'Baroque Classical Music, 1600-1750'
     elif subgenre ==  'Classical':
-        prompt = 'Classical music, 1750-1830'
+        prompt = 'Classical Music, 1750-1830'
     elif subgenre == 'Romantic':
         prompt = 'Romantic Classical Music, 1830-1920'
     elif subgenre ==  '20th Century':
