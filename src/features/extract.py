@@ -1,11 +1,11 @@
 import pandas as pd
 import librosa
-import opensmile
+# import opensmile
+import pickle
 
 AUDIO_PATH = "./data/processed/wav/"
 
-
-def get_librosa_features(song_id_list):
+def extract_librosa_features(song_id_list):
     features_list = []
 
     for song_id in song_id_list:
@@ -28,33 +28,35 @@ def get_librosa_features(song_id_list):
         columns=["mfcc", "rolloff", "centroid", "rms", "tempo", "onset_env", "zcr", "chromagram", "pitches", "magnitudes"]
     )
 
-    return librosa_features
+    with open("librosa_features.pkl", "wb") as f:
+        pickle.dump(librosa_features, f)
 
-def get_opensmile_features(song_id_list):
-    smile = opensmile.Smile(
-        feature_set=opensmile.FeatureSet.emobase,
-        feature_level=opensmile.FeatureLevel.Functionals,
-    )
-    features_list = [] # list of smile features for each clip
-    iters = 0 #FIXME
-    for file in song_id_list:
-        iters += 1 #FIXME
-        print(str(iters) + "/" + str(len(song_id_list))) #FIXME
+# def extract_opensmile_features(song_id_list):
+#     smile = opensmile.Smile(
+#         feature_set=opensmile.FeatureSet.emobase,
+#         feature_level=opensmile.FeatureLevel.Functionals,
+#     )
+#     features_list = [] # list of smile features for each clip
+#     iters = 0 #FIXME
+#     for file in song_id_list:
+#         iters += 1 #FIXME
+#         print(str(iters) + "/" + str(len(song_id_list))) #FIXME
         
-        # get smile features
-        filepath = AUDIO_PATH + str(file) + ".wav"
-        smile_features = smile.process_file(filepath)
-        # convert from df to list
-        smile_features = smile_features.values.tolist()
-        # convert from 2d list to 1d list
-        smile_features = sum(smile_features, [])
-        features_list.append(smile_features)
+#         # get smile features
+#         filepath = AUDIO_PATH + str(file) + ".wav"
+#         smile_features = smile.process_file(filepath)
+#         # convert from df to list
+#         smile_features = smile_features.values.tolist()
+#         # convert from 2d list to 1d list
+#         smile_features = sum(smile_features, [])
+#         features_list.append(smile_features)
 
-    opensmile_features = pd.DataFrame(
-        data=features_list
-    )
+#     opensmile_features = pd.DataFrame(
+#         data=features_list
+#     )
     
-    return opensmile_features
+#     with open("opensmile_features.pkl", "wb") as f:
+#         pickle.dump(opensmile_features, f)
 
 if __name__ == "__main__":
     pass
