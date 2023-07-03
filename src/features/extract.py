@@ -4,6 +4,7 @@ import librosa
 import pickle
 
 AUDIO_PATH = "./data/processed/audio/"
+CHUNK_SIZE = 10
 
 def extract_librosa_features(song_id_list):
     features_list = []
@@ -11,7 +12,7 @@ def extract_librosa_features(song_id_list):
     iter = 0
 
     for song_id in song_id_list:
-        if iter % 10 == 0:
+        if iter % CHUNK_SIZE == 0:
             print(f"{iter}/{size}")
         iter += 1
 
@@ -36,16 +37,18 @@ def extract_librosa_features(song_id_list):
     with open("librosa_features.pkl", "wb") as f:
         pickle.dump(librosa_features, f)
 
+# FIXME fix opensmile features
 # def extract_opensmile_features(song_id_list):
 #     smile = opensmile.Smile(
 #         feature_set=opensmile.FeatureSet.emobase,
 #         feature_level=opensmile.FeatureLevel.Functionals,
 #     )
 #     features_list = [] # list of smile features for each clip
-#     iters = 0 #FIXME
+#     size = len(song_id_list)
+#     iter = 0
 #     for file in song_id_list:
-#         iters += 1 #FIXME
-#         print(str(iters) + "/" + str(len(song_id_list))) #FIXME
+#         if iter % CHUNK_SIZE == 0:
+#             print(f"{iter}/{size}")
         
 #         # get smile features
 #         filepath = AUDIO_PATH + str(file) + ".wav"
