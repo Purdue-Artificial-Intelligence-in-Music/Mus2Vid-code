@@ -59,4 +59,7 @@ def extract_librosa_features(song_id_list):
 #         pickle.dump(opensmile_features, f)
 
 if __name__ == "__main__":
-    pass
+    import data
+
+    # song_id_list = get_song_id_list()
+    # extract_librosa_features(song_id_list)

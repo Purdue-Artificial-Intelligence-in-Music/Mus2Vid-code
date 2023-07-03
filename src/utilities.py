@@ -5,7 +5,7 @@ ANNOTATIONS_PATH = "./data/processed/annotations/annotations averaged per song/s
 def get_song_id_list():
     df = pd.read_csv(ANNOTATIONS_PATH)
     song_id_list = df["song_id"]
-    
+
     return song_id_list
 
 def get_targets():
