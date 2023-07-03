@@ -1,4 +1,8 @@
 from sklearn.svm import SVR
+import joblib
+
+FILE_EXTENSION = ".model"
+MODEL_PATH = "./models/emotion/"
 
 class EmotionRegressor():
 
@@ -11,8 +15,11 @@ class EmotionRegressor():
     def predict(self, input):
         self.svr.predict(input)
 
-    def save(self):
-        pass
+    def save(self, filename):
+        joblib.dump(self.svr, MODEL_PATH + filename + FILE_EXTENSION)
+
+    def load(self, filename):
+        self.svr = joblib.load(MODEL_PATH + filename + FILE_EXTENSION) 
 
 if __name__ == "__main__":
     pass

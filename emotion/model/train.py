@@ -10,6 +10,9 @@ def train():
 
     valence_regressor.fit(features, valence_targets)
     arousal_regressor.fit(features, arousal_targets)
+    
+    valence_regressor.save("valence_regressor")
+    arousal_regressor.save("arousal_regressor")
 
 if __name__ == "__main__":
     pass
