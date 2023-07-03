@@ -3,12 +3,17 @@ import librosa
 # import opensmile
 import pickle
 
-AUDIO_PATH = "./data/processed/wav/"
+AUDIO_PATH = "./data/processed/audio/"
 
 def extract_librosa_features(song_id_list):
     features_list = []
+    size = len(song_id_list)
+    iter = 0
 
     for song_id in song_id_list:
+        if iter % 10 == 0:
+            print(f"{iter}/{size}")
+        iter += 1
 
         waveform, sample_rate = librosa.load(AUDIO_PATH + f"{song_id}.mp3")
 
@@ -59,7 +64,8 @@ def extract_librosa_features(song_id_list):
 #         pickle.dump(opensmile_features, f)
 
 if __name__ == "__main__":
-    import data
+    from utilities import get_song_id_list
 
-    # song_id_list = get_song_id_list()
-    # extract_librosa_features(song_id_list)
+    song_id_list = get_song_id_list()
+    extract_librosa_features(song_id_list)
+    # extract_opensmile_features(song_id_list)
