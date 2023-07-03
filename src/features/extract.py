@@ -34,6 +34,7 @@ def extract_librosa_features(song_id_list):
         columns=["mfcc", "rolloff", "centroid", "rms", "tempo", "onset_env", "zcr", "chromagram", "pitches", "magnitudes"]
     )
 
+    # TODO save features by chunk
     with open("librosa_features.pkl", "wb") as f:
         pickle.dump(librosa_features, f)
 
@@ -71,4 +72,5 @@ if __name__ == "__main__":
 
     song_id_list = get_song_id_list()
     extract_librosa_features(song_id_list)
+    # FIXME
     # extract_opensmile_features(song_id_list)
