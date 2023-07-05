@@ -3,6 +3,8 @@ import pretty_midi as pm
 chrom_notes = ['C', 'Db', 'D', 'Eb', 'E', 'F', 'Gb', 'G', 'Ab', 'A', 'Bb', 'B'] # A list of all the notes/pitch classes with
                                                                                 # indices corresponding to 
                                                                                 # MIDI note values mod 12
+        
+chrom_degrees = ['I', 'IIb', 'II', 'IIIb', 'III', 'IV', 'Vb', 'V', 'VIb', 'VI', 'VIIb', 'VII'] # A list of all the relative pitch classes
 
 offsets = { # A list of chord intervals with their corresponding MIDI note value offset
     '1': 0, 
@@ -19,6 +21,7 @@ offsets = { # A list of chord intervals with their corresponding MIDI note value
     '12': 19,
     '13': 21
 }
+
 
 def first_note(notes):
     """
@@ -67,6 +70,16 @@ def consolidate_notes(song):
                 notes.append(note)
     return notes
 
+def get_note(note_n):
+    """
+    Returns a note name based on its MIDI note number
+    Parameters:
+        notes: an integer representing the MIDI note number
+    Returns:
+        output: a string containing the note name
+    """
+    return chrom_notes[note_n % 12]
+
 def parse_chord(root, number_string):
     """
     Returns the note corresponding to a particular degree in a scale defined by the root note.
@@ -100,7 +113,7 @@ def parse_chord(root, number_string):
         out += ")"
     return out
 
-def generate_chord_list(filepath = "chords without names.txt"):
+def generate_chord_list(filepath = ".\\chords without names.txt"):
     """
     Outputs a dictionary of chords mapped to the notes they contain based on a list of chord types in a text file.
     Parameters:
@@ -120,7 +133,8 @@ def generate_chord_list(filepath = "chords without names.txt"):
             for i in range(len(parts)):
                 part = parts[i]
                 if i == 0:
-                    chord_name = part.replace('_', note, 1)
+                    note_string = note + '-'
+                    chord_name = part.replace('_', note_string, 1)
                 elif part[0] == 'b' or part[0] == '#' or \
                    (part[0] >= '0' and part[0] <= '9') or \
                    part[0] == '(':
@@ -153,9 +167,35 @@ def get_chords(notes,
         chords.append(playing_notes)
     return chords
 
+def get_chords_window(notes, 
+                      offset = 0.01,
+                      window = 0.5):
+    """
+    Returns the chords (groups of notes occuring at the same time) in a list of notes, with a variable window size.
+    Parameters:
+        notes: a list of notes
+        offset: a parameter shifting the time selected for to allow chords to be picked up
+        window: a parameter allowing notes behind the current to be picked up
+    Returns:
+        chords: a list of lists of PrettyMIDI notes (each list of PrettyMIDI notes in the bigger list is a chord)
+    """
+    start_times = []
+    for note in notes:
+        if not (note.start in start_times):
+            start_times.append(note.start)
+    chords = []
+    for time in start_times:
+        playing_notes = []
+        for note in notes:
+            if note.start < time + offset and note.end >= time - window:
+                song.instruments[0].notes
+                playing_notes.append(note)
+        chords.append(playing_notes)
+    return chords
+
 def get_note_scores(notes, 
-                    octave_multiplier_on = False,
-                    end_multiplier_on = False):
+                    octave_multiplier_on = True,
+                    end_multiplier_on = True):
     """
     Generates note prominence values for a given list of notes.
     Parameters:
@@ -185,8 +225,8 @@ def get_note_scores(notes,
         octave_multiplier = 1
         end_multiplier = 1
         if octave_multiplier_on: # Reduce the score of the note the higher up in pitch it is
-            octave_multiplier = max(0, 1 - (max(0, (round(note.pitch / 12) - 2) / 8.0)))
-        if end_multiplier_on: # Reduce the score of the note the farther away it is from the last note
+            octave_multiplier = max(0, 1 - (max(0, (round(note.pitch / 12) - 2) / 10000.0)))
+        if end_multiplier_on and overall_dur_minus_last > 0: # Reduce the score of the note the farther away it is from the last note
             end_multiplier = (note.start - first_start) / overall_dur_minus_last
         score *= octave_multiplier
         score *= end_multiplier
@@ -195,7 +235,7 @@ def get_note_scores(notes,
         if note_scores_octave_agn[i] != 0:
             note_scores_octave_agn_dict[i] = note_scores_octave_agn[i]
 
-    return note_scores_octave_agn_dict, overall_dur, last_end, first_start
+    return note_scores_octave_agn_dict, overall_dur, last_end, first_start, last_start
     
 # Generates chord scores based on note scores
 def get_chord_scores(chord_list, 
@@ -252,6 +292,7 @@ def calculate_song_chords(song):
     Makes a list of all the chords in a song using the above methods.
     Parameters:
         song: a PrettyMIDI song object
+        all_chords: the chord list
     Returns:
         chord_list: a list of strings (names of chords in the song)
     """
