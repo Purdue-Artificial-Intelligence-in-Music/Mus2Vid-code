@@ -1,7 +1,7 @@
 import pandas as pd
 
 ANNOTATIONS_PATH = "./data/processed/annotations/annotations averaged per song/song_level/static_annotations_averaged_songs_1_2000.csv"
-AUDIO_PATH = "./data/processed/audio/"
+AUDIO_PATH = "./data/processed/wav/"
 FEATURES_PATH = "./data/processed/features/"
 FEATURES_EXT = ".features"
 CHUNK_SIZE = 10

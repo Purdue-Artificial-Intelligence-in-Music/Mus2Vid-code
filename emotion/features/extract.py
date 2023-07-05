@@ -36,38 +36,37 @@ def extract_librosa_features(song_id_list):
     joblib.dump(librosa_features, FEATURES_PATH + "librosa_features" + FEATURES_EXT)
 
 # FIXME fix opensmile features
-# def extract_opensmile_features(song_id_list):
-#     smile = opensmile.Smile(
-#         feature_set=opensmile.FeatureSet.emobase,
-#         feature_level=opensmile.FeatureLevel.Functionals,
-#     )
-#     features_list = [] # list of smile features for each clip
-#     size = len(song_id_list)
-#     iter = 0
-#     for file in song_id_list:
-#         if iter % CHUNK_SIZE == 0:
-#             print(f"{iter}/{size}")
+def extract_opensmile_features(song_id_list):
+    smile = opensmile.Smile(
+        feature_set=opensmile.FeatureSet.emobase,
+        feature_level=opensmile.FeatureLevel.Functionals,
+    )
+    features_list = [] # list of smile features for each clip
+    size = len(song_id_list)
+    iter = 0
+    for file in song_id_list:
+        if iter % CHUNK_SIZE == 0:
+            print(f"{iter}/{size}")
+        iter += 1
         
-#         # get smile features
-#         filepath = AUDIO_PATH + str(file) + ".wav"
-#         smile_features = smile.process_file(filepath)
-#         # convert from df to list
-#         smile_features = smile_features.values.tolist()
-#         # convert from 2d list to 1d list
-#         smile_features = sum(smile_features, [])
-#         features_list.append(smile_features)
+        # get smile features
+        filepath = AUDIO_PATH + str(file) + ".wav"
+        smile_features = smile.process_file(filepath)
+        # convert from df to list
+        smile_features = smile_features.values.tolist()
+        # convert from 2d list to 1d list
+        smile_features = sum(smile_features, [])
+        features_list.append(smile_features)
 
-#     opensmile_features = pd.DataFrame(
-#         data=features_list
-#     )
+    opensmile_features = pd.DataFrame(
+        data=features_list
+    )
     
-#     with open("opensmile_features.pkl", "wb") as f:
-#         pickle.dump(opensmile_features, f)
+    with open("opensmile_features.pkl", "wb") as f:
+        pickle.dump(opensmile_features, f)
 
 if __name__ == "__main__":
     from utilities import get_song_id_list
 
     song_id_list = get_song_id_list()
-    extract_librosa_features(song_id_list)
-    # FIXME
-    # extract_opensmile_features(song_id_list)
+    extract_opensmile_features(song_id_list)

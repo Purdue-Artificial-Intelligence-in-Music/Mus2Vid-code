@@ -1,7 +1,7 @@
 import joblib
 
-FEATURES_PATH = "./data/processed/features"
-TARGETS_PATH = "./data/processed/targets"
+FEATURES_PATH = "./data/processed/features/"
+TARGETS_PATH = "./data/processed/targets/"
 FEATURES_EXT = ".features"
 TARGETS_EXT = ".targets"
 
