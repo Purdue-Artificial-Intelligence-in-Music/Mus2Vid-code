@@ -1,6 +1,10 @@
 import pandas as pd
 
 ANNOTATIONS_PATH = "./data/processed/annotations/annotations averaged per song/song_level/static_annotations_averaged_songs_1_2000.csv"
+AUDIO_PATH = "./data/processed/audio/"
+FEATURES_PATH = "./data/processed/features/"
+FEATURES_EXT = ".features"
+CHUNK_SIZE = 10
 
 def get_song_id_list():
     df = pd.read_csv(ANNOTATIONS_PATH)

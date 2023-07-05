@@ -1,19 +1,17 @@
 import pandas as pd
 import librosa
-# import opensmile
-import pickle
+import opensmile
+import joblib 
+from utilities import AUDIO_PATH, FEATURES_PATH, FEATURES_EXT, CHUNK_SIZE
 
-AUDIO_PATH = "./data/processed/audio/"
-CHUNK_SIZE = 10
 
 def extract_librosa_features(song_id_list):
     features_list = []
-    size = len(song_id_list)
     iter = 0
 
     for song_id in song_id_list:
-        if iter % CHUNK_SIZE == 0:
-            print(f"{iter}/{size}")
+        if iter == CHUNK_SIZE:
+            break
         iter += 1
 
         waveform, sample_rate = librosa.load(AUDIO_PATH + f"{song_id}.mp3")
@@ -27,7 +25,7 @@ def extract_librosa_features(song_id_list):
         zcr = librosa.feature.zero_crossing_rate(waveform)
         chromagram = librosa.feature.chroma_stft(y=waveform, sr=sample_rate)
         pitches, magnitudes = librosa.piptrack(y=waveform, sr=sample_rate)
-        features_list.extend([mfcc, rolloff, centroid, rms, tempo, onset_env, zcr, chromagram, pitches, magnitudes])
+        features_list.append([mfcc, rolloff, centroid, rms, tempo, onset_env, zcr, chromagram, pitches, magnitudes])
 
     librosa_features = pd.DataFrame(
         data=features_list,
@@ -35,8 +33,7 @@ def extract_librosa_features(song_id_list):
     )
 
     # TODO save features by chunk
-    with open("librosa_features.pkl", "wb") as f:
-        pickle.dump(librosa_features, f)
+    joblib.dump(librosa_features, FEATURES_PATH + "librosa_features" + FEATURES_EXT)
 
 # FIXME fix opensmile features
 # def extract_opensmile_features(song_id_list):

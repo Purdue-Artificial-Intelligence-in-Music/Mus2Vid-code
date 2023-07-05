@@ -1,15 +1,18 @@
-import pickle 
+import joblib
 
-ROOT = "./data/processed/"
+FEATURES_PATH = "./data/processed/features"
+TARGETS_PATH = "./data/processed/targets"
+FEATURES_EXT = ".features"
+TARGETS_EXT = ".targets"
 
-def get_features():
-    with open(ROOT + "features", "rb") as f:
-        return pickle.load(f)
+def get_features(filename):
+    return joblib.load(FEATURES_PATH + filename + FEATURES_EXT)
 
-def get_valence_targets():
-    with open(ROOT + "valence-targets", "rb") as f:
-        return pickle.load(f)
+def get_valence_targets(filename):
+    return joblib.load(TARGETS_PATH + filename + TARGETS_EXT)
 
-def get_arousal_targets():
-    with open(ROOT + "arousal-targets", "rb") as f:
-        return pickle.load(f)
+def get_arousal_targets(filename):
+    return joblib.load(TARGETS_PATH + filename + TARGETS_EXT)
+
+if __name__ == "__main__":
+    pass
