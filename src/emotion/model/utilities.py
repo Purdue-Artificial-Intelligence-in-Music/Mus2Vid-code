@@ -12,8 +12,10 @@ TARGETS_EXT = "targets"
 def get_features(filename):
     return joblib.load(f"{FEATURES_DIR}/{filename}.{FEATURES_EXT}")
 
+
 def get_valence_targets():
     return pd.read_csv(ANNOTATIONS_PATH)["valence_mean"]
+
 
 def get_arousal_targets():
     return pd.read_csv(ANNOTATIONS_PATH)["arousal_mean"]

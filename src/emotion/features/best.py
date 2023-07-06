@@ -15,6 +15,7 @@ def select_librosa_features(librosa_features):
 
     return librosa_valence_features, librosa_arousal_features
 
+
 def select_opensmile_features(opensmile_features):
     valence_targets = get_valence_targets()
     arousal_targets = get_arousal_targets()

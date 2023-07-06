@@ -9,14 +9,14 @@ MODEL_EXT = "model"
 
 class EmotionRegressor():
 
-    def __init__(self):
-        self.svr = SVR(epsilon=0.2)
+    def __init__(self, epsilon=0.2):
+        self.svr = SVR(epsilon=epsilon)
 
     def fit(self, features, targets):
         self.svr.fit(features, targets)
 
-    def predict(self, input):
-        return self.svr.predict(input)
+    def predict(self, inputs):
+        return self.svr.predict(inputs)
 
     def save(self, filename):
         if not os.path.exists(MODEL_DIR):

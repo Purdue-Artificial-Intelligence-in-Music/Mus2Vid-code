@@ -39,6 +39,7 @@ def extract_librosa_features(song_id_list):
         os.mkdir(FEATURES_DIR)
     joblib.dump(librosa_features, f"{FEATURES_DIR}/librosa.{FEATURES_EXT}")
 
+
 def extract_opensmile_features(song_id_list):
     smile = opensmile.Smile(
         feature_set=opensmile.FeatureSet.emobase,

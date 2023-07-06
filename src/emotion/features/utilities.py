@@ -11,8 +11,10 @@ CHUNK_SIZE = 10
 def get_song_id_list():
     return pd.read_csv(ANNOTATIONS_PATH)["song_id"]
 
+
 def get_valence_targets():
     return pd.read_csv(ANNOTATIONS_PATH)["valence_mean"]
+
 
 def get_arousal_targets():
     return pd.read_csv(ANNOTATIONS_PATH)["arousal_mean"]

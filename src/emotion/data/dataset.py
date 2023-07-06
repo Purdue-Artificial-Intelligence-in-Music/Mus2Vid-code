@@ -6,10 +6,8 @@ RAW_ANNOTATIONS_DIR = "./data/raw/deam_dataset/DEAM_Annotations/annotations/anno
 RAW_AUDIO_DIR = "./data/raw/deam_dataset/DEAM_audio/MEMD_audio"
 RAW_FEATURES_DIR = "./data/raw/deam_dataset/features/features"
 RAW_METADATA_DIR = "./data/raw/deam_dataset/metadata/metadata"
-
 PROCESSED_ANNOTATIONS_DIR = "./data/processed/annotations"
 PROCESSED_AUDIO_DIR = "./data/processed/audio"
-
 ANNOTATIONS_FILE = "static_annotations_averaged_songs_1_2000.csv"
 
 
@@ -31,6 +29,7 @@ def process_audio():
                 f"{PROCESSED_AUDIO_DIR}/{root}.wav",
             ])
 
+
 def process_annotations():
     if not os.path.exists(PROCESSED_ANNOTATIONS_DIR):
         os.mkdir(PROCESSED_ANNOTATIONS_DIR)
@@ -39,6 +38,7 @@ def process_annotations():
         lines = f_read.read().replace(" ", "")
         with open(f"{PROCESSED_ANNOTATIONS_DIR}/{ANNOTATIONS_FILE}", "w") as f_write:
             f_write.write(lines)
+
 
 def process_data():
     process_audio()
