@@ -1,4 +1,5 @@
 import os
+import shutil
 import subprocess
 
 
@@ -34,7 +35,7 @@ def process_annotations():
         os.mkdir(PROCESSED_ANNOTATIONS_PATH)
 
     for filename in os.listdir(RAW_ANNOTATIONS_PATH):
-        os.rename(f"{RAW_ANNOTATIONS_PATH}/{filename}", f"{PROCESSED_ANNOTATIONS_PATH}/{filename}")
+        shutil.copyfile(f"{RAW_ANNOTATIONS_PATH}/{filename}", f"{PROCESSED_ANNOTATIONS_PATH}/{filename}")
 
 def process_data():
     process_audio()
