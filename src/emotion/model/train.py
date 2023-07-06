@@ -3,8 +3,8 @@ from utilities import get_features, get_valence_targets, get_arousal_targets
 
 
 def train():
-    valence_features = get_features("valence_features")
-    arousal_features = get_features("arousal_features")
+    valence_features = get_features("opensmile_valence")
+    arousal_features = get_features("opensmile_arousal")
     valence_targets = get_valence_targets()
     arousal_targets = get_arousal_targets()
 

@@ -1,6 +1,4 @@
-import opensmile
 import joblib
-import numpy as np
 from sklearn.feature_selection import SelectKBest
 from sklearn.feature_selection import f_regression
 from utilities import get_valence_targets, get_arousal_targets, FEATURES_DIR, FEATURES_EXT
