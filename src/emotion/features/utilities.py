@@ -1,10 +1,10 @@
 import pandas as pd
 
 
-ANNOTATIONS_PATH = "./data/processed/annotations/annotations averaged per song/song_level/static_annotations_averaged_songs_1_2000.csv"
-AUDIO_PATH = "./data/processed/wav/"
-FEATURES_PATH = "./data/processed/features/"
-FEATURES_EXT = ".features"
+ANNOTATIONS_PATH = "./data/processed/annotations/static_annotations_averaged_songs_1_2000.csv"
+AUDIO_DIR = "./data/processed/audio"
+FEATURES_DIR = "./data/interim/features"
+FEATURES_EXT = "features"
 CHUNK_SIZE = 10
 
 
@@ -14,15 +14,18 @@ def get_song_id_list():
 
     return song_id_list
 
-def get_targets():
+def get_valence_targets():
     df = pd.read_csv(ANNOTATIONS_PATH)
-    targets = df[["valence_mean", "arousal_mean"]]
+    return df["valence_mean"]
 
-    return targets
+def get_arousal_targets():
+    df = pd.read_csv(ANNOTATIONS_PATH)
+    return df["arousal_mean"]
 
 
 if __name__ == "__main__":
-    song_id_list, targets = get_song_id_list(), get_targets()
+    song_id_list, valence_targets, arousal_targets = get_song_id_list(), get_valence_targets(), get_arousal_targets()
 
     print(song_id_list)
-    print(targets)
+    print(valence_targets)
+    print(arousal_targets)

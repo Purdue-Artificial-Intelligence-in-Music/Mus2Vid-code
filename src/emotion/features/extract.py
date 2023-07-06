@@ -1,8 +1,9 @@
+import os
 import pandas as pd
 import librosa
 import opensmile
 import joblib 
-from utilities import AUDIO_PATH, FEATURES_PATH, FEATURES_EXT, CHUNK_SIZE
+from utilities import AUDIO_DIR, FEATURES_DIR, FEATURES_EXT, CHUNK_SIZE
 
 
 def extract_librosa_features(song_id_list):
@@ -15,7 +16,7 @@ def extract_librosa_features(song_id_list):
         if i == CHUNK_SIZE: # TODO
             break # TODO
 
-        waveform, sample_rate = librosa.load(AUDIO_PATH + f"{song_id}.mp3")
+        waveform, sample_rate = librosa.load(f"{AUDIO_DIR}/{song_id}.wav")
 
         mfcc = librosa.feature.mfcc(y=waveform, sr=sample_rate)
         rolloff = librosa.feature.spectral_rolloff(y=waveform, sr=sample_rate)
@@ -34,7 +35,9 @@ def extract_librosa_features(song_id_list):
     )
 
     # TODO save features by chunk
-    joblib.dump(librosa_features, f"{FEATURES_PATH}librosa_features{FEATURES_EXT}")
+    if not os.path.exists(FEATURES_DIR):
+        os.mkdir(FEATURES_DIR)
+    joblib.dump(librosa_features, f"{FEATURES_DIR}/librosa.{FEATURES_EXT}")
 
 def extract_opensmile_features(song_id_list):
     smile = opensmile.Smile(
@@ -49,8 +52,7 @@ def extract_opensmile_features(song_id_list):
             print(f"{i}/{size}")
         
         # get smile features
-        filepath = AUDIO_PATH + str(file) + ".wav"
-        smile_features = smile.process_file(filepath)
+        smile_features = smile.process_file(f"{AUDIO_DIR}/{file}.wav")
         # convert from df to list
         smile_features = smile_features.values.tolist()
         # convert from 2d list to 1d list
@@ -61,7 +63,9 @@ def extract_opensmile_features(song_id_list):
         data=features_list
     )
     
-    joblib.dump(opensmile_features, f"{FEATURES_PATH}opensmile_features{FEATURES_EXT}")
+    if not os.path.exists(FEATURES_DIR):
+        os.mkdir(FEATURES_DIR)
+    joblib.dump(opensmile_features, f"{FEATURES_DIR}/opensmile.{FEATURES_EXT}")
 
 
 if __name__ == "__main__":
