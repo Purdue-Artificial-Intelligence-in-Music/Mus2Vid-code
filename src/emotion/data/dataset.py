@@ -1,5 +1,4 @@
 import os
-import shutil
 import subprocess
 
 
@@ -10,6 +9,8 @@ RAW_METADATA_PATH = "./data/raw/deam_dataset/metadata/metadata"
 
 PROCESSED_ANNOTATIONS_PATH = "./data/processed/annotations"
 PROCESSED_AUDIO_PATH = "./data/processed/audio"
+
+ANNOTATIONS_FILE = "static_annotations_averaged_songs_1_2000.csv"
 
 
 def process_audio():
@@ -34,8 +35,10 @@ def process_annotations():
     if not os.path.exists(PROCESSED_ANNOTATIONS_PATH):
         os.mkdir(PROCESSED_ANNOTATIONS_PATH)
 
-    for filename in os.listdir(RAW_ANNOTATIONS_PATH):
-        shutil.copyfile(f"{RAW_ANNOTATIONS_PATH}/{filename}", f"{PROCESSED_ANNOTATIONS_PATH}/{filename}")
+    with open(f"{RAW_ANNOTATIONS_PATH}/{ANNOTATIONS_FILE}", "r") as f_read:
+        lines = f_read.read().replace(" ", "")
+        with open(f"{PROCESSED_ANNOTATIONS_PATH}/{ANNOTATIONS_FILE}", "w") as f_write:
+            f_write.write(lines)
 
 def process_data():
     process_audio()
