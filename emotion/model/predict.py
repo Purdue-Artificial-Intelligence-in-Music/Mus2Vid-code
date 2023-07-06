@@ -1,5 +1,6 @@
 from regressor import EmotionRegressor
 
+
 def predict(input):
     valence_regressor, arousal_regressor = EmotionRegressor(), EmotionRegressor()
 
@@ -10,6 +11,7 @@ def predict(input):
     arousal_output = arousal_regressor.predict(input)
 
     return valence_output, arousal_output
+
 
 if __name__ == "__main__":
     input = []

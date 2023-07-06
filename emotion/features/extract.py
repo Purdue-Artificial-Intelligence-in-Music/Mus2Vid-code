@@ -7,12 +7,13 @@ from utilities import AUDIO_PATH, FEATURES_PATH, FEATURES_EXT, CHUNK_SIZE
 
 def extract_librosa_features(song_id_list):
     features_list = []
-    iter = 0
 
-    for song_id in song_id_list:
-        if iter == CHUNK_SIZE:
-            break
-        iter += 1
+    size = len(song_id_list)
+    for i, song_id in enumerate(song_id_list):
+        if i % CHUNK_SIZE == 0:
+            print(f"{i}/{size}")
+        if i == CHUNK_SIZE: # TODO
+            break # TODO
 
         waveform, sample_rate = librosa.load(AUDIO_PATH + f"{song_id}.mp3")
 
@@ -33,21 +34,19 @@ def extract_librosa_features(song_id_list):
     )
 
     # TODO save features by chunk
-    joblib.dump(librosa_features, FEATURES_PATH + "librosa_features" + FEATURES_EXT)
+    joblib.dump(librosa_features, f"{FEATURES_PATH}librosa_features{FEATURES_EXT}")
 
-# FIXME fix opensmile features
 def extract_opensmile_features(song_id_list):
     smile = opensmile.Smile(
         feature_set=opensmile.FeatureSet.emobase,
         feature_level=opensmile.FeatureLevel.Functionals,
     )
     features_list = [] # list of smile features for each clip
+
     size = len(song_id_list)
-    iter = 0
-    for file in song_id_list:
-        if iter % CHUNK_SIZE == 0:
-            print(f"{iter}/{size}")
-        iter += 1
+    for i, file in enumerate(song_id_list):
+        if i % CHUNK_SIZE == 0:
+            print(f"{i}/{size}")
         
         # get smile features
         filepath = AUDIO_PATH + str(file) + ".wav"
@@ -62,8 +61,8 @@ def extract_opensmile_features(song_id_list):
         data=features_list
     )
     
-    with open("opensmile_features.pkl", "wb") as f:
-        pickle.dump(opensmile_features, f)
+    joblib.dump(opensmile_features, f"{FEATURES_PATH}opensmile_features{FEATURES_EXT}")
+
 
 if __name__ == "__main__":
     from utilities import get_song_id_list

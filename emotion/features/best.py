@@ -7,6 +7,7 @@ from utilities import get_targets, FEATURES_PATH, FEATURES_EXT
 import joblib
 import pickle, lzma
 
+
 def select_librosa_features(librosa_features):
     targets = get_targets()[:10]
     selector = SelectKBest(f_regression, k=100)
@@ -39,6 +40,7 @@ def select_opensmile_features(matched_smile_df):
     print(selector.get_feature_names_out())
 
     return valence_features, arousal_features
+
 
 if __name__ == "__main__":
     with lzma.open('emotion/data/matched_smile.xz', 'rb') as f:
