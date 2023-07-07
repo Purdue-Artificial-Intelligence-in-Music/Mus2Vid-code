@@ -1,7 +1,7 @@
 import os
 import joblib
 from sklearn.svm import SVR
-from util import MODEL_DIR, MODEL_EXT
+from model_util import MODEL_DIR, MODEL_EXT
 
 
 class EmotionRegressor():

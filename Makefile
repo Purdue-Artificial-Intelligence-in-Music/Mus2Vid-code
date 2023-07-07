@@ -1,3 +1,4 @@
+emotion = "./src/emotion"
 emotion_data = "./src/emotion/data"
 emotion_features = "./src/emotion/features"
 emotion_model = "./src/emotion/model"
@@ -35,11 +36,14 @@ emotion-visualize-util:
 	@cd $(emotion_visualize); $(python) -m util
 emotion-visualize: emotion-visualize-dataset emotion-visualize-regression emotion-visualize-util
 
-emotion: emotion-data emotion-features emotion-model emotion-visualize
+emotion-main:
+	@cd $(emotion); $(python) -m main
+
+emotion: emotion-data emotion-features emotion-model emotion-visualize emotion-main
 
 
 .PHONY: emotion-data-process emotion-data-util emotion-data
 .PHONY: emotion-features-best emotion-features-extract emotion-features-util emotion-features
 .PHONY: emotion-model-regressor emotion-model-train emotion-model-util emotion-model
 .PHONY: emotion-visualize-dataset emotion-visualize-regression emotion-visualize-util emotion-visualize
-.PHONY: emotion
+.PHONY: emotion-main emotion

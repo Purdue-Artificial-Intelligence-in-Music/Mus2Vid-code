@@ -2,7 +2,7 @@ import joblib
 import os
 from sklearn.feature_selection import SelectKBest
 from sklearn.feature_selection import f_regression
-from util import get_valence_targets, get_arousal_targets, FEATURES_DIR, FEATURES_EXT, SELECTOR_EXT
+from features_util import get_valence_targets, get_arousal_targets, FEATURES_DIR, FEATURES_EXT, SELECTOR_EXT
 
 
 ##### librosa #####

@@ -1,5 +1,5 @@
 import matplotlib.pyplot as plt
-from util import get_dataset_va_values
+from visualize_util import get_dataset_va_values
 
 
 def plot_dataset():

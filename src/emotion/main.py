@@ -1,8 +1,10 @@
 import sys
-sys.path.append("./src/emotion/data")
-sys.path.append("./src/emotion/features")
-sys.path.append("./src/emotion/model")
-sys.path.append("./src/emotion/visualize")
+import os
+sys.path.append("./data")
+sys.path.append("./features")
+sys.path.append("./model")
+sys.path.append("./visualize")
+print(os.getcwd())
 print(sys.path)
 
 from model.regressor import EmotionRegressor
@@ -29,5 +31,5 @@ def get_emotion(audio_filepath):
 
 
 if __name__ == "__main__":
-    valence, arousal = get_va_values("./data/processed/audio/2.wav")
+    valence, arousal = get_va_values("./../../data/processed/audio/2.wav")
     print(f"(valence, arousal) = ({valence:.4f}, {arousal:.4f})")
