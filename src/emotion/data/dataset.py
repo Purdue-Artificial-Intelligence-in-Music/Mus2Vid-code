@@ -1,5 +1,6 @@
 import os
 import subprocess
+import pandas as pd
 
 
 RAW_ANNOTATIONS_DIR = "./data/raw/deam_dataset/DEAM_Annotations/annotations/annotations averaged per song/song_level"
@@ -34,10 +35,14 @@ def process_annotations():
     if not os.path.exists(PROCESSED_ANNOTATIONS_DIR):
         os.mkdir(PROCESSED_ANNOTATIONS_DIR)
 
-    with open(f"{RAW_ANNOTATIONS_DIR}/{ANNOTATIONS_FILE}", "r") as f_read:
-        lines = f_read.read().replace(" ", "")
-        with open(f"{PROCESSED_ANNOTATIONS_DIR}/{ANNOTATIONS_FILE}", "w") as f_write:
-            f_write.write(lines)
+    annotations = pd.read_csv(f"{RAW_ANNOTATIONS_DIR}/{ANNOTATIONS_FILE}")
+    annotations.rename(columns={
+        " valence_mean": "valence_mean",
+        " valence_std": "valence_std",
+        " arousal_mean": "arousal_mean",
+        " arousal_std": "arousal_std"
+    })
+    annotations.to_csv(f"{PROCESSED_ANNOTATIONS_DIR}/{ANNOTATIONS_FILE}")
 
 
 def process_data():
@@ -46,4 +51,5 @@ def process_data():
 
 
 if __name__ == "__main__":
-    process_data()
+    # process_data()
+    process_annotations()
