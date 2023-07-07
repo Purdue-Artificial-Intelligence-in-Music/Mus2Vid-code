@@ -1,9 +1,13 @@
 import sys
+sys.path.append("./src/emotion/data")
+sys.path.append("./src/emotion/features")
+sys.path.append("./src/emotion/model")
+sys.path.append("./src/emotion/visualize")
 print(sys.path)
 
-from emotion.model.regressor import EmotionRegressor
-from emotion.features.extract import extract_opensmile_features
-from emotion.features.best import get_best_opensmile_features
+from model.regressor import EmotionRegressor
+from features.extract import extract_opensmile_features
+from features.best import get_best_opensmile_features
 
 
 def get_va_values(audio_filepath):

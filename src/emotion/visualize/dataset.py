@@ -1,5 +1,5 @@
 import matplotlib.pyplot as plt
-from emotion.visualize.util import get_dataset_va_values
+from util import get_dataset_va_values
 
 
 def plot_dataset():
