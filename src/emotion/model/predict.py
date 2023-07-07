@@ -1,4 +1,4 @@
-from regressor import EmotionRegressor
+from model.regressor import EmotionRegressor
 
 
 def predict(input):

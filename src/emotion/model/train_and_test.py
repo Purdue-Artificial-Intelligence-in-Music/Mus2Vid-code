@@ -1,5 +1,5 @@
-from regressor import EmotionRegressor
-from utilities import get_features, get_valence_targets, get_arousal_targets
+from model.regressor import EmotionRegressor
+from model.utilities import get_features, get_valence_targets, get_arousal_targets
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error, mean_absolute_error
 
@@ -25,8 +25,8 @@ def test(
     arousal_mse = mean_squared_error(arousal_targets_test, arousal_targets_predict)
     valence_mae = mean_absolute_error(valence_targets_test, valence_targets_predict)
     arousal_mae = mean_absolute_error(arousal_targets_test, arousal_targets_predict)
-    print(f"MSE: (valence: {valence_mse:.4}, arousal: {arousal_mse:.4})")
-    print(f"MAE: (valence: {valence_mae:.4}, arousal: {arousal_mae:.4})")
+    print(f"MSE: (valence: {valence_mse:.4f}, arousal: {arousal_mse:.4f})")
+    print(f"MAE: (valence: {valence_mae:.4f}, arousal: {arousal_mae:.4f})")
 
 
 def train_and_test():

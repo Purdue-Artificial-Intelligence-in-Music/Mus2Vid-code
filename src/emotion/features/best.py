@@ -2,7 +2,7 @@ import joblib
 import os
 from sklearn.feature_selection import SelectKBest
 from sklearn.feature_selection import f_regression
-from utilities import get_valence_targets, get_arousal_targets, FEATURES_DIR, FEATURES_EXT, SELECTOR_EXT
+from features.utilities import get_valence_targets, get_arousal_targets, FEATURES_DIR, FEATURES_EXT, SELECTOR_EXT
 
 
 ##### librosa #####
@@ -22,7 +22,8 @@ def get_best_librosa_features(librosa_features):
 
 ##### opensmile #####
 
-def _save_opensmile_feature_selectors(opensmile_features):
+def _save_opensmile_feature_selectors():
+    opensmile_features = joblib.load(f"{FEATURES_DIR}/opensmile.{FEATURES_EXT}")
     valence_targets = get_valence_targets()
     arousal_targets = get_arousal_targets()
 
@@ -42,7 +43,7 @@ def get_best_opensmile_features(opensmile_features):
         os.path.exists(f"{FEATURES_DIR}/opensmile_valence.{SELECTOR_EXT}") and
         os.path.exists(f"{FEATURES_DIR}/opensmile_arousal.{SELECTOR_EXT}")
     ):
-        _save_opensmile_feature_selectors(opensmile_features)
+        _save_opensmile_feature_selectors()
 
     opensmile_valence_selector = joblib.load(f"{FEATURES_DIR}/opensmile_valence.{SELECTOR_EXT}")
     opensmile_arousal_selector = joblib.load(f"{FEATURES_DIR}/opensmile_arousal.{SELECTOR_EXT}")
