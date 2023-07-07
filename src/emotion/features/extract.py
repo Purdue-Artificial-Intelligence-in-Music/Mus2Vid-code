@@ -52,16 +52,16 @@ def save_librosa_features_list(audio_filepaths, filename="librosa"):
 
 ##### opensmile #####
 
-def extract_opensmile_features(smile, audio_filepath):
+def extract_opensmile_features(audio_filepath):
+    smile = opensmile.Smile(
+        feature_set=opensmile.FeatureSet.emobase,
+        feature_level=opensmile.FeatureLevel.Functionals,
+    )
     # Get smile features, convert from df to list, and convert from 2D list to 1D list
     return sum(smile.process_file(audio_filepath).values.tolist(), [])
 
 
 def get_opensmile_features_list(audio_filepaths):
-    smile = opensmile.Smile(
-        feature_set=opensmile.FeatureSet.emobase,
-        feature_level=opensmile.FeatureLevel.Functionals,
-    )
     opensmile_features_list = [] # list of smile features for each clip
 
     size = len(audio_filepaths)
@@ -69,7 +69,7 @@ def get_opensmile_features_list(audio_filepaths):
         if i % CHUNK_SIZE == 0:
             print(f"{i}/{size}")
         
-        opensmile_features_list.append(extract_opensmile_features(smile, audio_filepath))
+        opensmile_features_list.append(extract_opensmile_features(audio_filepath))
 
     return pd.DataFrame(data=opensmile_features_list)
 
