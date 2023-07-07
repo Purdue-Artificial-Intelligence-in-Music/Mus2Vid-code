@@ -3,7 +3,7 @@ import pandas as pd
 import librosa
 import opensmile
 import joblib 
-from utilities import AUDIO_DIR, FEATURES_DIR, FEATURES_EXT, CHUNK_SIZE
+from utilities import FEATURES_DIR, FEATURES_EXT, CHUNK_SIZE
 
 
 ##### librosa #####
