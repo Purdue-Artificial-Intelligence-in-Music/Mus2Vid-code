@@ -8,8 +8,14 @@ FEATURES_EXT = "features"
 CHUNK_SIZE = 10
 
 
-def get_song_id_list():
-    return pd.read_csv(ANNOTATIONS_PATH)["song_id"]
+def get_audio_filepaths():
+    song_id_list = pd.read_csv(ANNOTATIONS_PATH)["song_id"]
+
+    audio_filepaths = []
+    for song_id in song_id_list:
+        audio_filepaths.append(f"{AUDIO_DIR}/{song_id}.wav")
+
+    return audio_filepaths
 
 
 def get_valence_targets():
@@ -21,8 +27,8 @@ def get_arousal_targets():
 
 
 if __name__ == "__main__":
-    song_id_list, valence_targets, arousal_targets = get_song_id_list(), get_valence_targets(), get_arousal_targets()
+    audio_filepaths, valence_targets, arousal_targets = get_audio_filepaths(), get_valence_targets(), get_arousal_targets()
 
-    print(song_id_list)
+    print(audio_filepaths)
     print(valence_targets)
     print(arousal_targets)
