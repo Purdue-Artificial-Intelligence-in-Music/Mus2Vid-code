@@ -1,5 +1,5 @@
 from model.regressor import EmotionRegressor
-from model.utilities import get_features, get_valence_targets, get_arousal_targets
+from emotion.model.util import get_features, get_valence_targets, get_arousal_targets
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error, mean_absolute_error
 
