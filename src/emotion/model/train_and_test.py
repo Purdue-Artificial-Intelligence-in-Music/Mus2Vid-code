@@ -1,5 +1,5 @@
-from model.regressor import EmotionRegressor
-from emotion.model.util import get_features, get_valence_targets, get_arousal_targets
+from regressor import EmotionRegressor
+from util import get_features, get_valence_targets, get_arousal_targets
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error, mean_absolute_error
 
@@ -31,6 +31,8 @@ def test(
 
 def train_and_test():
     valence_regressor, arousal_regressor = EmotionRegressor(), EmotionRegressor()
+
+    opensmile_features = get_features("opensmile")
 
     valence_features = get_features("opensmile_valence")
     arousal_features = get_features("opensmile_arousal")

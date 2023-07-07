@@ -36,13 +36,13 @@ def process_annotations():
         os.mkdir(PROCESSED_ANNOTATIONS_DIR)
 
     annotations = pd.read_csv(f"{RAW_ANNOTATIONS_DIR}/{ANNOTATIONS_FILE}")
-    annotations.rename(columns={
+    annotations = annotations.rename(columns={
         " valence_mean": "valence_mean",
         " valence_std": "valence_std",
         " arousal_mean": "arousal_mean",
         " arousal_std": "arousal_std"
     })
-    annotations.to_csv(f"{PROCESSED_ANNOTATIONS_DIR}/{ANNOTATIONS_FILE}")
+    annotations.to_csv(f"{PROCESSED_ANNOTATIONS_DIR}/{ANNOTATIONS_FILE}", index=False)
 
 
 def process_data():
@@ -52,4 +52,3 @@ def process_data():
 
 if __name__ == "__main__":
     process_data()
-    process_annotations()
