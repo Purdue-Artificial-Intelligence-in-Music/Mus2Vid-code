@@ -5,6 +5,7 @@ ANNOTATIONS_PATH = "./data/processed/annotations/static_annotations_averaged_son
 AUDIO_DIR = "./data/processed/audio"
 FEATURES_DIR = "./data/interim/features"
 FEATURES_EXT = "features"
+SELECTOR_EXT = "selector"
 CHUNK_SIZE = 10
 
 
