@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 
-def plot_regressor():
+def plot_regression():
     pass
 
 
