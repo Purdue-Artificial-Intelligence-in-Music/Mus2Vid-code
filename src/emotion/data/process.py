@@ -51,5 +51,5 @@ def process_data():
 
 
 if __name__ == "__main__":
-    # process_data()
+    process_data()
     process_annotations()
