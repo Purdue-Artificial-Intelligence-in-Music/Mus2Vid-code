@@ -12,7 +12,6 @@ TARGETS_EXT = "targets"
 MODEL_EXT = "model"
 
 
-
 def get_features(filename):
     return joblib.load(f"{FEATURES_DIR}/{filename}.{FEATURES_EXT}")
 
