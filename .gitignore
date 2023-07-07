@@ -102,3 +102,4 @@ target/
 *.features
 *.model
 *.targets
+*.selector
