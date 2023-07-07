@@ -2,7 +2,7 @@ import joblib
 import os
 from sklearn.feature_selection import SelectKBest
 from sklearn.feature_selection import f_regression
-from util import get_valence_targets, get_arousal_targets, FEATURES_DIR, FEATURES_EXT, SELECTOR_EXT
+from emotion.features.util import get_valence_targets, get_arousal_targets, FEATURES_DIR, FEATURES_EXT, SELECTOR_EXT
 
 
 ##### librosa #####
@@ -54,12 +54,5 @@ def get_best_opensmile_features(opensmile_features):
     return opensmile_valence_features, opensmile_arousal_features
 
 
-def save_best_opensmile_features(opensmile_features):
-    opensmile_valence_features, opensmile_arousal_features = get_best_opensmile_features(opensmile_features)
-
-    joblib.dump(opensmile_valence_features, f"{FEATURES_DIR}/opensmile_valence.{FEATURES_EXT}")
-    joblib.dump(opensmile_arousal_features, f"{FEATURES_DIR}/opensmile_arousal.{FEATURES_EXT}")
-
-
 if __name__ == "__main__":
-    save_best_opensmile_features(joblib.load(f"{FEATURES_DIR}/opensmile.{FEATURES_EXT}"))
+    print(get_best_opensmile_features(joblib.load(f"{FEATURES_DIR}/opensmile.{FEATURES_EXT}")))

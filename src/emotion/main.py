@@ -1,9 +1,9 @@
 import sys
 print(sys.path)
 
-from model.regressor import EmotionRegressor
-from features.extract import extract_opensmile_features
-from features.best import get_best_opensmile_features
+from emotion.model.regressor import EmotionRegressor
+from emotion.features.extract import extract_opensmile_features
+from emotion.features.best import get_best_opensmile_features
 
 
 def get_va_values(audio_filepath):

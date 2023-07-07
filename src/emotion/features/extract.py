@@ -3,7 +3,7 @@ import pandas as pd
 import librosa
 import opensmile
 import joblib 
-from util import FEATURES_DIR, FEATURES_EXT, CHUNK_SIZE
+from emotion.features.util import FEATURES_DIR, FEATURES_EXT, CHUNK_SIZE
 
 
 def extract_librosa_features(audio_filepaths):
