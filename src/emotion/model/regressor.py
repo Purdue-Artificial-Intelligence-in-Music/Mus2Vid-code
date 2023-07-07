@@ -19,9 +19,7 @@ class EmotionRegressor():
         return self.svr.predict(inputs)
 
     def save(self, filename):
-        if not os.path.exists(MODEL_DIR):
-            os.mkdir(MODEL_DIR)
-
+        if not os.path.exists(MODEL_DIR): os.mkdir(MODEL_DIR)
         joblib.dump(self.svr, f"{MODEL_DIR}/{filename}.{MODEL_EXT}")
 
     def load(self, filename):
