@@ -1,15 +1,6 @@
-import sys
-import os
-sys.path.append("./data")
-sys.path.append("./features")
-sys.path.append("./model")
-sys.path.append("./visualize")
-print(os.getcwd())
-print(sys.path)
-
-from model.regressor import EmotionRegressor
-from features.extract import extract_opensmile_features
-from features.best import get_best_opensmile_features
+from emotion.model.regressor import EmotionRegressor
+from emotion.features.extract import extract_opensmile_features
+from emotion.features.best import get_best_opensmile_features
 
 
 def get_va_values(audio_filepath):
@@ -31,5 +22,5 @@ def get_emotion(audio_filepath):
 
 
 if __name__ == "__main__":
-    valence, arousal = get_va_values("./../../data/processed/audio/2.wav")
+    valence, arousal = get_va_values("../data/processed/audio/2.wav")
     print(f"(valence, arousal) = ({valence:.4f}, {arousal:.4f})")

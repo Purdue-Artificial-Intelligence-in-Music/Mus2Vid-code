@@ -1,4 +1,4 @@
-ROOT = "./../../.."
+ROOT = ".."
 RAW_ANNOTATIONS_DIR = f"{ROOT}/data/raw/deam_dataset/DEAM_Annotations/annotations/annotations averaged per song/song_level"
 RAW_AUDIO_DIR = f"{ROOT}/data/raw/deam_dataset/DEAM_audio/MEMD_audio"
 RAW_FEATURES_DIR = f"{ROOT}/data/raw/deam_dataset/features/features"

@@ -1,7 +1,7 @@
 import os
 import subprocess
 import pandas as pd
-from data_util import RAW_ANNOTATIONS_DIR, RAW_AUDIO_DIR, PROCESSED_ANNOTATIONS_DIR, PROCESSED_AUDIO_DIR, ANNOTATIONS_FILE
+from emotion.data.util import RAW_ANNOTATIONS_DIR, RAW_AUDIO_DIR, PROCESSED_ANNOTATIONS_DIR, PROCESSED_AUDIO_DIR, ANNOTATIONS_FILE
 
 
 def process_audio():

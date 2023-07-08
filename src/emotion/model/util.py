@@ -2,7 +2,7 @@ import joblib
 import pandas as pd
 
 
-ROOT = "./../../.."
+ROOT = ".."
 ANNOTATIONS_PATH = f"{ROOT}/data/processed/annotations/static_annotations_averaged_songs_1_2000.csv"
 FEATURES_DIR = f"{ROOT}/data/interim/features"
 TARGETS_DIR = f"{ROOT}/data/interim/targets"
