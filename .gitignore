@@ -97,3 +97,9 @@ target/
 
 # Mypy cache
 .mypy_cache/
+
+# data
+*.features
+*.model
+*.targets
+*.selector
