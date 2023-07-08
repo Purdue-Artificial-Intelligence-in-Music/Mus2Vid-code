@@ -2,6 +2,7 @@ import sys
 from utils.midi import *
 from utils.diffusion import *
 from utils.prompting import *
+from utils.upscaling import *
 model = tf.keras.models.load_model('utils\model.h5')
 
 def generate_picture(midi_path, image_name):
@@ -18,6 +19,7 @@ def generate_picture(midi_path, image_name):
     image = get_pic(prompt)
     display_images(image)
     image.images[0].save(image_name)
+    upscale_image(image_name,image_name)
 
 def main():
     # generate_picture(sys.argv[1], sys.argv[2])
