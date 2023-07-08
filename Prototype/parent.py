@@ -1,19 +1,16 @@
 import sys
-from utils.midi import *
+from utils.features import *
 from utils.diffusion import *
 from utils.prompting import *
-model = tf.keras.models.load_model('utils\model.h5')
+model = tf.keras.models.load_model('utils\genre_model.h5')
 
-def generate_picture(midi_path, image_name):
-    midi_obj = predict(midi_path)
-    midi_features = get_features(midi_obj)
+def generate_picture(audio, image_name):
+    audio_features = get_features(audio)
 
-    subgenre_num = model.predict(midi_features)
+    subgenre_num = model.predict(audio_features)
     subgenre = get_subgenre(np.argmax(subgenre_num))
-    print(subgenre)
 
     prompt = get_prompt(subgenre)
-    print(prompt)
 
     image = get_pic(prompt)
     display_images(image)
