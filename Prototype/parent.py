@@ -2,7 +2,8 @@ import sys
 from utils.features import *
 from utils.diffusion import *
 from utils.prompting import *
-model = tf.keras.models.load_model('utils\genre_model.h5')
+from utils.upscaling import *
+model = tf.keras.models.load_model('utils\model.h5')
 
 def generate_picture(audio, image_name):
     audio_features = get_features(audio)
@@ -15,6 +16,7 @@ def generate_picture(audio, image_name):
     image = get_pic(prompt)
     display_images(image)
     image.images[0].save(image_name)
+    upscale_image(image_name,image_name)
 
 def main():
     # generate_picture(sys.argv[1], sys.argv[2])
