@@ -1,10 +1,9 @@
 import pandas as pd
 
 
-ROOT = ".."
-ANNOTATIONS_PATH = f"{ROOT}/data/processed/annotations/static_annotations_averaged_songs_1_2000.csv"
-AUDIO_DIR = f"{ROOT}/data/processed/audio"
-FEATURES_DIR = f"{ROOT}/data/interim/features"
+ANNOTATIONS_PATH = "./data/processed/annotations/static_annotations_averaged_songs_1_2000.csv"
+AUDIO_DIR = "./data/processed/audio"
+FEATURES_DIR = "./data/interim/features"
 FEATURES_EXT = "features"
 SELECTOR_EXT = "selector"
 CHUNK_SIZE = 10

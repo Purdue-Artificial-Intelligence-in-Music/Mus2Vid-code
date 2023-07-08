@@ -1,8 +1,7 @@
 import pandas as pd
 
 
-ROOT = ".."
-ANNOTATIONS_PATH = f"{ROOT}/data/processed/annotations/static_annotations_averaged_songs_1_2000.csv"
+ANNOTATIONS_PATH = "./data/processed/annotations/static_annotations_averaged_songs_1_2000.csv"
 
 
 def get_dataset_va_values():

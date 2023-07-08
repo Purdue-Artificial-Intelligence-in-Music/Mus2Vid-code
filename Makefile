@@ -2,37 +2,37 @@ python = "python3"
 
 
 emotion-data-process:
-	@cd src; $(python) -m emotion.data.process
+	@$(python) -m src.emotion.data.process
 emotion-data-util:
-	@cd src; $(python) -m emotion.data.util 
+	@$(python) -m src.emotion.data.util 
 emotion-data: emotion-data-process emotion-data-util
 
 emotion-features-best:
-	@cd src; $(python) -m emotion.features.best
+	@$(python) -m src.emotion.features.best
 emotion-features-extract:
-	@cd src; $(python) -m emotion.features.extract
+	@$(python) -m src.emotion.features.extract
 emotion-features-util:
-	@cd src; $(python) -m emotion.features.util
+	@$(python) -m src.emotion.features.util
 emotion-features: emotion-features-best emotion-features-extract emotion-features-util
 
 emotion-model-regressor:
-	@cd src; $(python) -m emotion.model.regressor
+	@$(python) -m src.emotion.model.regressor
 emotion-model-train:
-	@cd src; $(python) -m emotion.model.train
+	@$(python) -m src.emotion.model.train
 emotion-model-util:
-	@cd src; $(python) -m emotion.model.util
+	@$(python) -m src.emotion.model.util
 emotion-model: emotion-model-regressor emotion-model-train emotion-model-util
 
 emotion-visualize-dataset:
-	@cd src; $(python) -m emotion.visualize.dataset
+	@$(python) -m src.emotion.visualize.dataset
 emotion-visualize-regression:
-	@cd src; $(python) -m emotion.visualize.regression
+	@$(python) -m src.emotion.visualize.regression
 emotion-visualize-util:
-	@cd src; $(python) -m emotion.visualize.util
+	@$(python) -m src.emotion.visualize.util
 emotion-visualize: emotion-visualize-dataset emotion-visualize-regression emotion-visualize-util
 
 emotion-main:
-	@cd src; $(python) -m emotion.main
+	@$(python) -m src.emotion.main
 
 emotion: emotion-data emotion-features emotion-model emotion-visualize emotion-main
 

@@ -2,11 +2,10 @@ import joblib
 import pandas as pd
 
 
-ROOT = ".."
-ANNOTATIONS_PATH = f"{ROOT}/data/processed/annotations/static_annotations_averaged_songs_1_2000.csv"
-FEATURES_DIR = f"{ROOT}/data/interim/features"
-TARGETS_DIR = f"{ROOT}/data/interim/targets"
-MODEL_DIR = f"{ROOT}/models/emotion"
+ANNOTATIONS_PATH = "./data/processed/annotations/static_annotations_averaged_songs_1_2000.csv"
+FEATURES_DIR = "./data/interim/features"
+TARGETS_DIR = "./data/interim/targets"
+MODEL_DIR = "./models/emotion"
 FEATURES_EXT = "features"
 TARGETS_EXT = "targets"
 MODEL_EXT = "model"
