@@ -37,7 +37,7 @@ def get_emotion(audio_filepath: str) -> str:
     Parameters
     ----------
     audio_filepath
-        Filepath of audio relative to repository root (i.e., "./Mus2Vid-code").
+        Filepath of audio relative to repository root.
 
     Returns
     -------
