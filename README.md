@@ -35,7 +35,7 @@ Professor Kristen Yeon-Ji Yun (Music).
 | ---- | ----------- |
 | [Miniconda <i class="fa fa-external-link" style="font-size:12px"></i>](https://docs.conda.io/en/main/miniconda.html) or [Conda <i class="fa fa-external-link" style="font-size:12px"></i>](https://www.anaconda.com/download/) | Package manager |
 | Linux or Windows Subsystem for Linux (WSL) | Something about linux |
-| deam_dataset.zip | See [Download Raw Data](#download-raw-data) |
+| `deam_dataset.zip` | See [Download Raw Data](#download-raw-data) |
 
 ### Conda environment
 
