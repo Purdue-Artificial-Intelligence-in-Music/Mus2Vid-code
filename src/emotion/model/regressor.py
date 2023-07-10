@@ -16,6 +16,7 @@ class EmotionRegressor():
     """
 
     def __init__(self, epsilon=0.2) -> None:
+        """Initialize regressor with option to set epsilon value."""
         self.svr = SVR(epsilon=epsilon)
 
     def fit(self, features: pd.DataFrame, targets: pd.DataFrame) -> None:

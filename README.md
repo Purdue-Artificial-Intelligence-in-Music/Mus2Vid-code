@@ -18,7 +18,7 @@ Professor Kristen Yeon-Ji Yun (Music).
     - [Download raw data](#download-raw-data)
 - [Documentation](#documentation)
     - [Reference docs](#reference-docs)
-        - [Docstring examples](#docstring-examples)
+        - [Docstrings](#docstrings)
     - [Process docs](#process-docs)
 - [Repository Structure](#repository-structure-current)
     - [Current](#current)
@@ -79,13 +79,23 @@ Mus2Vid-code/
 
 ### Reference docs
 
-Docstrings are used for commenting packages, modules, classes,
+Docstrings are used for code comments for packages, modules, classes,
 functions, and methods. Inline comments just use regular python comments
 and should be used *sparingly*.
 
-#### Docstring examples
+As a rule of thumb, code comments should not be used to convey info that
+can be easily gathered from the code itself.
+
+If short on time, focus on writing comments for broad things (e.g.,
+modules, classes) and/or segments of code that might be harder to
+understand (e.g., nested list comprehensions, complex algorithm).
+
+#### Docstrings
 
 *Function*
+
+Functions should generally have a section for Parameters and Returns.
+Returns should have type hints and&mdash;if necessary&mdash;a short description.
 
 ```py
 def get_va_values(audio_filepath: str) -> tuple[float, float]:
@@ -123,7 +133,11 @@ def get_valence_targets() -> pd.Series:
     return pd.read_csv(ANNOTATIONS_PATH)["valence_mean"]
 ```
 
-*Class*
+*Classes and methods*
+
+Classes with attributes will have an Attributes section.
+The methods should not be included in the class's docstring.
+Instead, each method should have its own docstring.
 
 ```py
 class EmotionRegressor():
@@ -136,6 +150,7 @@ class EmotionRegressor():
     """
 
     def __init__(self, epsilon=0.2) -> None:
+        """Initialize regressor with option to set epsilon value."""
         self.svr = SVR(epsilon=epsilon)
 
     def fit(self, features: pd.DataFrame, targets: pd.DataFrame) -> None:
