@@ -1,11 +1,15 @@
 python=python3
 
 
+# conda
+
 conda:
 	conda env update -n mus2vid --prune -f environment.yml
 conda-save:
 	conda env export | grep -v "^prefix: " > environment.yml
 
+
+# emotion module
 
 emotion-data-process:
 	$(python) -m src.emotion.data.process
