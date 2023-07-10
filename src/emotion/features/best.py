@@ -9,6 +9,10 @@ from src.emotion.features.util import get_valence_targets, get_arousal_targets, 
 def _save_opensmile_feature_selectors():
     """Train and save feature selectors for later use.
 
+    Choose the 100 most effective features and save feature
+    selector for prediction/inference based off of the
+    training features and targets.
+
     Returns
     -------
     None
@@ -17,8 +21,8 @@ def _save_opensmile_feature_selectors():
     valence_targets = get_valence_targets()
     arousal_targets = get_arousal_targets()
 
-    opensmile_valence_selector = SelectKBest(score_func=f_regression, k=100) # Choose the 100 most effective features
-    opensmile_arousal_selector = SelectKBest(score_func=f_regression, k=100) # Choose the 100 most effective features
+    opensmile_valence_selector = SelectKBest(score_func=f_regression, k=100)
+    opensmile_arousal_selector = SelectKBest(score_func=f_regression, k=100)
 
     opensmile_valence_selector.fit(opensmile_features, valence_targets)
     opensmile_arousal_selector.fit(opensmile_features, arousal_targets)

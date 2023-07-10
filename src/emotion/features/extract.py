@@ -7,12 +7,13 @@ from src.emotion.features.util import FEATURES_DIR, FEATURES_EXT, CHUNK_SIZE
 
 
 def extract_opensmile_features(audio_filepaths: list[str]):
-    """Return a pandas.DataFrame of openSMILE features extracted from audio specified at the given filepaths.
+    """Return a pandas.DataFrame of openSMILE features 
+    extracted from audio specified at the given filepaths.
 
     Parameters
     ----------
     audio_filepaths
-        A list of audio filepaths relative to repository root (i.e., "./Mus2Vid-code").
+        A list of audio filepaths relative to repository root.
     """
     if os.path.exists(f"{FEATURES_DIR}/opensmile.{FEATURES_EXT}"):
         return joblib.load(f"{FEATURES_DIR}/opensmile.{FEATURES_EXT}")
@@ -21,7 +22,7 @@ def extract_opensmile_features(audio_filepaths: list[str]):
         feature_set=opensmile.FeatureSet.emobase,
         feature_level=opensmile.FeatureLevel.Functionals,
     )
-    opensmile_features_list = [] # list of smile features for each clip
+    opensmile_features_list = []
 
     size = len(audio_filepaths)
     for i, audio_filepath in enumerate(audio_filepaths):

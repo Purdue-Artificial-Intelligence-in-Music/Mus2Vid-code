@@ -10,7 +10,7 @@ CHUNK_SIZE = 10
 
 
 def get_audio_filepaths() -> list[str]:
-    """Return a list of audio filepaths relative to repository root (i.e., "./Mus2Vid-code")."""
+    """Return a list of audio filepaths relative to repository root."""
     song_id_list = pd.read_csv(ANNOTATIONS_PATH)["song_id"]
 
     audio_filepaths = []

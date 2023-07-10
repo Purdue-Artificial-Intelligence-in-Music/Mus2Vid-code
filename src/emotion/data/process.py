@@ -7,8 +7,8 @@ from src.emotion.data.util import RAW_ANNOTATIONS_DIR, RAW_AUDIO_DIR, PROCESSED_
 def process_audio() -> None:
     """Process raw audio files for use with emotion module.
 
-    Take .mp3 audio files from directory specified by RAW_AUDIO_DIR,
-    convert them to .wav files, and save them in PROCESSED_AUDIO_DIR.
+    Take .mp3 audio files, convert them to .wav files,
+    and save them in PROCESSED_AUDIO_DIR.
 
     Returns
     -------
@@ -32,7 +32,7 @@ def process_audio() -> None:
             ])
 
 
-def process_annotations():
+def process_annotations() -> None:
     """Process audio annotations for use with emotion module.
 
     Take raw annotation files and remove extra space from column headers.
