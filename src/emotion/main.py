@@ -18,7 +18,8 @@ def get_va_values(audio_filepath: str) -> tuple[float, float]:
     arousal: float
         A float between 1 and 9.
     """
-    valence_regressor, arousal_regressor = EmotionRegressor(), EmotionRegressor()
+    valence_regressor = EmotionRegressor()
+    arousal_regressor = EmotionRegressor()
     valence_regressor.load("valence_regressor")
     arousal_regressor.load("arousal_regressor")
 
