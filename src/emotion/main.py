@@ -31,7 +31,7 @@ def get_va_values(audio_filepath: str) -> tuple[float, float]:
     return valence, arousal
 
 
-def get_emotion(audio_filepath):
+def get_emotion(audio_filepath: str) -> str:
     """Process audio at given filepath and return an emotion.
 
     Parameters
