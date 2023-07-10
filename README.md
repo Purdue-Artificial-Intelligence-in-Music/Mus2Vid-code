@@ -5,13 +5,26 @@ Automatic generation of video accompaniment for classical music.
 This project is affiliated with the CAM2 research lab, and is under the
 direction of Professor Yung-Hsiang Lu (ECE) and Professor Kristen Yeon-Ji Yun (Music).
 
-## Setup
+## Table of Contents
 
-#### Clone the repository
+- [Setup](#setup)
+    - [Clone the repository](#clone-the-repository)
+    - [Conda environment](#conda-environment)
+    - [Download raw data](#download-raw-data)
+- [Documentation](#documentation)
+    - [Reference docs](#reference-docs)
+    - [Process docs](#process-docs)
+- [Repository Structure](#repository-structure-current)
+    - [Current](#current)
+    - [Proposed](#proposed)
+
+# Setup
+
+### Clone the repository
 
     $ git clone git@github.com:Mus2Vid/Mus2Vid-code.git
 
-#### Requirements
+### Requirements
 
 | Name | Description |
 | ---- | ----------- |
@@ -19,7 +32,7 @@ direction of Professor Yung-Hsiang Lu (ECE) and Professor Kristen Yeon-Ji Yun (M
 | Linux or Windows Subsystem for Linux (WSL) | Something about linux |
 | deam_dataset.zip | See [Download Raw Data](#download-raw-data) |
 
-#### Conda environment
+### Conda environment
 
 Create or update the conda environment by running this command from
 the root of the repository 
@@ -33,7 +46,7 @@ Save conda environment to `environment.yml`
 *Note: these commands work regardless of whether or not
 the conda environment is currently activated*.
 
-#### Download raw data
+### Download raw data
 
 Download `deam_dataset.zip`, and extract its contents into `data/raw`.
 
@@ -56,7 +69,21 @@ Mus2Vid-code/
 └── ...
 ```
 
-## Repository Structure (Current)
+# Documentation
+
+### Reference docs
+
+Docstrings are used for commenting packages, modules, classes,
+functions, and methods. Inline comments just use regular python comments
+and should be used sparingly.
+
+### Process docs
+
+Google Drive will be used to host our design docs.
+
+# Repository Structure 
+
+### Current
 
 ```
 Mus2Vid-code/
@@ -132,7 +159,7 @@ Mus2Vid-code/
             └── util.py
 ```
 
-## Repository Structure (Proposed)
+### Proposed
 
 ```
 Mus2Vid-code/
