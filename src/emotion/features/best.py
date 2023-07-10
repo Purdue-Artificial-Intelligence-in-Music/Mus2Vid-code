@@ -7,6 +7,12 @@ from src.emotion.features.util import get_valence_targets, get_arousal_targets, 
 
 
 def _save_opensmile_feature_selectors():
+    """Train and save feature selectors for later use.
+
+    Returns
+    -------
+    None
+    """
     opensmile_features = joblib.load(f"{FEATURES_DIR}/opensmile.{FEATURES_EXT}")
     valence_targets = get_valence_targets()
     arousal_targets = get_arousal_targets()
