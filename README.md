@@ -81,7 +81,7 @@ Mus2Vid-code/
 
 Docstrings are used for commenting packages, modules, classes,
 functions, and methods. Inline comments just use regular python comments
-and should be used sparingly.
+and should be used *sparingly*.
 
 #### Docstring examples
 
