@@ -5,7 +5,58 @@ Automatic generation of video accompaniment for classical music.
 This project is affiliated with the CAM2 research lab, and is under the
 direction of Professor Yung-Hsiang Lu (ECE) and Professor Kristen Yeon-Ji Yun (Music).
 
-# Repository Structure (Current)
+## Setup
+
+#### Clone the repository
+
+    $ git clone git@github.com:Mus2Vid/Mus2Vid-code.git
+
+#### Requirements
+
+| Name | Description |
+| ---- | ----------- |
+| [Miniconda or Conda](https://conda.io/projects/conda/en/latest/user-guide/install/index.html) | Package manager |
+| Linux or Windows Subsystem for Linux (WSL) | Something about linux |
+| deam_dataset.zip | See [Download Raw Data](#download-raw-data) |
+
+#### Conda environment
+
+Create or update the conda environment by running this command from
+the root of the repository 
+
+    $ make conda
+
+Save conda environment to `environment.yml`
+
+    $ make conda-save
+
+*Note: these commands work regardless of whether or not
+the environment is currently activated*.
+
+#### Download raw data
+
+Download `deam_dataset.zip`, and extract its contents into `data/raw`.
+
+Your directory should look like this after extracting `deam_dataset.zip`:
+
+```
+Mus2Vid-code/
+├── ...
+├── data/
+│   └── raw/
+│       └── deam_dataset/
+│           ├── DEAM_Annotations/
+│           │   └── ...
+│           ├── DEAM_audio/
+│           │   └── ...
+│           ├── features/
+│           │   └── ...
+│           └── metadata/
+│               └── ...
+└── ...
+```
+
+## Repository Structure (Current)
 
 ```
 Mus2Vid-code/
@@ -81,7 +132,7 @@ Mus2Vid-code/
             └── util.py
 ```
 
-# Repository Structure (Proposed)
+## Repository Structure (Proposed)
 
 ```
 Mus2Vid-code/
