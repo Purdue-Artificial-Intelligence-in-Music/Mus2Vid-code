@@ -1,6 +1,5 @@
 import os
 import pandas as pd
-import librosa
 import opensmile
 import joblib 
 from src.emotion.features.util import FEATURES_DIR, FEATURES_EXT, CHUNK_SIZE
