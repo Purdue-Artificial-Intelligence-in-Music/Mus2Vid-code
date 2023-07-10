@@ -8,7 +8,7 @@ def process_audio() -> None:
     """Process raw audio files for use with emotion module.
 
     Take .mp3 audio files, convert them to .wav files,
-    and save them in PROCESSED_AUDIO_DIR.
+    and save them in a separate directory.
 
     Returns
     -------

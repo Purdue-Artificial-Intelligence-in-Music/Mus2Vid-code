@@ -18,6 +18,7 @@ Professor Kristen Yeon-Ji Yun (Music).
     - [Download raw data](#download-raw-data)
 - [Documentation](#documentation)
     - [Reference docs](#reference-docs)
+        - [Docstring examples](#docstring-examples)
     - [Process docs](#process-docs)
 - [Repository Structure](#repository-structure-current)
     - [Current](#current)
@@ -81,6 +82,79 @@ Mus2Vid-code/
 Docstrings are used for commenting packages, modules, classes,
 functions, and methods. Inline comments just use regular python comments
 and should be used sparingly.
+
+#### Docstring examples
+
+*Function*
+
+```py
+def get_va_values(audio_filepath: str) -> tuple[float, float]:
+    """Process audio at given filepath and return valence and arousal values.
+
+    Parameters
+    ----------
+    audio_filepath
+        Filepath relative to repository root.
+
+    Returns
+    -------
+    valence: float
+        A float between 1 and 9.
+    arousal: float
+        A float between 1 and 9.
+    """
+    valence_regressor = EmotionRegressor()
+    arousal_regressor = EmotionRegressor()
+    valence_regressor.load("valence_regressor")
+    arousal_regressor.load("arousal_regressor")
+
+    opensmile_features = extract_opensmile_features([audio_filepath])
+    opensmile_valence_features, opensmile_arousal_features = get_best_opensmile_features(opensmile_features)
+
+    valence = valence_regressor.predict(opensmile_valence_features)[0]
+    arousal = arousal_regressor.predict(opensmile_arousal_features)[0]
+
+    return valence, arousal
+```
+
+```py
+def get_valence_targets() -> pd.Series:
+    """Return a pandas.Series of target values for valence."""
+    return pd.read_csv(ANNOTATIONS_PATH)["valence_mean"]
+```
+
+*Class*
+
+```py
+class EmotionRegressor():
+    """A Support Vector Regressor (SVR) for predicting valence and
+    arousal values given the pre-extracted features of an audio file.
+    
+    EmotionRegressor can be used to predict both valence and
+    arousal values from an audio file. Separate instances of EmotionRegressor
+    should be used for valence and arousal.
+    """
+
+    def __init__(self, epsilon=0.2) -> None:
+        self.svr = SVR(epsilon=epsilon)
+
+    def fit(self, features: pd.DataFrame, targets: pd.DataFrame) -> None:
+        """Fit model to provided set of features and targets."""
+        self.svr.fit(features, targets)
+
+    def predict(self, inputs: pd.DataFrame) -> np.ndarray:
+        """Predict and return valence and arousal values."""
+        return self.svr.predict(inputs)
+
+    def save(self, filename: str) -> None:
+        """Save the current model to a file."""
+        if not os.path.exists(MODEL_DIR): os.mkdir(MODEL_DIR)
+        joblib.dump(self.svr, f"{MODEL_DIR}/{filename}.{MODEL_EXT}")
+
+    def load(self, filename: str) -> None:
+        """Load a model from a file."""
+        self.svr = joblib.load(f"{MODEL_DIR}/{filename}.{MODEL_EXT}") 
+```
 
 ### Process docs
 

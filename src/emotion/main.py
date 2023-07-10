@@ -9,7 +9,7 @@ def get_va_values(audio_filepath: str) -> tuple[float, float]:
     Parameters
     ----------
     audio_filepath
-        Relative filepath to Mus2Vid-code's root.
+        Filepath relative to repository root.
 
     Returns
     -------
