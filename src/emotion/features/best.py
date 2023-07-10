@@ -32,7 +32,7 @@ def _save_opensmile_feature_selectors():
     joblib.dump(opensmile_arousal_selector, f"{FEATURES_DIR}/opensmile_arousal.{SELECTOR_EXT}")
 
 
-def get_best_opensmile_features(opensmile_features: pd.DataFrame) -> tuple[list, list]:
+def get_best_opensmile_features(opensmile_features: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame]:
     """Return the best pre-extracted openSMILE features.
 
     Parameters
