@@ -31,7 +31,7 @@ Save conda environment to `environment.yml`
     $ make conda-save
 
 *Note: these commands work regardless of whether or not
-the environment is currently activated*.
+the conda environment is currently activated*.
 
 #### Download raw data
 
