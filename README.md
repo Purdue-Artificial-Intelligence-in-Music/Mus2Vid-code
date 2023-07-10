@@ -79,8 +79,11 @@ Mus2Vid-code/
 
 ### Reference docs
 
-Docstrings are used for code comments for packages, modules, classes,
-functions, and methods. Inline comments just use regular python comments
+Docstrings can be used for code comments for packages, modules, classes,
+functions, and methods. A docstring is contained within a pair of triple
+quotes (i.e., `"""example docstring"""`).
+
+Inline comments just use regular python comments
 and should be used *sparingly*.
 
 As a rule of thumb, code comments should not be used to convey info that
