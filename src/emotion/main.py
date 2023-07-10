@@ -20,6 +20,8 @@ def get_va_values(audio_filepath):
 def get_emotion(audio_filepath):
     valence, arousal = get_va_values(audio_filepath)
 
+    return "emotion"
+
 
 if __name__ == "__main__":
     valence, arousal = get_va_values("../data/processed/audio/2.wav")
