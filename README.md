@@ -1,9 +1,12 @@
-# Mus2Vid
+# Mus2Vid: Automatic generation of video accompaniment for classical music
 
 Welcome to the repository for the Purdue research project Mus2Vid:
 Automatic generation of video accompaniment for classical music.
-This project is affiliated with the CAM2 research lab, and is under the
-direction of Professor Yung-Hsiang Lu (ECE) and Professor Kristen Yeon-Ji Yun (Music).
+This project is affiliated with the
+[CAM<sup>2</sup> research lab](https://engineering.purdue.edu/VIP/teams/cam2)
+and is under the direction of
+Professor Yung-Hsiang Lu (ECE) and
+Professor Kristen Yeon-Ji Yun (Music).
 
 ## Table of Contents
 
@@ -28,7 +31,7 @@ direction of Professor Yung-Hsiang Lu (ECE) and Professor Kristen Yeon-Ji Yun (M
 
 | Name | Description |
 | ---- | ----------- |
-| [Miniconda or Conda](https://conda.io/projects/conda/en/latest/user-guide/install/index.html) | Package manager |
+| [Miniconda](https://docs.conda.io/en/main/miniconda.html) or [Conda](https://www.anaconda.com/download/) | Package manager |
 | Linux or Windows Subsystem for Linux (WSL) | Something about linux |
 | deam_dataset.zip | See [Download Raw Data](#download-raw-data) |
 
