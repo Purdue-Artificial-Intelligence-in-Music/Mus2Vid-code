@@ -1,5 +1,5 @@
 import sys
-from utils.midi import *
+from utils.features import *
 from utils.diffusion import *
 from utils.prompting import *
 from utils.upscaling import *
