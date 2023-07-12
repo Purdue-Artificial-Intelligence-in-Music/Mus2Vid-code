@@ -3,8 +3,23 @@ from src.emotion.features.extract import extract_opensmile_features
 from src.emotion.features.best import get_best_opensmile_features
 
 
-def get_va_values(audio_filepath):
-    valence_regressor, arousal_regressor = EmotionRegressor(), EmotionRegressor()
+def get_va_values(audio_filepath: str) -> tuple[float, float]:
+    """Process audio at given filepath and return valence and arousal values.
+
+    Parameters
+    ----------
+    audio_filepath
+        Filepath relative to repository root.
+
+    Returns
+    -------
+    valence: float
+        A float between 1 and 9.
+    arousal: float
+        A float between 1 and 9.
+    """
+    valence_regressor = EmotionRegressor()
+    arousal_regressor = EmotionRegressor()
     valence_regressor.load("valence_regressor")
     arousal_regressor.load("arousal_regressor")
 
@@ -17,8 +32,24 @@ def get_va_values(audio_filepath):
     return valence, arousal
 
 
-def get_emotion(audio_filepath):
+def get_emotion(audio_filepath: str) -> str:
+    """Process audio at given filepath and return an emotion.
+
+    Parameters
+    ----------
+    audio_filepath
+        Filepath of audio relative to repository root.
+
+    Returns
+    -------
+    emotion: str
+        An emotion word or phrase that describes the provided audio.
+    """
     valence, arousal = get_va_values(audio_filepath)
+
+    emotion = "happy"
+
+    return emotion
 
 
 if __name__ == "__main__":

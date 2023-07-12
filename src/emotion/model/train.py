@@ -8,7 +8,7 @@ def train(
     valence_regressor, arousal_regressor,
     valence_features_train, arousal_features_train,
     valence_targets_train, arousal_targets_train
-):
+) -> None:
     valence_regressor.fit(valence_features_train, valence_targets_train)
     arousal_regressor.fit(arousal_features_train, arousal_targets_train)
 
@@ -17,7 +17,7 @@ def test(
     valence_regressor, arousal_regressor,
     valence_features_test, arousal_features_test,
     valence_targets_test, arousal_targets_test
-):
+) -> None:
     valence_targets_predict = valence_regressor.predict(valence_features_test)
     arousal_targets_predict = arousal_regressor.predict(arousal_features_test)
 
@@ -29,7 +29,7 @@ def test(
     print(f"MAE: (valence: {valence_mae:.4f}, arousal: {arousal_mae:.4f})")
 
 
-def train_and_test():
+def train_and_test() -> None:
     valence_regressor, arousal_regressor = EmotionRegressor(), EmotionRegressor()
 
     opensmile_features = get_features("opensmile")

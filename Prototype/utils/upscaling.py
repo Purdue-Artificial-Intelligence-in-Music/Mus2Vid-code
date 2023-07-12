@@ -2,6 +2,8 @@ from realesrgan import RealESRGANer
 import cv2
 from basicsr.archs.rrdbnet_arch import RRDBNet
 from basicsr.utils.download_util import load_file_from_url
+import numpy
+from PIL import Image
 
 def get_upsampler(model_str = 'x2'):
     """    
@@ -25,27 +27,29 @@ def get_upsampler(model_str = 'x2'):
     upsampler = RealESRGANer(scale=netscale,model_path=model_path,model=model,half=True)
     return upsampler
 
-def get_upscaled_image(input, output, upsampler):
+def get_upscaled_image(input, upsampler):
     """
     upscales an input image using an upsampler object
 
     Parameters:
-        input (str): The path to the input image file
-        output (str): The path to the output image file
+        input (PIL image): The input image 
         upsampler: upsampler object
+    Returns:
+        output (list of PIL image): list of upscaled image
     """
-    img = cv2.imread(input)
+    img = numpy.array(input)
     sr_image, _ = upsampler.enhance(img)
-    cv2.imwrite(output,sr_image)
+    return [Image.fromarray(sr_image)]
 
-def upscale_image(input, output, model_str = 'x2'):
+def upscale_image(input, model_str = 'x2'):
     """
     downloads a model and upscales the input image
-    
+
     Parameters:
-        input (str): The path to the input image file
-        output (str): The path to the output image file
+        input (PIL image): The input image
         model_str (str): x2 or x4 default: x2
+    Returns:
+        output (list of PIL image): list of upscaled image
     """
     upsampler = get_upsampler(model_str=model_str)
-    get_upscaled_image(input=input, output=output, upsampler=upsampler)
+    return get_upscaled_image(input=input, upsampler=upsampler)
