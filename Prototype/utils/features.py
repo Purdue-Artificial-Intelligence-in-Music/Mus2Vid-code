@@ -14,7 +14,7 @@ def get_features(audio, selector_file = "genre_features.selector"):
     smile_features = get_smile_features(audio)
     midi_features = get_midi_features(midi_obj)
 
-    audio_features = np.concatenate((smile_features, midi_features), axis=1)
+    audio_features = np.asarray(smile_features + midi_features).reshape((1, len(smile_features + midi_features)))
     audio_features = selector.transform(audio_features)
 
     return audio_features
@@ -129,9 +129,6 @@ def get_midi_features(midi_obj):
     # features.append(chords)
     # features.append(changes)
     # features.append(grams)
-
-    features = np.asarray(features)
-    features = np.expand_dims(features, axis = 0)
 
     return features
 
