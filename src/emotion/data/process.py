@@ -4,7 +4,16 @@ import pandas as pd
 from src.emotion.data.util import RAW_ANNOTATIONS_DIR, RAW_AUDIO_DIR, PROCESSED_ANNOTATIONS_DIR, PROCESSED_AUDIO_DIR, ANNOTATIONS_FILE
 
 
-def process_audio():
+def process_audio() -> None:
+    """Process raw audio files for use with emotion module.
+
+    Take .mp3 audio files, convert them to .wav files,
+    and save them in a separate directory.
+
+    Returns
+    -------
+    None
+    """
     if not os.path.exists(PROCESSED_AUDIO_DIR):
         os.mkdir(PROCESSED_AUDIO_DIR)
 
@@ -23,7 +32,15 @@ def process_audio():
             ])
 
 
-def process_annotations():
+def process_annotations() -> None:
+    """Process audio annotations for use with emotion module.
+
+    Take raw annotation files and remove extra space from column headers.
+    
+    Returns
+    -------
+    None
+    """
     if not os.path.exists(PROCESSED_ANNOTATIONS_DIR):
         os.mkdir(PROCESSED_ANNOTATIONS_DIR)
 
@@ -37,10 +54,6 @@ def process_annotations():
     annotations.to_csv(f"{PROCESSED_ANNOTATIONS_DIR}/{ANNOTATIONS_FILE}", index=False)
 
 
-def process_data():
+if __name__ == "__main__":
     process_audio()
     process_annotations()
-
-
-if __name__ == "__main__":
-    process_data()

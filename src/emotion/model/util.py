@@ -11,15 +11,18 @@ TARGETS_EXT = "targets"
 MODEL_EXT = "model"
 
 
-def get_features(filename):
+def get_features(filename) -> pd.DataFrame:
+    """Return a pandas.DataFrame of features loaded from a file."""
     return joblib.load(f"{FEATURES_DIR}/{filename}.{FEATURES_EXT}")
 
 
-def get_valence_targets():
+def get_valence_targets() -> pd.Series:
+    """Return a pandas.Series of target values for valence."""
     return pd.read_csv(ANNOTATIONS_PATH)["valence_mean"]
 
 
-def get_arousal_targets():
+def get_arousal_targets() -> pd.Series:
+    """Return a pandas.Series of target values for arousal."""
     return pd.read_csv(ANNOTATIONS_PATH)["arousal_mean"]
 
 

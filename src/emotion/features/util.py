@@ -9,7 +9,8 @@ SELECTOR_EXT = "selector"
 CHUNK_SIZE = 10
 
 
-def get_audio_filepaths():
+def get_audio_filepaths() -> list[str]:
+    """Return a list of audio filepaths relative to repository root."""
     song_id_list = pd.read_csv(ANNOTATIONS_PATH)["song_id"]
 
     audio_filepaths = []
@@ -19,11 +20,13 @@ def get_audio_filepaths():
     return audio_filepaths
 
 
-def get_valence_targets():
+def get_valence_targets() -> pd.Series:
+    """Return a pandas.Series of target values for valence."""
     return pd.read_csv(ANNOTATIONS_PATH)["valence_mean"]
 
 
-def get_arousal_targets():
+def get_arousal_targets() -> pd.Series:
+    """Return a pandas.Series of target values for arousal."""
     return pd.read_csv(ANNOTATIONS_PATH)["arousal_mean"]
 
 

@@ -2,7 +2,8 @@ import matplotlib.pyplot as plt
 from src.emotion.visualize.util import get_dataset_va_values
 
 
-def plot_dataset():
+def plot_dataset() -> None:
+    """Plot the valence and arousal values of the dataset."""
     valence, arousal = get_dataset_va_values()
     _, ax = plt.subplots()
 
