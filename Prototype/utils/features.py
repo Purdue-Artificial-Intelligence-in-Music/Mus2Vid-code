@@ -8,7 +8,7 @@ from basic_pitch import ICASSP_2022_MODEL_PATH
 BASIC_PITCH_MODEL = tf.saved_model.load(str(ICASSP_2022_MODEL_PATH))
 
 def get_features(audio, selector_file = "genre_features.selector"):
-    selector = joblib.load(selector_file)s
+    selector = joblib.load(selector_file)
     midi_obj = bp_predict(audio)
 
     smile_features = get_smile_features(audio)
