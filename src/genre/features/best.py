@@ -4,7 +4,7 @@ import joblib
 import os
 import numpy as np
 from src.genre.features.util import INTERIM_DATA_DIR, SELECTOR_EXT
-from src.genre.features.extract import get_featuress
+from src.genre.features.extract import get_features
 
 def select_features():
     if(not(os.path.exists(f"{INTERIM_DATA_DIR}labeled_features.xz"))):
