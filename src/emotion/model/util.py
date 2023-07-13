@@ -7,6 +7,7 @@ FEATURES_DIR = "./data/interim/features"
 TARGETS_DIR = "./data/interim/targets"
 MODEL_DIR = "./models/emotion"
 FEATURES_EXT = "features"
+SELECTOR_EXT = "selector"
 TARGETS_EXT = "targets"
 MODEL_EXT = "model"
 
