@@ -54,21 +54,26 @@ class ImageGenerationThread(threading.Thread):
     """ 
     def __init__(self, 
                  name, 
-                 Prompt_Thread, 
-                 inference = 25, 
+                 Prompt_Thread,
+                 seed = None, 
+                 inference = 10, 
                  guidance_scale = 7.5,
                  imgs_per_prompt = 1,
                  upsampler_model_str = 'x2',
                  upsampler = None,
                  display_func = None):
-        super(StableDiffusionThread, self).__init__()
+        super(ImageGenerationThread, self).__init__()
         self.pipe = None
-        self.seed = seed
         self.Prompt_Thread = Prompt_Thread
         self.negative_prompt = DEFAULT_NEGATIVE_PROMPT
         self.inference = inference
         self.guidance_scale = guidance_scale
         self.imgs_per_prompt = imgs_per_prompt
+
+        if seed is None:
+            self.generator = torch.Generator("cuda")
+        else:
+            self.generator = torch.Generator("cuda").manual_seed(seed)
         
         self.upsampler_model_str = upsampler_model_str
         self.upsampler = upsampler
@@ -77,8 +82,8 @@ class ImageGenerationThread(threading.Thread):
         self.output = None
         self.display_func = display_func
         
-        self.pipe = StableDiffusionPipeline.from_pretrained(model_id, torch_dtype=torch.float16)
-        self.pipe = self.pipe.to("cuda")
+        if self.pipe == None:
+            self.pipe = get_pipe()
     
     def set_negative_prompt(self, prompt):
         self.negative_prompt = prompt
@@ -90,21 +95,18 @@ class ImageGenerationThread(threading.Thread):
     """
     def run(self):
         while self.is_alive():
-                generator_list = []
-                for i in range(num_images_per_prompt):
-                    generator_list.append(torch.Generator("cuda"))
-                pipe = get_pipe()
-                images = pipe(
+                images = self.pipe(
                     self.Prompt_Thread.prompt,
                     negative_prompt= self.negative_prompt,
                     num_inference_steps = self.inference,
                     guidance_scale = self.guidance_scale,
                     num_images_per_prompt = self.imgs_per_prompt,
+                    generator= self.generator
                 ).images
                 for image in images:
                     if not image is None:
-                    img = numpy.array(image)
+                        img = numpy.array(image)
                     sr_image, _ = self.upsampler.enhance(img)
                     self.output = [Image.fromarray(sr_image)] 
                     if not self.display_func is None:
-                        self.display_func(output)
+                        self.display_func(self.output)

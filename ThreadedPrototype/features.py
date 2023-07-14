@@ -22,7 +22,6 @@ def get_midi_features(midi_obj):
     Returns:
         list of float: The extracted features.
     """
-    
     # tempo: the estimated tempo of the audio file
     tempo = midi_obj.estimate_tempo()
 
@@ -31,7 +30,6 @@ def get_midi_features(midi_obj):
 
     # resolution: the time resolution of the audio file (in ticks per beat)
     resolution = midi_obj.resolution
-
 
     # Extract time signature information
     ts_changes = midi_obj.time_signature_changes
@@ -47,23 +45,13 @@ def get_midi_features(midi_obj):
     melody_complexity = np.sum(melody > 0)
     # melody_range: the range of pitch classes in the melody
     melody_range = np.max(melody) - np.min(melody)
-    # OPTIONAL feature melody_contour: the temporal evolution of pitch content in the audio file
-    # melody_contour = librosa.feature.tempogram(y=file.fluidsynth(fs=16000), sr=16000, hop_length=512)
-    # melody_contour = np.mean(melody_contour, axis=0)
     # chroma: a chroma representation of the audio file
     chroma = midi_obj.get_chroma()
     # pitch_class_hist: the sum of the chroma matrix along the pitch axis
     pitch_class_hist = np.sum(chroma, axis=1)
-    # Chord detection functions
-    # chords = calculate_song_chords(midi_obj)
-    # changes = chord_changes(chords, midi_obj)
-    # grams = n_grams(chords, 3)
 
     features = normalize_features([tempo, num_sig_changes, resolution, ts_1,
                             ts_2, melody_complexity, melody_range] + list(pitch_class_hist))
-    # features.append(chords)
-    # features.append(changes)
-    # features.append(grams)
 
     features = np.asarray(features)
     features = np.expand_dims(features, axis = 0)
@@ -179,6 +167,8 @@ class SmileThread(AudioThread):
         smile_feats = smile_feats.values.tolist()
         # convert from 2d list to 1d list
         smile_feats = sum(smile_feats, [])
+        # convert to numpy array
+        smile_feats = np.asarray(smile_feats).reshape((1, 988)) # there are 988 emobase features. 1 row = 1 audio clip, each column is a feature
 
         return smile_feats
     
