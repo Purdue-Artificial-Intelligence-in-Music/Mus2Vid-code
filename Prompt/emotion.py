@@ -1,7 +1,6 @@
 ## use the emotions on the VA model
 ## output text for the different emotions for overall prompt generation
 
-
 ## take float values and output emotion word 
 ## values based on data csv file 
 ## Some emotions based on VA model is not on there so I used the closest synonym
