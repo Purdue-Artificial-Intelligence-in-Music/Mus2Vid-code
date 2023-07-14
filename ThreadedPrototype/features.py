@@ -1,11 +1,14 @@
+import sys
+sys.path.insert(0, '../basic-pitch-modified')
+
 import numpy as np
 import pretty_midi
 import tensorflow as tf
 import opensmile
 import joblib
-import AudioThread
-from basic_pitch.inference import predict as bp
-from basic_pitch import ICASSP_2022_MODEL_PATH
+from AudioThread import *
+from basic_pitch_modified.inference import predict_pyaudio
+from basic_pitch_modified import ICASSP_2022_MODEL_PATH
 BASIC_PITCH_MODEL = tf.saved_model.load(str(ICASSP_2022_MODEL_PATH))
 
 def get_midi_features(midi_obj):
@@ -157,7 +160,7 @@ class MIDIFeatureThread(threading.Thread):
         while(self.is_alive()):
             midi_data = BP_Thread.data
             if (not midi_data is None) and (len(thread.data.instruments) != 0): 
-                midi_features = normalize_features(get_features(midi_data))
+                self.midi_features = get_midi_features(midi_data)
                 
 
 class SmileThread(AudioThread):
@@ -171,7 +174,7 @@ class SmileThread(AudioThread):
     """
     def process(self, signal):
         # get smile features
-        smile_feats = smile.process_signal(signal, self.RATE)
+        smile_feats = self.smile.process_signal(signal, self.RATE)
         # convert from df to list
         smile_feats = smile_feats.values.tolist()
         # convert from 2d list to 1d list
@@ -192,7 +195,7 @@ class SmileThread(AudioThread):
     def __init__(self, name, starting_chunk_size, 
                  F_SET = opensmile.FeatureSet.emobase, 
                  F_LEVEL = opensmile.FeatureLevel.Functionals):
-        self.smile = smile = opensmile.Smile(
+        self.smile = opensmile.Smile(
                                     feature_set = F_SET,
                                     feature_level = F_LEVEL,
                                 )

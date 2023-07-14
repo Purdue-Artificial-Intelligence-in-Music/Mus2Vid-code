@@ -3,6 +3,7 @@ import pretty_midi
 import tensorflow as tf
 import opensmile
 import joblib
+import threading
 
 '''
 This class is a thread class that predicts the genre of input notes in real time.
@@ -32,5 +33,5 @@ class EmotionClassificationThread(threading.Thread):
     def run(self):
         while (self.is_alive()):
             smile_features = self.SM_Thread.data
-            if not smile_features is None:
+            #if not smile_features is None:
                 # self.emotion_output = predict(smile_features)
