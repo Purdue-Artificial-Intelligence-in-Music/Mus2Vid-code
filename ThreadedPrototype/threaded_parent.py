@@ -39,17 +39,11 @@ def main():
                                            genre_thread = GP_Thread,
                                            emotion_thread = Emo_Thread)
     Prompt_Thread.start()
-    while True:
-        print(Prompt_Thread.prompt)
-        time.sleep(1)
-    """
     print("Prompt initialized")
     Img_Thread = ImageGenerationThread(name = 'Img_Thread',
                                       Prompt_Thread = Prompt_Thread)
-    Img_Thread.start()
     print("Img initialized")
-    """
-    #Img_Thread.join()
+    Img_Thread.start()
     
 
 if __name__ == "__main__":

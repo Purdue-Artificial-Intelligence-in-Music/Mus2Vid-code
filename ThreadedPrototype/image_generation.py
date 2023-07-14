@@ -55,7 +55,7 @@ class ImageGenerationThread(threading.Thread):
     """ 
     def __init__(self, 
                  name, 
-                 Prompt_Thread,
+                 Prompt_Thread = None,
                  seed = None, 
                  inference = 10, 
                  guidance_scale = 7.5,
@@ -64,7 +64,8 @@ class ImageGenerationThread(threading.Thread):
                  upsampler = None,
                  display_func = None):
         super(ImageGenerationThread, self).__init__()
-        self.pipe = None
+        self.pipe = get_pipe()
+        self.seed = seed
         self.Prompt_Thread = Prompt_Thread
         self.negative_prompt = DEFAULT_NEGATIVE_PROMPT
         self.inference = inference
@@ -82,9 +83,7 @@ class ImageGenerationThread(threading.Thread):
             self.upsampler = get_upsampler(upsampler_model_str)
         self.output = None
         self.display_func = display_func
-        
-        if self.pipe == None:
-            self.pipe = get_pipe()
+      
     
     def set_negative_prompt(self, prompt):
         self.negative_prompt = prompt
@@ -96,18 +95,47 @@ class ImageGenerationThread(threading.Thread):
     """
     def run(self):
         while self.is_alive():
+            if not self.Prompt_Thread is None:
+                prompt = self.Prompt_Thread.prompt
+                if not (prompt is None or prompt == ""):
+                    images = self.pipe(
+                        str(prompt),
+                        negative_prompt= self.negative_prompt,
+                        num_inference_steps = self.inference,
+                        guidance_scale = self.guidance_scale,
+                        num_images_per_prompt = self.imgs_per_prompt,
+                        generator= self.generator
+                    ).images
+                else:
+                    images = self.pipe(
+                        "black screen",
+                        negative_prompt= self.negative_prompt,
+                        num_inference_steps = self.inference,
+                        guidance_scale = self.guidance_scale,
+                        num_images_per_prompt = self.imgs_per_prompt,
+                        generator= self.generator
+                    ).images
+            else:
                 images = self.pipe(
-                    self.Prompt_Thread.prompt,
+                    "black screen",
                     negative_prompt= self.negative_prompt,
                     num_inference_steps = self.inference,
                     guidance_scale = self.guidance_scale,
                     num_images_per_prompt = self.imgs_per_prompt,
                     generator= self.generator
                 ).images
-                for image in images:
-                    if not image is None:
-                        img = numpy.array(image)
-                    sr_image, _ = self.upsampler.enhance(img)
-                    self.output = [Image.fromarray(sr_image)] 
-                    if not self.display_func is None:
-                        self.display_func(self.output)
+            for image in images:
+                if not image is None:
+                    img = numpy.array(image)
+                sr_image, _ = self.upsampler.enhance(img)
+                self.output = [Image.fromarray(sr_image)] 
+                if not self.display_func is None:
+                    self.display_func(self.output)
+                
+
+def main():
+    thr = ImageGenerationThread(name = "thr")
+    thr.start()
+                    
+if __name__ == "__main__":
+    main()
