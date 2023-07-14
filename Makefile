@@ -26,7 +26,7 @@ emotion-features-extract:
 emotion-features-util:
 	$(python) -m src.emotion.features.util
 
-emotion-features: emotion-features-best emotion-features-extract emotion-features-util
+emotion-features: emotion-features-extract emotion-features-best emotion-features-util
 
 
 emotion-model-regressor:

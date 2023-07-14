@@ -1,7 +1,8 @@
 from src.emotion.model.regressor import EmotionRegressor
-from src.emotion.model.util import get_features, get_valence_targets, get_arousal_targets
+from src.emotion.model.util import get_features, get_valence_targets, get_arousal_targets, FEATURES_DIR, SELECTOR_EXT
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error, mean_absolute_error
+import joblib
 
 
 def train(
@@ -34,8 +35,12 @@ def train_and_test() -> None:
 
     opensmile_features = get_features("opensmile")
 
-    valence_features = get_features("opensmile_valence")
-    arousal_features = get_features("opensmile_arousal")
+    opensmile_valence_selector = joblib.load(f"{FEATURES_DIR}/opensmile_valence.{SELECTOR_EXT}")
+    opensmile_arousal_selector = joblib.load(f"{FEATURES_DIR}/opensmile_arousal.{SELECTOR_EXT}")
+
+    valence_features = opensmile_valence_selector.transform(opensmile_features)
+    arousal_features = opensmile_arousal_selector.transform(opensmile_features)
+
     valence_targets = get_valence_targets()
     arousal_targets = get_arousal_targets()
 
