@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 import random
+import threading
 
 ## use the emotions on the VA model
 ## output text for the different emotions for overall prompt generation
@@ -169,5 +170,5 @@ class PromptGenerationThread(threading.Thread):
     """
     def run(self):
         while self.is_alive():
-            subgenre = self.genre_thread.data
+            subgenre = self.genre_thread.genre_output
             self.prompt = get_prompt(subgenre)

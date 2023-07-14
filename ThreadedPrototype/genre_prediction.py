@@ -3,6 +3,7 @@ import pretty_midi
 import tensorflow as tf
 import opensmile
 import joblib
+import time
 import threading
 
 def get_subgenre(num):
@@ -14,7 +15,7 @@ This class is a thread class that predicts the genre of input notes in real time
 '''
 
 class GenrePredictorThread(threading.Thread):
-    genre_model = tf.keras.models.load_model('.\model.h5')
+    genre_model = tf.keras.models.load_model('./genre_model.h5')
     
     """
     This function is called when a GenrePredictorThread is created. It sets the BasicPitchThread to grab MIDI data from.
@@ -36,7 +37,7 @@ class GenrePredictorThread(threading.Thread):
     Returns: nothing
     """
     def run(self):
-        while type(BP_Thread.data) == NoneType:
+        while self.MF_Thread.midi_features is None or self.SM_Thread.data is none:
             time.sleep(0.2)
         while(self.is_alive()):
             smile_features = self.SM_Thread.data

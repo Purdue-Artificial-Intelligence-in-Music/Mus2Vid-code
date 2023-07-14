@@ -1,6 +1,7 @@
 import pyaudio
 import numpy as np
 import threading
+import time
 
 '''
 This class is a template class for a thread that reads in audio from PyAudio.
@@ -27,11 +28,10 @@ class AudioThread(threading.Thread):
         self.p = None    # PyAudio vals
         self.stream = None
         self.FORMAT = pyaudio.paFloat32
-        self.CHANNELS = INPUT_CHANNELS
-        self.RATE = SAMPLE_RATE
+        self.CHANNELS = 2
+        self.RATE = 44100
         self.CHUNK = starting_chunk_size * 2
-
-        self.max_time = 0    # Data storage and analytics
+        
         self.data = None
         
     def set_args_before(a):
@@ -66,7 +66,7 @@ class AudioThread(threading.Thread):
                                   stream_callback=self.callback,
                                   frames_per_buffer=self.CHUNK)
         while (self.is_alive()):
-                time.sleep(1.0)
+            time.sleep(1.0)
             
     def stop(self):
         """
@@ -87,10 +87,5 @@ class AudioThread(threading.Thread):
         Returns: nothing of importance to the user
         """
         numpy_array = np.frombuffer(in_data, dtype=np.float32)
-        start_time = time.process_time()
         self.data = self.process_func(*self.args_before, numpy_array, *self.args_after)
-        end_time = time.process_time()
-        elapsed_time = end_time - start_time
-        if (elapsed_time > self.max_time):
-            self.max_time = elapsed_time
         return None, pyaudio.paContinue
