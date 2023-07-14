@@ -25,18 +25,16 @@ def main():
                                      SM_Thread = SM_Thread, 
                                      MF_Thread = MF_Thread)
     GP_Thread.start()
+    Emo_Thread = EmotionGenerationThread(name = 'Emo_Thread',
+                                         SM_Thread = SM_Thread)
+    Emo_Thread.start()
     Prompt_Thread = PromptGenerationThread(name = 'Prompt_Thread',
                                            genre_thread = GP_Thread,
-                                           emotion_thread = None)
+                                           emotion_thread = Emo_Thread)
     Prompt_Thread.start()
-    SD_Thread = StableDiffusionThread(name = 'SD_Thread',
+    Img_Thread = ImageGenerationThread(name = 'Img_Thread',
                                       Prompt_Thread = Prompt_Thread)
-    SD_Thread.start()
-    US_Thread = UpscalerThread(name = 'US_Thread',
-                               SD_Thread = SD_Thread,
-                               display_func = display_images)
-    US_Thread.start()
-    
+    Img_Thread.start()
     
 
 if __name__ == "__main__":
