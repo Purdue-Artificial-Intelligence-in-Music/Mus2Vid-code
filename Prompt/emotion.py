@@ -1,27 +1,26 @@
 ## use the emotions on the VA model
 ## output text for the different emotions for overall prompt generation
 
-
 ## take float values and output emotion word 
-## values based on normalized data csv file 
+## values based on data csv file 
 ## Some emotions based on VA model is not on there so I used the closest synonym
 
 def get_emotion_from_values(arousal,valence):
     thresholds = {
-        (0.2017937219730941,-0.2763358778625955): "surprised",
-        (0.6442451420029891,0.41984732824427495): "excited",     ## used jumpy 
-        (0.15396113602391637,-0.9145038167938931): "joyous",
-        (0.2735426008968609,-0.30992366412213745): "happy",       ## used Jaunty 
-        (-0.9013452914798207,-0.8290076335877863): "content",
-        (-0.9999999999999999,-0.8015267175572519): "relaxed",
-        (-0.4977578475336324,-0.8106870229007634): "calm",        ## used carefree
-        (0.12107623318385641,0.31603053435114514): "sleepy",      ## used wistful 
-        (-0.30642750373692085,0.2549618320610687): "bored",
-        (0.2526158445440956,0.49007633587786237): "sad",
-        (0.3572496263079221,0.5572519083969467): "depressed",     ## used grievous
-        (0.4080717488789236,0.23664122137404564): "distressed",    ## used troubled 
-        (0.8953662182361732,0.7648854961832063): "angry",
-        (0.638266068759342,0.45038167938931295): "afraid"           ## used aghast 
+        (5.74,4.09): "surprised",
+        (7.22,6.37): "excited",     ## used jumpy 
+        (4.55,2): "joyous",
+        (5.98,3.98): "happy",       ## used Jaunty 
+        (2.05,2.28): "content",
+        (1.72,2.37): "relaxed",
+        (3.4,2.34): "calm",        ## used carefree
+        (5.47,6.03): "sleepy",      ## used wistful 
+        (4.04,5.83): "bored",
+        ( 5.91,6.6): "sad",
+        (6.26,6.82): "depressed",     ## used grievous
+        (6.43,5.77): "distressed",    ## used troubled 
+        (8.06,7.5): "angry",
+        (7.2,6.47): "afraid"           ## used aghast 
         
     }
     
