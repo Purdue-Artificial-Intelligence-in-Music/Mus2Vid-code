@@ -36,3 +36,9 @@ def display_images(pipe):
     for i in range(len(pipe[0])):
         image = pipe.images[i]
         image.show()
+
+# if __name__ == "__main__":
+#     pr = "man sitting on in a chair on a porch, in the style of vincent van gogh, intense colors, saturated colors, dark red, deep purple, dark colors, black, harsh lighting"
+#     np = "amateur, poorly drawn hands, poorly drawn face, misshapen, blue, cool colors, dull lighting, dull colors, missing limbs, ugly, mutated, beginner"
+#     pipe = get_pic(prompt = pr, negative_prompt = np)
+#     display_images(pipe)
