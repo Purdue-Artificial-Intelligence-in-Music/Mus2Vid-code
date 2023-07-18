@@ -1,11 +1,6 @@
-import sys
-sys.path.insert(0, '../basic-pitch-modified')
-
 import numpy as np
-import pretty_midi
 import tensorflow as tf
 import opensmile
-import joblib
 import time
 from AudioThread import *
 from basic_pitch_modified.inference import predict_pyaudio

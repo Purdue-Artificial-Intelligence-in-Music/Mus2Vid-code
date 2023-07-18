@@ -2,12 +2,12 @@ from diffusers import DiffusionPipeline, DPMSolverMultistepScheduler
 stable_diffusion_model_id = "stabilityai/stable-diffusion-2-1-base"
 import torch
 from realesrgan import RealESRGANer
-import cv2
 from basicsr.archs.rrdbnet_arch import RRDBNet
 from basicsr.utils.download_util import load_file_from_url
 import numpy
 from PIL import Image
 import threading
+import prompting
 
 DEFAULT_NEGATIVE_PROMPT = "ugly, tiling, poorly drawn hands, poorly drawn feet, poorly drawn face, out of frame, mutation, mutated, extra limbs, extra legs, extra arms, disfigured, deformed, cross-eye, body out of frame, blurry, bad art, bad anatomy, blurred, text, watermark, grainy, low resolution, cropped, beginner, amateur, oversaturated"
 
@@ -134,7 +134,9 @@ class ImageGenerationThread(threading.Thread):
                 
 
 def main():
-    thr = ImageGenerationThread(name = "thr")
+    p_thr = prompting.PromptGenerationThread(name = "p_thr", genre_thread=None, emotion_thread=None)
+    #p_thr.start()      
+    thr = ImageGenerationThread(name = "thr", Prompt_Thread=p_thr)
     thr.start()
                     
 if __name__ == "__main__":
