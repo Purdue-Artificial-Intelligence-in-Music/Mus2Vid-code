@@ -208,7 +208,10 @@ class PromptGenerationThread(threading.Thread):
     """
     def run(self):
         while self.is_alive():
-            subgenre = self.genre_thread.genre_output
+            if self.genre_thread is None or self.genre_thread.genre_output is None:
+                subgenre = "Baroque"
+            else:
+                subgenre = self.genre_thread.genre_output
             valence = self.emotion_thread.valence
             arousal = self.emotion_thread.arousal
             self.prompt = get_prompt(subgenre, valence, arousal)

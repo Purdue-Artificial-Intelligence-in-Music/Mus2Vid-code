@@ -15,7 +15,7 @@ This class is a thread class that predicts the genre of input notes in real time
 '''
 
 class GenrePredictorThread(threading.Thread):
-    genre_model = tf.keras.models.load_model('./genre_model.h5')
+    genre_model = tf.keras.models.load_model('genre_model.h5')
     
     """
     This function is called when a GenrePredictorThread is created. It sets the BasicPitchThread to grab MIDI data from.

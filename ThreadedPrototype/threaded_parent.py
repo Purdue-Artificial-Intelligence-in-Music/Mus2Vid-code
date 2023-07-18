@@ -1,10 +1,8 @@
-import sys
 from emotion import *
 from features import *
 from genre_prediction import *
 from image_generation import *
 from prompting import *
-import time
 
 STARTING_CHUNK = 1024
 
@@ -41,9 +39,11 @@ def main():
     Prompt_Thread.start()
     print("Prompt initialized")
     Img_Thread = ImageGenerationThread(name = 'Img_Thread',
-                                      Prompt_Thread = Prompt_Thread)
+                                      Prompt_Thread = Prompt_Thread,
+                                      display_func=display_images)
     print("Img initialized")
     Img_Thread.start()
+    Img_Thread.join()
     
 
 if __name__ == "__main__":
