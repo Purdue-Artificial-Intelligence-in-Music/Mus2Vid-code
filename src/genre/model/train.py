@@ -6,7 +6,7 @@ import os
 from tensorflow import keras
 from keras import metrics
 import matplotlib.pyplot as plt
-import pickle.lzma
+import pickle, lzma
 from src.genre.model.util import *
 from src.genre.features.best import select_features
 
@@ -109,7 +109,7 @@ def test_train_split(labeled_features):
     return training_features, training_labels, validation_features, validation_labels, test_features, test_labels
 
 
-    def classification_network(training_features, training_labels, validation_features, validation_labels):
+def classification_network(training_features, training_labels, validation_features, validation_labels):
     num_features = training_features.shape[1]
 
     # Define the model architecture
