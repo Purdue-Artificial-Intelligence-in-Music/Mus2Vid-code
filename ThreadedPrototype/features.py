@@ -1,11 +1,10 @@
 import numpy as np
-import pretty_midi
 import tensorflow as tf
 import opensmile
-import joblib
-import AudioThread
-from basic_pitch.inference import predict as bp
-from basic_pitch import ICASSP_2022_MODEL_PATH
+import time
+from AudioThread import *
+from basic_pitch_modified.inference import predict_pyaudio
+from basic_pitch_modified import ICASSP_2022_MODEL_PATH
 BASIC_PITCH_MODEL = tf.saved_model.load(str(ICASSP_2022_MODEL_PATH))
 
 def get_midi_features(midi_obj):
@@ -129,7 +128,7 @@ class MIDIFeatureThread(threading.Thread):
     Returns: nothing
     """ 
     def __init__(self, name, BP_Thread):
-        super(GenrePredictorThread, self).__init__()
+        super(MIDIFeatureThread, self).__init__()
         self.BP_Thread = BP_Thread
         self.midi_features = None
     
@@ -140,12 +139,12 @@ class MIDIFeatureThread(threading.Thread):
     Returns: nothing
     """
     def run(self):
-        while type(BP_Thread.data) == NoneType:
+        while self.BP_Thread.data is None:
             time.sleep(0.2)
         while(self.is_alive()):
-            midi_data = BP_Thread.data
-            if (not midi_data is None) and (len(thread.data.instruments) != 0): 
-                midi_features = normalize_features(get_features(midi_data))
+            midi_data = self.BP_Thread.data
+            if (not midi_data is None) and (len(midi_data.instruments) != 0): 
+                self.midi_features = get_midi_features(midi_data)
                 
 
 class SmileThread(AudioThread):
@@ -182,10 +181,10 @@ class SmileThread(AudioThread):
     def __init__(self, name, starting_chunk_size, 
                  F_SET = opensmile.FeatureSet.emobase, 
                  F_LEVEL = opensmile.FeatureLevel.Functionals):
-        self.smile = smile = opensmile.Smile(
+        self.smile = opensmile.Smile(
                                     feature_set = F_SET,
                                     feature_level = F_LEVEL,
                                 )
-        self.RATE = SAMPLE_RATE
+        self.RATE = 44100
 
         super().__init__(name, starting_chunk_size, self.process, (), ())
