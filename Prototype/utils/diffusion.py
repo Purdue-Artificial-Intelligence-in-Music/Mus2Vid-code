@@ -40,7 +40,6 @@ def get_pic(prompt,
         num_images_per_prompt = num_images_per_prompt,
     )
 
-<<<<<<< HEAD
 def display_images(images):
     """
     Displays images in a StableDiffusionPipelineOutput
@@ -52,15 +51,8 @@ def display_images(images):
     for i in range(len(images)):
         image = images[i]
         image.show()
-=======
-def display_images(pipe):
-    for i in range(len(pipe[0])):
-        image = pipe.images[i]
-        image.show()
-
 # if __name__ == "__main__":
 #     pr = "man sitting on in a chair on a porch, in the style of vincent van gogh, intense colors, saturated colors, dark red, deep purple, dark colors, black, harsh lighting"
 #     np = "amateur, poorly drawn hands, poorly drawn face, misshapen, blue, cool colors, dull lighting, dull colors, missing limbs, ugly, mutated, beginner"
 #     pipe = get_pic(prompt = pr, negative_prompt = np)
 #     display_images(pipe)
->>>>>>> 96b71e088457c482292211e498fa66ecf3b99801
