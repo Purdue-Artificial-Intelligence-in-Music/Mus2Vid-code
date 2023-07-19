@@ -210,7 +210,7 @@ class PromptGenerationThread(threading.Thread):
     """
     def run(self):
         while not self.stop_request:
-            if self.genre_thread is None or self.genre_thread.genre_output is None:
+            if self.genre_thread is None or self.genre_thread.genre_output is None: # default genre, this shouldn't happen
                 subgenre = "Baroque"
             else:
                 subgenre = self.genre_thread.genre_output
