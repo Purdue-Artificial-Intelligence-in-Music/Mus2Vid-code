@@ -162,6 +162,8 @@ class PromptGenerationThread(threading.Thread):
         self.prompt = None
         self.genre_thread = genre_thread
         self.emotion_thread = emotion_thread
+
+        self.stop_request = False
         
     """
     When the thread is started, this function is called which repeatedly generates new prompts.
@@ -169,7 +171,7 @@ class PromptGenerationThread(threading.Thread):
     Returns: nothing
     """
     def run(self):
-        while self.is_alive():
+        while not self.stop_request:
             if self.genre_thread is None or self.genre_thread.genre_output is None:
                 self.prompt = get_prompt("Baroque")
             else:

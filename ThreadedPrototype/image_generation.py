@@ -83,6 +83,8 @@ class ImageGenerationThread(threading.Thread):
             self.upsampler = get_upsampler(upsampler_model_str)
         self.output = None
         self.display_func = display_func
+
+        self.stop_request = False
       
     
     def set_negative_prompt(self, prompt):
@@ -94,7 +96,7 @@ class ImageGenerationThread(threading.Thread):
     Returns: nothing
     """
     def run(self):
-        while self.is_alive():
+        while not self.stop_request:
             if not self.Prompt_Thread is None:
                 prompt = self.Prompt_Thread.prompt
                 if not (prompt is None or prompt == ""):
