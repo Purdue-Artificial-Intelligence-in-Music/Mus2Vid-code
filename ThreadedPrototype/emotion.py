@@ -6,12 +6,10 @@ import pandas as pd
 import joblib
 from sklearn.svm import SVR
 
-MODEL_DIR = ""
-MODEL_EXT = ".model"
-SELECTOR_EXT = ".selector"
-FEATURES_DIR = ""
-from src.emotion.model.regressor import EmotionRegressor
-from src.emotion.features.best import get_best_opensmile_features
+MODEL_DIR = "."
+MODEL_EXT = "model"
+SELECTOR_EXT = "selector"
+FEATURES_DIR = "."
 
 class EmotionRegressor():
     """A Support Vector Regressor (SVR) for predicting valence and
@@ -43,55 +41,6 @@ class EmotionRegressor():
         """Load a model from a file."""
         self.svr = joblib.load(f"{MODEL_DIR}/{filename}.{MODEL_EXT}") 
 
-def get_best_opensmile_features(opensmile_features: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame]:
-    """Return the best pre-extracted openSMILE features.
-
-    Parameters
-    ----------
-    opensmile_features
-        Pre-extracted openSMILE features.
-
-    Returns
-    -------
-    opensmile_valence_features: pandas.DataFrame
-    opensmile_arousal_features: pandas.DataFrame
-    """
-
-    opensmile_valence_selector = joblib.load(f"{FEATURES_DIR}/opensmile_valence.{SELECTOR_EXT}")
-    opensmile_arousal_selector = joblib.load(f"{FEATURES_DIR}/opensmile_arousal.{SELECTOR_EXT}")
-
-    opensmile_valence_features = opensmile_valence_selector.transform(opensmile_features)
-    opensmile_arousal_features = opensmile_arousal_selector.transform(opensmile_features)
-
-    return opensmile_valence_features, opensmile_arousal_features
-
-def get_va_values(opensmile_features: pd.DataFrame) -> tuple[float, float]:
-    """Process audio at given filepath and return valence and arousal values.
-
-    Parameters
-    ----------
-    audio_filepath
-        Filepath relative to repository root.
-
-    Returns
-    -------
-    valence: float
-        A float between 1 and 9.
-    arousal: float
-        A float between 1 and 9.
-    """
-    valence_regressor = EmotionRegressor()
-    arousal_regressor = EmotionRegressor()
-    valence_regressor.load("valence_regressor")
-    arousal_regressor.load("arousal_regressor")
-
-    opensmile_valence_features, opensmile_arousal_features = get_best_opensmile_features(opensmile_features)
-
-    valence = valence_regressor.predict(opensmile_valence_features)[0]
-    arousal = arousal_regressor.predict(opensmile_arousal_features)[0]
-
-    return valence, arousal
-
 '''
 This class is a thread class that predicts the genre of input notes in real time.
 '''
@@ -108,9 +57,17 @@ class EmotionClassificationThread(threading.Thread):
     """ 
     def __init__(self, name, SM_Thread):
         super(EmotionClassificationThread, self).__init__()
+        self.name = name
+        self.stop_request = False
         self.SM_Thread = SM_Thread
-        self.valence = None
-        self.arousal = None
+        self.emo_values = None
+        self.valence_regressor = EmotionRegressor()
+        self.valence_regressor.load("valence_regressor")
+        self.arousal_regressor = EmotionRegressor()
+        self.arousal_regressor.load("arousal_regressor")
+        self.opensmile_valence_selector = joblib.load(f"{FEATURES_DIR}/opensmile_valence.{SELECTOR_EXT}")
+        self.opensmile_arousal_selector = joblib.load(f"{FEATURES_DIR}/opensmile_arousal.{SELECTOR_EXT}")
+
     
     """
     When the thread is started, this function is called which repeatedly grabs the most recent
@@ -119,7 +76,11 @@ class EmotionClassificationThread(threading.Thread):
     Returns: nothing
     """
     def run(self):
-        while (self.is_alive()):
-            smile_features = self.SM_Thread.data
-            if not smile_features is None:
-                (self.valence, self.arousal) = get_va_values(smile_features)
+        while not self.stop_request:
+            if not (self.SM_Thread is None or self.SM_Thread.data is None):
+                smile_features = self.SM_Thread.data
+
+                opensmile_valence_features = self.opensmile_valence_selector.transform(smile_features)
+                opensmile_arousal_features = self.opensmile_arousal_selector.transform(smile_features)
+
+                self.emo_values = (self.valence_regressor.predict(opensmile_valence_features)[0], self.arousal_regressor.predict(opensmile_arousal_features)[0])

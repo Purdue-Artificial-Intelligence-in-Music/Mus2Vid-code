@@ -9,8 +9,10 @@ from PIL import Image
 import threading
 import prompting
 
+import sys
+sys.path.append("../")
 from src.image.StableDiffusion.Diffusion import get_pipe
-from src.image.Real-ESRGAN.upscale import get_upsampler
+from src.image.Real_ESRGAN.upscale import get_upsampler
 
 DEFAULT_NEGATIVE_PROMPT = "ugly, tiling, poorly drawn hands, poorly drawn feet, poorly drawn face, out of frame, mutation, mutated, extra limbs, extra legs, extra arms, disfigured, deformed, cross-eye, body out of frame, blurry, bad art, bad anatomy, blurred, text, watermark, grainy, low resolution, cropped, beginner, amateur, oversaturated"
 

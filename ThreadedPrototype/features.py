@@ -131,6 +131,7 @@ class MIDIFeatureThread(threading.Thread):
         super(MIDIFeatureThread, self).__init__()
         self.BP_Thread = BP_Thread
         self.midi_features = None
+        self.stop_request = False
     
     """
     When the thread is started, this function is called which repeatedly grabs the most recent
@@ -139,12 +140,13 @@ class MIDIFeatureThread(threading.Thread):
     Returns: nothing
     """
     def run(self):
-        while self.BP_Thread.data is None:
-            time.sleep(0.2)
-        while(self.is_alive()):
-            midi_data = self.BP_Thread.data
-            if (not midi_data is None) and (len(midi_data.instruments) != 0): 
-                self.midi_features = get_midi_features(midi_data)
+        while not self.stop_request:
+            if not self.BP_Thread.data is None:
+                midi_data = self.BP_Thread.data
+                if (not midi_data is None) and (len(midi_data.instruments) != 0): 
+                    self.midi_features = get_midi_features(midi_data)
+            else:
+                time.sleep(1)
                 
 
 class SmileThread(AudioThread):
