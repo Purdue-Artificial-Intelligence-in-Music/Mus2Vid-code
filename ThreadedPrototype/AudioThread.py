@@ -31,6 +31,8 @@ class AudioThread(threading.Thread):
         self.CHANNELS = 2
         self.RATE = 44100
         self.CHUNK = starting_chunk_size * 2
+
+        self.stop_request = False
         
         self.data = None
         
@@ -65,8 +67,9 @@ class AudioThread(threading.Thread):
                                   output=False,
                                   stream_callback=self.callback,
                                   frames_per_buffer=self.CHUNK)
-        while (self.is_alive()):
+        while not self.stop_request:
             time.sleep(1.0)
+        self.stop()
             
     def stop(self):
         """
