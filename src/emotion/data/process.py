@@ -56,5 +56,5 @@ def process_annotations() -> None:
 
 
 if __name__ == "__main__":
-    # sprocess_audio()
+    process_audio()
     process_annotations()
