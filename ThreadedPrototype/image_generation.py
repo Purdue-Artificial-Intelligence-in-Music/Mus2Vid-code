@@ -6,7 +6,7 @@ from basicsr.archs.rrdbnet_arch import RRDBNet
 from basicsr.utils.download_util import load_file_from_url
 import numpy
 from PIL import Image
-import threading
+import multiprocessing
 import prompting
 
 import sys
@@ -20,7 +20,7 @@ DEFAULT_NEGATIVE_PROMPT = "ugly, tiling, poorly drawn hands, poorly drawn feet, 
 This class is a thread class that generates images procedurally in real time.
 '''
 
-class ImageGenerationThread(threading.Thread):
+class ImageGenerationThread(multiprocessing.Process):
     
     """
     This function is called when a StableDiffusionThread is created.

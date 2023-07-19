@@ -1,7 +1,7 @@
 import numpy as np
 import os
 import tensorflow as tf
-import threading
+import multiprocessing
 import pandas as pd
 import joblib
 from sklearn.svm import SVR
@@ -45,7 +45,7 @@ class EmotionRegressor():
 This class is a thread class that predicts the genre of input notes in real time.
 '''
 
-class EmotionClassificationThread(threading.Thread):
+class EmotionClassificationThread(multiprocessing.Process):
     # Import model
     
     """

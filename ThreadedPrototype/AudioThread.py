@@ -1,13 +1,13 @@
 import pyaudio
 import numpy as np
-import threading
+import multiprocessing
 import time
 
 '''
 This class is a template class for a thread that reads in audio from PyAudio.
 '''
 
-class AudioThread(threading.Thread):
+class AudioThread(multiprocessing.Process):
     def __init__(self, name, starting_chunk_size, process_func, args_before, args_after):
         """
         Initializes an AudioThread.
