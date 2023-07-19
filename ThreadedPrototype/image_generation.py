@@ -9,35 +9,10 @@ from PIL import Image
 import threading
 import prompting
 
+from src.image.StableDiffusion.Diffusion import get_pipe
+from src.image.Real-ESRGAN.upscale import get_upsampler
+
 DEFAULT_NEGATIVE_PROMPT = "ugly, tiling, poorly drawn hands, poorly drawn feet, poorly drawn face, out of frame, mutation, mutated, extra limbs, extra legs, extra arms, disfigured, deformed, cross-eye, body out of frame, blurry, bad art, bad anatomy, blurred, text, watermark, grainy, low resolution, cropped, beginner, amateur, oversaturated"
-
-def get_pipe():
-    pipe = DiffusionPipeline.from_pretrained(stable_diffusion_model_id, torch_dtype=torch.float16, revision="fp16")
-    pipe.scheduler = DPMSolverMultistepScheduler.from_config(pipe.scheduler.config)
-    pipe = pipe.to("cuda")
-    return pipe
-
-def get_upsampler(model_str = 'x2'):
-    """    
-    Downloads the real-ESRGAN model into an upsampler object
-
-    Parameters:
-        model_str (str): x2 or x4 default: x2
-        
-    Returns:
-    upsampler object
-    """
-    if (model_str == 'x2'):
-        model = RRDBNet(num_in_ch=3, num_out_ch=3, num_feat=64, num_block=23, num_grow_ch=32, scale=2)
-        netscale = 2
-        file_url = 'https://github.com/xinntao/Real-ESRGAN/releases/download/v0.2.1/RealESRGAN_x2plus.pth'
-    elif (model_str == 'x4'):
-        model = RRDBNet(num_in_ch=3, num_out_ch=3, num_feat=64, num_block=23, num_grow_ch=32, scale=4)
-        netscale = 4
-        file_url = 'https://github.com/xinntao/Real-ESRGAN/releases/download/v0.1.0/RealESRGAN_x4plus.pth'
-    model_path = load_file_from_url(url=file_url)
-    upsampler = RealESRGANer(scale=netscale,model_path=model_path,model=model,half=True)
-    return upsampler
 
 '''
 This class is a thread class that generates images procedurally in real time.
@@ -83,6 +58,8 @@ class ImageGenerationThread(threading.Thread):
             self.upsampler = get_upsampler(upsampler_model_str)
         self.output = None
         self.display_func = display_func
+
+        self.stop_request = False
       
     
     def set_negative_prompt(self, prompt):
@@ -94,7 +71,7 @@ class ImageGenerationThread(threading.Thread):
     Returns: nothing
     """
     def run(self):
-        while self.is_alive():
+        while not self.stop_request:
             if not self.Prompt_Thread is None:
                 prompt = self.Prompt_Thread.prompt
                 if not (prompt is None or prompt == ""):
