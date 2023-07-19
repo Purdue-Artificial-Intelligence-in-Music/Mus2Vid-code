@@ -1,15 +1,26 @@
 from diffusers import DiffusionPipeline, DPMSolverMultistepScheduler
 stable_diffusion_model_id = "stabilityai/stable-diffusion-2-1-base"
+negative_prompts = "ugly, tiling, poorly drawn hands, poorly drawn feet, poorly drawn face, out of frame, mutation, mutated, extra limbs, extra legs, extra arms, disfigured, deformed, cross-eye, body out of frame, blurry, bad art, bad anatomy, blurred, text, watermark, grainy, low resolution, cropped, beginner, amateur, oversaturated"
 import torch
 
 def get_pipe():
+    """
+    Initializes a stable diffusion pipeline
+    Parameters:
+        void
+    Returns:
+        pipe: pipeline object
+    """
     pipe = DiffusionPipeline.from_pretrained(stable_diffusion_model_id, torch_dtype=torch.float16, revision="fp16")
     pipe.scheduler = DPMSolverMultistepScheduler.from_config(pipe.scheduler.config)
     pipe = pipe.to("cuda")
     return pipe
 
-def get_pic(prompt, negative_prompt = "ugly, tiling, poorly drawn hands, poorly drawn feet, poorly drawn face, out of frame, mutation, mutated, extra limbs, extra legs, extra arms, disfigured, deformed, cross-eye, body out of frame, blurry, bad art, bad anatomy, blurred, text, watermark, grainy, low resolution, cropped, beginner, amateur, oversaturated"
-            , inference = 10, guidance_scale = 7.5, num_images_per_prompt = 1):
+def get_pic(prompt, 
+            negative_prompt = negative_prompts, 
+            inference = 10, 
+            guidance_scale = 7.5, 
+            num_images_per_prompt = 1, ):
     """
     Creates an image using stable diffusion pipeline
     Parameters:
@@ -20,9 +31,6 @@ def get_pic(prompt, negative_prompt = "ugly, tiling, poorly drawn hands, poorly 
     Returns:
         output: stable diffusion pipeline output
     """
-    generator_list = []
-    for i in range(num_images_per_prompt):
-        generator_list.append(torch.Generator("cuda"))
     pipe = get_pipe()
     return pipe(
         prompt,
@@ -32,11 +40,17 @@ def get_pic(prompt, negative_prompt = "ugly, tiling, poorly drawn hands, poorly 
         num_images_per_prompt = num_images_per_prompt,
     )
 
-def display_images(pipe):
-    for i in range(len(pipe[0])):
-        image = pipe.images[i]
+def display_images(images):
+    """
+    Displays images in a StableDiffusionPipelineOutput
+    Parameters:
+        images: StableDiffusionPipelineOutput
+    Returns:
+        void
+    """
+    for i in range(len(images)):
+        image = images[i]
         image.show()
-
 # if __name__ == "__main__":
 #     pr = "man sitting on in a chair on a porch, in the style of vincent van gogh, intense colors, saturated colors, dark red, deep purple, dark colors, black, harsh lighting"
 #     np = "amateur, poorly drawn hands, poorly drawn face, misshapen, blue, cool colors, dull lighting, dull colors, missing limbs, ugly, mutated, beginner"

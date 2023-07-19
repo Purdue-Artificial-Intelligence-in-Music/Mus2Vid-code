@@ -18,6 +18,7 @@ def process_audio() -> None:
         os.mkdir(PROCESSED_AUDIO_DIR)
 
     for filename in os.listdir(RAW_AUDIO_DIR):
+        print(filename)
         root, ext = os.path.splitext(filename)
         if ext == ".mp3" and not os.path.exists(f"{PROCESSED_AUDIO_DIR}/{root}.wav"):
             subprocess.run([
@@ -55,5 +56,5 @@ def process_annotations() -> None:
 
 
 if __name__ == "__main__":
-    process_audio()
+    # sprocess_audio()
     process_annotations()

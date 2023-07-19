@@ -3,6 +3,7 @@ from sklearn.feature_selection import f_classif
 import joblib
 import os
 import numpy as np
+import pickle, lzma
 from src.genre.features.util import INTERIM_DATA_DIR, SELECTOR_EXT
 from src.genre.features.extract import get_features
 

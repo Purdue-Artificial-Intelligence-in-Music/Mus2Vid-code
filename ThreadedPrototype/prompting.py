@@ -3,6 +3,43 @@ import matplotlib.image as mpimg
 import random
 import threading
 
+## take float values and output emotion word 
+## values based on data csv file 
+## Some emotions based on VA model is not on there so I used the closest synonym
+def get_emotion_from_values(arousal,valence):
+    thresholds = {
+        (5.74,4.09): "surprised",
+        (7.22,6.37): "excited",     ## used jumpy 
+        (4.55,2): "joyous",
+        (5.98,3.98): "happy",       ## used Jaunty 
+        (2.05,2.28): "content",
+        (1.72,2.37): "relaxed",
+        (3.4,2.34): "calm",        ## used carefree
+        (5.47,6.03): "sleepy",      ## used wistful 
+        (4.04,5.83): "bored",
+        ( 5.91,6.6): "sad",
+        (6.26,6.82): "depressed",     ## used grievous
+        (6.43,5.77): "distressed",    ## used troubled 
+        (8.06,7.5): "angry",
+        (7.2,6.47): "afraid"           ## used aghast 
+        
+    }
+    
+    
+
+
+    closest_distance = float('inf')
+    closest_emotion = None
+
+    for threshold, emotion in thresholds.items():
+        arousal_threshold, valence_threshold = threshold
+        distance = abs(arousal - arousal_threshold) + abs(valence - valence_threshold)
+        if distance < closest_distance:
+            closest_distance = distance
+            closest_emotion = emotion
+
+    return closest_emotion
+
 ## use the emotions on the VA model
 ## output text for the different emotions for overall prompt generation
 def get_emotion(emotion_input):
@@ -135,11 +172,12 @@ def get_genre(subgenre):
 
 ## connect all the text into one prompt to send to SD 
 
-def get_prompt(subgenre): # add valence and arousal eventually
+def get_prompt(subgenre, valence, arousal): # add valence and arousal eventually
     modify = perspectiveRandom()
     genre = get_genre(subgenre)
-    emotion = get_emotion("sleepy")
-    result = [genre,emotion,modify]
+    emotion = get_emotion_from_values(arousal, valence)
+    emotion_mod = get_emotion(emotion)
+    result = [genre,emotion_mod,modify]
     modify_str = [', '.join(item) if isinstance(item, list) else item for item in result]
     prompt = ', '.join(str(item) for item in modify_str)
     return prompt
@@ -173,6 +211,9 @@ class PromptGenerationThread(threading.Thread):
     def run(self):
         while not self.stop_request:
             if self.genre_thread is None or self.genre_thread.genre_output is None:
-                self.prompt = get_prompt("Baroque")
+                subgenre = "Baroque"
             else:
-                self.prompt = get_prompt(self.genre_thread.genre_output)
+                subgenre = self.genre_thread.genre_output
+            valence = self.emotion_thread.valence
+            arousal = self.emotion_thread.arousal
+            self.prompt = get_prompt(subgenre, valence, arousal)
