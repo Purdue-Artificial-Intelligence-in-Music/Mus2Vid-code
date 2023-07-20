@@ -30,7 +30,7 @@ def get_pic(prompt,
         inference: number of inference step, around 50 for a high quality image
         guidance scale: a way to increase the adherence to the conditional signal that guides the generation (text, in this case) as well as overall sample quality
     Returns:
-        output: stable diffusion pipeline output
+        output: list of PIL images
     """
     pipe = get_pipe()
     return pipe(
@@ -43,7 +43,7 @@ def get_pic(prompt,
 
 if __name__ == "__main__":
     from src.image.display.display import display_images
-    
+
     prompt = ""
     img = get_pic(prompt)
     display_images(img)
