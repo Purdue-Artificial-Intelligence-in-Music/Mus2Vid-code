@@ -1,0 +1,2 @@
+The code in this folder isn't relevant to the prototype for Mus2Vid. ./src contains functions that create and implement the models
+and tools used by mus2vid. ./testing_code contains all the garbage we wrote trying to get everything to work.
