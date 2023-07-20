@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 import random
-import threading
+import multiprocessing
 
 
 ## take float values and output emotion word
@@ -205,8 +205,6 @@ def get_genre(subgenre):
 
 
 ## connect all the text into one prompt to send to SD
-
-
 def get_prompt(subgenre, valence, arousal):  # add valence and arousal eventually
     modify = perspectiveRandom()
     genre = get_genre(subgenre)
@@ -224,8 +222,7 @@ def get_prompt(subgenre, valence, arousal):  # add valence and arousal eventuall
 This class is a thread class that generates prompts procedurally in real time.
 """
 
-
-class PromptGenerationThread(threading.Thread):
+class PromptGenerationThread(multiprocessing.Process):
 
     """
     This function is called when a PromptGenerationThread is created.

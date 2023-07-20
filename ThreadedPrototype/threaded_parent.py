@@ -20,7 +20,7 @@ def main():
             os.remove(os.path.join(dir, f))
         """
         BP_Thread = BasicPitchThread(name = 'BP_Thread', 
-                                        starting_chunk_size = STARTING_CHUNK)
+                                        starting_chunk_size = STARTING_CHUNK)                            
         SM_Thread = SmileThread(name = 'SM_Thread', 
                                 starting_chunk_size = STARTING_CHUNK)
         MF_Thread = MIDIFeatureThread(name = 'MF_Thread',
@@ -30,9 +30,10 @@ def main():
         GP_Thread = GenrePredictorThread(name = 'GP_Thread',
                                         SM_Thread = SM_Thread, 
                                         MF_Thread = MF_Thread)
+        
         Prompt_Thread = PromptGenerationThread(name = 'Prompt_Thread',
-                                            genre_thread = GP_Thread,
-                                            emotion_thread = Emo_Thread)
+                                            genre_thread = None,
+                                            emotion_thread = None)
         """
         Img_Thread = ImageGenerationThread(name = 'Img_Thread',
                                         Prompt_Thread = None,
@@ -55,6 +56,16 @@ def main():
         Img_Thread.start()
         print("Img started")
         Img_Thread.join()
+
+        while True:
+            """
+            if not (BP_Thread is None or BP_Thread.data is None):
+                print(BP_Thread.data)
+            if not (SM_Thread is None or SM_Thread.data is None):
+                print(SM_Thread.data)
+                time.sleep(0.5)
+            """
+            time.sleep(0.5)
     except KeyboardInterrupt:
         """
         BP_Thread.stop_request = True
@@ -65,6 +76,7 @@ def main():
         Prompt_Thread.stop_request = True
         """
         Img_Thread.stop_request = True
+        
 
 if __name__ == "__main__":
     main()
