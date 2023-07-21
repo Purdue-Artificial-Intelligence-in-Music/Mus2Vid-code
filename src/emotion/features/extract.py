@@ -14,8 +14,8 @@ def extract_opensmile_features(audio_filepaths: list[str]):
     audio_filepaths
         A list of audio filepaths relative to repository root.
     """
-    if os.path.exists(f"{FEATURES_DIR}/opensmile.{FEATURES_EXT}"):
-        return joblib.load(f"{FEATURES_DIR}/opensmile.{FEATURES_EXT}")
+    # if os.path.exists(f"{FEATURES_DIR}/opensmile.{FEATURES_EXT}"):
+    #     return joblib.load(f"{FEATURES_DIR}/opensmile.{FEATURES_EXT}")
 
     smile = opensmile.Smile(
         feature_set=opensmile.FeatureSet.emobase,
