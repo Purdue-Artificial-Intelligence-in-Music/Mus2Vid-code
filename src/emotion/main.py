@@ -25,7 +25,7 @@ def get_va_values(audio_filepath: str) -> tuple[float, float]:
 
     opensmile_features = extract_opensmile_features([audio_filepath])
     opensmile_valence_features, opensmile_arousal_features = get_best_opensmile_features(opensmile_features)
-
+    
     valence = valence_regressor.predict(opensmile_valence_features)[0]
     arousal = arousal_regressor.predict(opensmile_arousal_features)[0]
 
