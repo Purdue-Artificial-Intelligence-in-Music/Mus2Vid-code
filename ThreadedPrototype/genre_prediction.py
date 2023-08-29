@@ -4,7 +4,7 @@ import tensorflow as tf
 import opensmile
 import joblib
 import time
-import multiprocessing
+import threading
 
 def get_subgenre(num):
     genre_list = ['20th Century', 'Romantic', 'Classical', 'Baroque']
@@ -14,7 +14,7 @@ def get_subgenre(num):
 This class is a thread class that predicts the genre of input notes in real time.
 '''
 
-class GenrePredictorThread(multiprocessing.Process):
+class GenrePredictorThread(threading.Thread):
     
     """
     This function is called when a GenrePredictorThread is created. It sets the BasicPitchThread to grab MIDI data from.

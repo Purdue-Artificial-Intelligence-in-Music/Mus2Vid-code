@@ -1,6 +1,6 @@
 from emotion import *
-from features import *
-from genre_prediction import *
+from features_2 import *
+from genre_prediction_2 import *
 from image_generation import *
 from prompting import *
 import time
@@ -18,63 +18,46 @@ def main():
         dir = 'image_output_cache'
         for f in os.listdir(dir):
             os.remove(os.path.join(dir, f))
-        """
-        BP_Thread = BasicPitchThread(name = 'BP_Thread', 
-                                        starting_chunk_size = STARTING_CHUNK)                            
-        SM_Thread = SmileThread(name = 'SM_Thread', 
-                                starting_chunk_size = STARTING_CHUNK)
-        MF_Thread = MIDIFeatureThread(name = 'MF_Thread',
-                                    BP_Thread = BP_Thread)
-        Emo_Thread = EmotionClassificationThread(name = 'Emo_Thread',
-                                            SM_Thread = SM_Thread)
-        GP_Thread = GenrePredictorThread(name = 'GP_Thread',
-                                        SM_Thread = SM_Thread, 
-                                        MF_Thread = MF_Thread)
+        SPA_Thread = SinglePyAudioThread(name = "SPA_Thread", starting_chunk_size=STARTING_CHUNK)
+        MMF_Thread = ModifiedMIDIFeatureThread(name = "MMF_Thread", SinglePyAudioThread=SPA_Thread)
+        Emo_Thread = EmotionClassificationThreadSPA(name = 'Emo_Thread',
+                                            SPA_Thread = SPA_Thread)
+        GP_Thread = ModifiedGenrePredictorThread(name = 'GP_Thread',
+                                        MF_Thread = MMF_Thread, 
+                                        SPA_Thread=SPA_Thread)
         
         Prompt_Thread = PromptGenerationThread(name = 'Prompt_Thread',
                                             genre_thread = None,
-                                            emotion_thread = None)
-        """
+                                            emotion_thread = Emo_Thread)
+        
         Img_Thread = ImageGenerationThread(name = 'Img_Thread',
-                                        Prompt_Thread = None,
+                                        Prompt_Thread = Prompt_Thread,
                                         display_func=display_images)
         print("All threads init'ed")
-        """
-        BP_Thread.start()
-        print("BP started")
-        SM_Thread.start()
-        print("SM started")
-        MF_Thread.start()
-        print("MF started")
+        SPA_Thread.start()
+        print("============== SPA started")
+        MMF_Thread.start()
+        print("============== MMF started")
         Emo_Thread.start()
-        print("Emo started")
-        GP_Thread.start()
-        print("GP started")
-        Prompt_Thread.start()
-        print("Prompt started")
+        print("============== Emo started")
         """
+        GP_Thread.start()
+        print("============== GP started")
+        """
+        Prompt_Thread.start()
+        print("============== Prompt started")
         Img_Thread.start()
-        print("Img started")
-        Img_Thread.join()
-
+        print("============== Img started")
         while True:
-            """
-            if not (BP_Thread is None or BP_Thread.data is None):
-                print(BP_Thread.data)
-            if not (SM_Thread is None or SM_Thread.data is None):
-                print(SM_Thread.data)
-                time.sleep(0.5)
-            """
+            print("Hi")
+            print(Prompt_Thread.prompt)
             time.sleep(0.5)
     except KeyboardInterrupt:
-        """
-        BP_Thread.stop_request = True
-        SM_Thread.stop_request = True
-        MF_Thread.stop_request = True
+        SPA_Thread.stop_request = True
+        MMF_Thread.stop_request = True
         GP_Thread.stop_request = True
         Emo_Thread.stop_request = True
         Prompt_Thread.stop_request = True
-        """
         Img_Thread.stop_request = True
         
 

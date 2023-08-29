@@ -1,7 +1,8 @@
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 import random
-import multiprocessing
+import threading
+import time
 
 
 ## take float values and output emotion word
@@ -222,7 +223,7 @@ def get_prompt(subgenre, valence, arousal):  # add valence and arousal eventuall
 This class is a thread class that generates prompts procedurally in real time.
 """
 
-class PromptGenerationThread(multiprocessing.Process):
+class PromptGenerationThread(threading.Thread):
 
     """
     This function is called when a PromptGenerationThread is created.
@@ -253,3 +254,4 @@ class PromptGenerationThread(multiprocessing.Process):
                 self.prompt = "Black screen"
             else:
                 self.prompt = get_prompt(self.genre_thread.genre_output, self.emotion_thread.emo_values[0], self.emotion_thread.emo_values[1])
+            time.sleep(0.1)
