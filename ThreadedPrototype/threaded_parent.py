@@ -40,10 +40,8 @@ def main():
         print("============== MMF started")
         Emo_Thread.start()
         print("============== Emo started")
-        """
         GP_Thread.start()
         print("============== GP started")
-        """
         Prompt_Thread.start()
         print("============== Prompt started")
         Img_Thread.start()
