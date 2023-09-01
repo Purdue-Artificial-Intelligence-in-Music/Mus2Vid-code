@@ -27,10 +27,11 @@ def main():
                                         SPA_Thread=SPA_Thread)
         
         Prompt_Thread = PromptGenerationThread(name = 'Prompt_Thread',
-                                            genre_thread = None,
+                                            genre_thread = GP_Thread,
                                             emotion_thread = Emo_Thread)
         
         Img_Thread = ImageGenerationThread(name = 'Img_Thread',
+                                           seed=1028,
                                         Prompt_Thread = Prompt_Thread,
                                         display_func=display_images)
         print("All threads init'ed")
@@ -47,7 +48,7 @@ def main():
         Img_Thread.start()
         print("============== Img started")
         while True:
-            print("Hi")
+            print("\n\n")
             print(Prompt_Thread.prompt)
             time.sleep(0.5)
     except KeyboardInterrupt:

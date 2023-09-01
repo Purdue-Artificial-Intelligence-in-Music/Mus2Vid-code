@@ -32,7 +32,7 @@ class ModifiedGenrePredictorThread(threading.Thread):
         self.stop_request = False
 
         self.selector = joblib.load("genre_features.selector")
-        self.genre_model = tf.keras.models.load_model('genre_model.h5')
+        self.genre_model = tf.keras.models.load_model('my_model.model')
     
     """
     When the thread is started, this function is called which repeatedly grabs the most recent
