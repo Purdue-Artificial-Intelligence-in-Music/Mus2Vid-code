@@ -15,7 +15,7 @@ class ImageDisplayThread(threading.Thread):
     Returns: nothing
     """
 
-    def __init__(self, name, Img_Thread, window_name = "Image", static_dur = 300, blend_frames = 120, blend_mspf = 0):
+    def __init__(self, name, Img_Thread, window_name = "Image", static_dur = 1200, blend_frames = 60, blend_mspf = 1):
         super(ImageDisplayThread, self).__init__()
         self.name = name
         self.image_thread = Img_Thread
