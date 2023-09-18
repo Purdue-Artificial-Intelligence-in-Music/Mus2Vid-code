@@ -3,15 +3,45 @@ from features_2 import *
 from genre_prediction_2 import *
 from image_generation import *
 from prompting import *
+from img_display_thread import *
 import time
 import os
+import cv2
 
 STARTING_CHUNK = 1024
+
+new_image = False
+
+def display_images_old(pipe):
+    for i in range(len(pipe)):
+        image = pipe[i]
+        name = f"image_output_cache/image%d.png" % int(round(time.time() * 10, 1))
+        image.save(name)
+        display_images_cv(name)
 
 def display_images(pipe):
     for i in range(len(pipe)):
         image = pipe[i]
-        image.save(f"image_output_cache/image%d.png" % int(round(time.time() * 10, 1)))
+        new_image = True
+        display_images_cv(name)
+
+def display_images_cv(path):
+    # Reading an image in default mode
+    image = cv2.imread(path)
+  
+    # Window name in which image is displayed
+    window_name = 'image'
+  
+    # Using cv2.imshow() method
+    # Displaying the image
+    cv2.imshow(window_name, image)
+
+    # waits for user to press any key
+    # (this is necessary to avoid Python kernel form crashing)
+    cv2.waitKey(0)
+
+    # closing all open windows
+    cv2.destroyWindow(window_name)
 
 def main():
     try:
@@ -31,9 +61,11 @@ def main():
                                             emotion_thread = Emo_Thread)
         
         Img_Thread = ImageGenerationThread(name = 'Img_Thread',
-                                           seed=1028,
                                         Prompt_Thread = Prompt_Thread,
-                                        display_func=display_images)
+                                        display_func=None)
+        Display_Thread = ImageDisplayThread(name = "Display_Thread",
+                                            Img_Thread = Img_Thread)
+        
         print("All threads init'ed")
         SPA_Thread.start()
         print("============== SPA started")
@@ -47,6 +79,8 @@ def main():
         print("============== Prompt started")
         Img_Thread.start()
         print("============== Img started")
+        Display_Thread.start()
+        print("============== Display started")
         while True:
             print("\n\n")
             print(Prompt_Thread.prompt)
@@ -58,6 +92,7 @@ def main():
         Emo_Thread.stop_request = True
         Prompt_Thread.stop_request = True
         Img_Thread.stop_request = True
+        Display_Thread.stop_request = True
         
 
 if __name__ == "__main__":

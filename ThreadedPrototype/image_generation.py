@@ -8,6 +8,7 @@ import numpy
 from PIL import Image
 import threading
 import prompting
+import time
 
 import sys
 sys.path.append("../")
@@ -86,31 +87,18 @@ class ImageGenerationThread(threading.Thread):
                         num_images_per_prompt = self.imgs_per_prompt,
                         generator= self.generator
                     ).images
-                else:
-                    images = self.pipe(
-                        "black screen",
-                        negative_prompt= self.negative_prompt,
-                        num_inference_steps = self.inference,
-                        guidance_scale = self.guidance_scale,
-                        num_images_per_prompt = self.imgs_per_prompt,
-                        generator= self.generator
-                    ).images
+                    for image in images:
+                        if not image is None:
+                            img = numpy.array(image)
+                        sr_image, _ = self.upsampler.enhance(img)
+                        #self.output = [Image.fromarray(sr_image)] 
+                        self.output = sr_image
+                        if not self.display_func is None:
+                            self.display_func(self.output)
             else:
-                images = self.pipe(
-                    "black screen",
-                    negative_prompt= self.negative_prompt,
-                    num_inference_steps = self.inference,
-                    guidance_scale = self.guidance_scale,
-                    num_images_per_prompt = self.imgs_per_prompt,
-                    generator= self.generator
-                ).images
-            for image in images:
-                if not image is None:
-                    img = numpy.array(image)
-                sr_image, _ = self.upsampler.enhance(img)
-                self.output = [Image.fromarray(sr_image)] 
-                if not self.display_func is None:
-                    self.display_func(self.output)
+                print("No prompt or thread")
+                self.output = None
+            time.sleep(0.2)
                 
 
 def main():
