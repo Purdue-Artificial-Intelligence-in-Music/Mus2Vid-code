@@ -9,6 +9,7 @@ from PIL import Image
 import threading
 import prompting
 import time
+import numpy as np
 
 import sys
 sys.path.append("../")

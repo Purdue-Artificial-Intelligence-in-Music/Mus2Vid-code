@@ -64,9 +64,12 @@ def main():
                                         Prompt_Thread = Prompt_Thread,
                                         display_func=None)
         Display_Thread = ImageDisplayThread(name = "Display_Thread",
+                                            Prompt_Thread=Prompt_Thread,
                                             Img_Thread = Img_Thread)
         
         print("All threads init'ed")
+        Display_Thread.start()
+        print("============== Display started")
         SPA_Thread.start()
         print("============== SPA started")
         MMF_Thread.start()
@@ -79,8 +82,6 @@ def main():
         print("============== Prompt started")
         Img_Thread.start()
         print("============== Img started")
-        Display_Thread.start()
-        print("============== Display started")
         while True:
             print("\n\n")
             print(Prompt_Thread.prompt)
