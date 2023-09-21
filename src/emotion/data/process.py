@@ -1,7 +1,7 @@
 import os
 import subprocess
 import pandas as pd
-from src.emotion.data.util import RAW_ANNOTATIONS_DIR, RAW_AUDIO_DIR, PROCESSED_ANNOTATIONS_DIR, PROCESSED_AUDIO_DIR, ANNOTATIONS_FILE
+from utils.util import RAW_ANNOTATIONS_DIR, RAW_AUDIO_DIR, PROCESSED_ANNOTATIONS_DIR, PROCESSED_AUDIO_DIR, ANNOTATIONS_FILE
 
 
 def process_audio() -> None:

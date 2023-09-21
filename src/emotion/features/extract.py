@@ -2,7 +2,7 @@ import os
 import pandas as pd
 import opensmile
 import joblib 
-from src.emotion.features.util import FEATURES_DIR, FEATURES_EXT, CHUNK_SIZE
+from utils.util import FEATURES_DIR, FEATURES_EXT, CHUNK_SIZE
 
 
 def extract_opensmile_features(audio_filepaths: list[str]):
@@ -38,7 +38,7 @@ def extract_opensmile_features(audio_filepaths: list[str]):
 
 
 if __name__ == "__main__":
-    from src.emotion.features.util import get_audio_filepaths
+    from utils.util import get_audio_filepaths
 
     audio_filepaths = get_audio_filepaths()
     print(extract_opensmile_features(audio_filepaths))

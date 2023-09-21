@@ -3,7 +3,7 @@ import pandas as pd
 import numpy as np
 import joblib
 from sklearn.svm import SVR
-from src.emotion.model.util import MODEL_DIR, MODEL_EXT
+from src.emotion.model.utils.util import MODEL_DIR, MODEL_EXT
 
 
 class EmotionRegressor():
