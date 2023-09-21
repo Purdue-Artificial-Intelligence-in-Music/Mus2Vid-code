@@ -130,6 +130,8 @@ class EmotionClassificationThreadSPA(threading.Thread):
                 v_val = self.valence_regressor.predict(opensmile_valence_features)[0]
                 a_val = self.arousal_regressor.predict(opensmile_arousal_features)[0]
 
+                print(f"Valence: %.2f, Arousal: %.2f" % (v_val, a_val))
+                
                 #if v_val is None or a_val is None:
                 #    print("prediction bad")
 
