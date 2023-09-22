@@ -242,7 +242,7 @@ def get_subject(subgenre, valence, arousal):
 
 
 ## connect all the text into one prompt to send to SD
-def get_prompt(subgenre, valence, arousal):  # add valence and arousal eventually
+def get_prompt(subgenre, valence, arousal):
     modify = perspectiveRandom()
     genre = get_genre(subgenre)
     emotion = get_emotion_from_values(arousal, valence)
@@ -254,7 +254,17 @@ def get_prompt(subgenre, valence, arousal):  # add valence and arousal eventuall
     prompt = ", ".join(str(item) for item in modify_str)
     return prompt
 
-
+def get_prompt_2(subgenre, valence, arousal):
+    genre = get_genre(subgenre)
+    subject = get_subject(genre, valence, arousal)
+    emotion = get_emotion_from_values(arousal, valence)
+    emotion_mod = get_emotion(emotion)
+    result = [subject, emotion_mod, emotion]
+    modify_str = [
+        ", ".join(item) if isinstance(item, list) else item for item in result
+    ]
+    prompt = ", ".join(str(item) for item in modify_str)
+    return prompt
 """
 This class is a thread class that generates prompts procedurally in real time.
 """
