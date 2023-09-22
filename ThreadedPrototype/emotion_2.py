@@ -7,7 +7,7 @@ import threading
 import pandas as pd
 
 MODEL_DIR = "."
-MODEL_EXT = "h5"
+MODEL_EXT = "keras"
 SELECTOR_EXT = "selector"
 FEATURES_DIR = "."
 

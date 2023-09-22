@@ -73,14 +73,6 @@ def split(labeled_features):
 def test_load(test_feats, test_labels, path):
     model = keras.models.load_model(path)
 
-    test_preds = model.predict(test_feats)
-    print(test_labels[:10], test_feats[:10])
-
-    error = test_preds - test_labels
-    plt.hist(error, bins=20)
-    plt.xlabel("Prediction error (" + str(type) + ")")
-    plt.ylabel("Count")
-    plt.show()
 
 def build_model(type):
     features = get_matrix(type)
@@ -89,7 +81,7 @@ def build_model(type):
     num_feats = train_features.shape[1]
     print(num_feats)
 
-    normalizer = keras.layers.Normalization()
+    normalizer = keras.layers.Normalization(input_dim=256)
     normalizer.adapt(train_features)
 
     model = keras.Sequential([
@@ -107,7 +99,7 @@ def build_model(type):
         y = train_labels,
         validation_data = (validation_features, validation_labels),
         epochs=100,
-        verbose=2,
+        verbose=1,
         batch_size=8,
         callbacks=[keras.callbacks.EarlyStopping(monitor='val_loss', patience=10, restore_best_weights=True)]
     )
@@ -116,20 +108,17 @@ def build_model(type):
     hist['epoch'] = history.epoch
     hist.tail()
 
+    test_preds = model.predict(test_features).flatten()
     error = test_preds - test_labels
-    plt.hist(error, bins=20)
+    plt.hist(error, bins=25)
     plt.xlabel("Prediction error (" + str(type) + ")")
     plt.ylabel("Count")
     plt.show()
 
-    plot_loss(history)
+    # plot_loss(history)
 
     if not os.path.exists(MODEL_DIR): os.mkdir(MODEL_DIR)
     model.save(f"{MODEL_DIR}/{type}.keras")
-
-
-    test_preds = model.predict(test_features)
-    print(test_labels[:10], test_preds[:10])
 
     test_load(test_features, test_labels, f"{MODEL_DIR}/{type}.keras")
 
@@ -137,4 +126,4 @@ def build_model(type):
 
 if __name__ == "__main__":
     build_model("valence")
-    # build_model("arousal")
+    build_model("arousal")
