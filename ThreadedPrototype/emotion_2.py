@@ -5,6 +5,7 @@ import tensorflow as tf
 from tensorflow import keras
 import threading
 import pandas as pd
+import joblib
 
 MODEL_DIR = "."
 MODEL_EXT = "keras"
@@ -27,6 +28,8 @@ class EmotionClassificationThread(threading.Thread):
         self.stop_request = False
         self.SM_Thread = SM_Thread
         self.emo_values = None
+        self.valence_selector = joblib.load(f"{FEATURES_DIR}/opensmile_valence.{SELECTOR_EXT}")
+        self.arousal_selector = joblib.load(f"{FEATURES_DIR}/opensmile_arousal.{SELECTOR_EXT}")
         self.valence_regressor = keras.models.load_model(f"{MODEL_DIR}/valence.{MODEL_EXT}")
         self.valence_regressor = keras.models.load_model(f"{MODEL_DIR}/arousal.{MODEL_EXT}")
     
@@ -40,8 +43,10 @@ class EmotionClassificationThread(threading.Thread):
         while not self.stop_request:
             if not (self.SM_Thread is None or self.SM_Thread.data is None):
                 smile_features = self.SM_Thread.data
+                va_feats = self.valence_regressor.transform(smile_features)
+                ar_feats = self.arousal_selector.transform(smile_features)
 
-                self.emo_values = (self.valence_regressor.predict(smile_features)[0], self.arousal_regressor.predict(smile_features)[0])
+                self.emo_values = (self.valence_regressor.predict(va_feats)[0], self.arousal_regressor.predict(ar_feats)[0])
 
 class EmotionClassificationThreadSPA(threading.Thread):
     # Import model
@@ -59,6 +64,8 @@ class EmotionClassificationThreadSPA(threading.Thread):
         self.stop_request = False
         self.SPA_Thread = SPA_Thread
         self.emo_values = None
+        self.valence_selector = joblib.load(f"{FEATURES_DIR}/opensmile_valence.{SELECTOR_EXT}")
+        self.arousal_selector = joblib.load(f"{FEATURES_DIR}/opensmile_arousal.{SELECTOR_EXT}")
         self.valence_regressor = keras.models.load_model(f"{MODEL_DIR}/valence.{MODEL_EXT}")
         self.valence_regressor = keras.models.load_model(f"{MODEL_DIR}/arousal.{MODEL_EXT}")
 
@@ -73,12 +80,14 @@ class EmotionClassificationThreadSPA(threading.Thread):
         while not self.stop_request:
             if not (self.SPA_Thread is None or self.SPA_Thread.data is None):
                 _, smile_features = self.SPA_Thread.data
-
+                va_feats = self.valence_regressor.transform(smile_features)
+                ar_feats = self.arousal_selector.transform(smile_features)
+            
                 #if not (opensmile_arousal_features is None or opensmile_valence_features is None):
                 #    print("Emo data found at thread level")
 
-                v_val = self.valence_regressor.predict(smile_features)[0]
-                a_val = self.arousal_regressor.predict(smile_features)[0]
+                v_val = self.valence_regressor.predict(va_feats)[0]
+                a_val = self.arousal_regressor.predict(ar_feats)[0]
 
                 print(f"Valence: %.2f, Arousal: %.2f" % (v_val, a_val))
                 
