@@ -11,6 +11,12 @@ SELECTOR_EXT = "selector"
 TARGETS_EXT = "targets"
 MODEL_EXT = "model"
 
+def get_valence_selector():
+    return joblib.load(f"{FEATURES_DIR}/opensmile_valence.{SELECTOR_EXT}")
+
+def get_arousal_selector():
+    return joblib.load(f"{FEATURES_DIR}/opensmile_arousal.{SELECTOR_EXT}")
+
 
 def get_features(filename) -> pd.DataFrame:
     """Return a pandas.DataFrame of features loaded from a file."""
@@ -19,12 +25,12 @@ def get_features(filename) -> pd.DataFrame:
 
 def get_valence_targets() -> pd.Series:
     """Return a pandas.Series of target values for valence."""
-    return pd.read_csv(ANNOTATIONS_PATH)["valence_mean"]
+    return pd.Series.tolist(pd.read_csv(ANNOTATIONS_PATH)["valence_mean"])
 
 
 def get_arousal_targets() -> pd.Series:
     """Return a pandas.Series of target values for arousal."""
-    return pd.read_csv(ANNOTATIONS_PATH)["arousal_mean"]
+    return pd.Series.tolist(pd.read_csv(ANNOTATIONS_PATH)["arousal_mean"])
 
 
 if __name__ == "__main__":

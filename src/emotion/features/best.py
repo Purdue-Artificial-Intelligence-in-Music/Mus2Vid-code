@@ -20,9 +20,9 @@ def _save_opensmile_feature_selectors():
     opensmile_features = joblib.load(f"{FEATURES_DIR}/opensmile.{FEATURES_EXT}")
     valence_targets = get_valence_targets()
     arousal_targets = get_arousal_targets()
-    print("yo")
-    opensmile_valence_selector = SelectKBest(score_func=f_regression, k=988) # all features for now
-    opensmile_arousal_selector = SelectKBest(score_func=f_regression, k=988) # all features for now
+
+    opensmile_valence_selector = SelectKBest(score_func=f_regression, k=256)
+    opensmile_arousal_selector = SelectKBest(score_func=f_regression, k=256)
 
     opensmile_valence_selector.fit(opensmile_features, valence_targets)
     opensmile_arousal_selector.fit(opensmile_features, arousal_targets)

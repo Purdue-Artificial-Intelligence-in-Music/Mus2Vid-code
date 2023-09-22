@@ -26,7 +26,7 @@ def get_pipe():
     Returns:
         pipe: pipeline object
     """
-    pipe = DiffusionPipeline.from_pretrained(MODEL_ID, torch_dtype=torch.float16, revision="fp16")
+    pipe = DiffusionPipeline.from_pretrained(stable_diffusion_model_id, torch_dtype=torch.float16, revision="fp16")
     pipe.scheduler = DPMSolverMultistepScheduler.from_config(pipe.scheduler.config)
     pipe = pipe.to("cuda")
     return pipe
