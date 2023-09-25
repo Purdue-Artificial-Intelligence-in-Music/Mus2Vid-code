@@ -1,7 +1,9 @@
-from src.emotion.model.regressor import EmotionRegressor
 from src.emotion.features.extract import extract_opensmile_features
 from src.emotion.features.best import get_best_opensmile_features
+import keras
 
+MODEL_DIR = "models/emotion"
+MODEL_EXT = "keras"
 
 def get_va_values(audio_filepath: str) -> tuple[float, float]:
     """Process audio at given filepath and return valence and arousal values.
@@ -18,10 +20,9 @@ def get_va_values(audio_filepath: str) -> tuple[float, float]:
     arousal: float
         A float between 1 and 9.
     """
-    valence_regressor = EmotionRegressor()
-    arousal_regressor = EmotionRegressor()
-    valence_regressor.load("valence_regressor")
-    arousal_regressor.load("arousal_regressor")
+    valence_regressor = keras.models.load_model(f"{MODEL_DIR}/valence.{MODEL_EXT}")
+    arousal_regressor = keras.models.load_model(f"{MODEL_DIR}/arousal.{MODEL_EXT}")
+
 
     opensmile_features = extract_opensmile_features([audio_filepath])
     opensmile_valence_features, opensmile_arousal_features = get_best_opensmile_features(opensmile_features)

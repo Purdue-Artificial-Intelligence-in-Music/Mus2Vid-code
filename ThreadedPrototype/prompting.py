@@ -224,15 +224,12 @@ def get_subject(subgenre, valence, arousal):
                   "moonlit baroque garden adorned with ornate statues and overgrown vines",
                   "Sublime natural landscape, majestic sunrise"][quadrant]
     elif subgenre == "Classical":
-        prompt = \
-            [
-                "stormy, 18th-century ship's deck, with waves crashing against the vessel and wind howling through the sails",
+        prompt = ["stormy, 18th-century ship's deck, with waves crashing against the vessel and wind howling through the sails",
                 "sun-drenched 18th-century countryside, where jubilant peasants gather for a bountiful harvest celebration",
                 "lavish 19th century drawing room filled with genteel society engaging in polite conversation"
                 "Serene countryside, meandering stream with rolling hills"][quadrant]
     elif subgenre == "Romantic":
-        prompt = [
-            "moonlit balcony in 19th-century Verona, two star-crossed lovers, separated by a tragic fate, pour out their hearts",
+        prompt = ["moonlit balcony in 19th-century Verona, two star-crossed lovers, separated by a tragic fate, pour out their hearts",
             "breathtaking 19th-century Parisian ballroom, crystal chandeliers, beautiful men and women dancing in ornate suits and dresses.",
             "tranquil, rain-kissed garden on the outskirts of a 19th-century European town, where a gentle rain showers the roses in bloom"
             "quaint, sun-kissed garden in a 19th-century countryside. A couple strolls alone holding hands"][quadrant]
