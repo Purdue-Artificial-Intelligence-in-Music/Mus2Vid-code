@@ -2,9 +2,13 @@ from utils.util import *
 import os
 import pandas as pd
 import numpy as np
+import math
 from tensorflow import keras
 import joblib
 import matplotlib.pyplot as plt
+
+def get_test_feats():
+    pass
 
 def get_matrix(type):
     features = get_features("opensmile")
@@ -70,8 +74,21 @@ def split(labeled_features):
 
     return training_features, test_features, validation_features, training_labels, test_labels, validation_labels
 
-def test_load(test_feats, test_labels, path):
-    model = keras.models.load_model(path)
+def test_load(model, test_feats, test_labels, path):
+    # print("loading...")
+    # model = keras.models.load_model(path)
+
+    test_preds = model.predict(test_feats).flatten()
+    error = test_preds - test_labels
+    absolute = abs(error)
+    print("avg error: ", sum(absolute)/len(absolute))
+    plt.hist(error, bins=25)
+    plt.xlabel("Prediction error (" + str(type) + ")")
+    plt.ylabel("Count")
+    plt.show()
+
+    return
+
 
 
 def build_model(type):
@@ -79,20 +96,25 @@ def build_model(type):
     train_features, test_features, validation_features, train_labels, test_labels, validation_labels = split(features)
 
     num_feats = train_features.shape[1]
-    print(num_feats)
+    # print(train_features.shape)
+    # print(train_features[0].shape)
+    # print(train_features[0])
 
     normalizer = keras.layers.Normalization(input_dim=256)
     normalizer.adapt(train_features)
 
     model = keras.Sequential([
         normalizer,
-        keras.layers.Dense(num_feats, activation='relu', kernel_regularizer='l2'),
-        keras.layers.Dense(128, activation='relu', kernel_regularizer='l2'),
-        keras.layers.Dense(128, activation='relu', kernel_regularizer='l2'),
+        keras.layers.Dense(num_feats, kernel_regularizer='l2'),
+        keras.layers.ReLU(max_value = 10),
+        keras.layers.Dense(128, kernel_regularizer='l2'),
+        keras.layers.ReLU(max_value = 10),
+        keras.layers.Dense(64, kernel_regularizer='l2'),
+        keras.layers.ReLU(max_value = 10),
         keras.layers.Dense(1)
     ])
 
-    model.compile(optimizer=keras.optimizers.Adam(learning_rate=0.001), loss='mean_absolute_error')
+    model.compile(optimizer=keras.optimizers.Adam(learning_rate=0.0005), loss='mean_absolute_error')
 
     history = model.fit(
         x = train_features,
@@ -108,23 +130,14 @@ def build_model(type):
     hist['epoch'] = history.epoch
     hist.tail()
 
-    test_preds = model.predict(test_features).flatten()
-    print(test_preds[:10])
-    error = test_preds - test_labels
-    plt.hist(error, bins=25)
-    plt.xlabel("Prediction error (" + str(type) + ")")
-    plt.ylabel("Count")
-    plt.show()
-
     # plot_loss(history)
 
-    if not os.path.exists(MODEL_DIR): os.mkdir(MODEL_DIR)
     model.save(f"{MODEL_DIR}/{type}.keras")
 
-    test_load(test_features, test_labels, f"{MODEL_DIR}/{type}.keras")
+    test_load(model, test_features, test_labels, f"{MODEL_DIR}/{type}.keras")
 
     return
 
 if __name__ == "__main__":
     build_model("valence")
-    # build_model("arousal")
+    build_model("arousal")

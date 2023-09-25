@@ -6,6 +6,11 @@ import joblib
 import time
 import threading
 
+MODEL_DIR = "utils"
+MODEL_EXT = "model"
+SELECTOR_EXT = "selector"
+FEATURES_DIR = "utils"
+
 def get_subgenre(num):
     genre_list = ['20th Century', 'Romantic', 'Classical', 'Baroque']
     return genre_list[num]
@@ -31,8 +36,8 @@ class ModifiedGenrePredictorThread(threading.Thread):
         self.genre_output = None
         self.stop_request = False
 
-        self.selector = joblib.load("genre_features.selector")
-        self.genre_model = tf.keras.models.load_model('my_model.model')
+        self.selector = joblib.load(f"{FEATURES_DIR}/genre_features.{SELECTOR_EXT}")
+        self.genre_model = tf.keras.models.load_model(f"{MODEL_DIR}/my_model.{MODEL_EXT}")
     
     """
     When the thread is started, this function is called which repeatedly grabs the most recent
