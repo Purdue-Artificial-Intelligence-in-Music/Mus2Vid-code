@@ -1,4 +1,4 @@
-from emotion import *
+from emotion_2 import *
 from features_2 import *
 from genre_prediction_2 import *
 from image_generation import *

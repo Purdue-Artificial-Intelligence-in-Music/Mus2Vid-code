@@ -28,8 +28,8 @@ def _save_opensmile_feature_selectors():
     opensmile_arousal_selector.fit(opensmile_features, arousal_targets)
 
     if not os.path.exists(FEATURES_DIR): os.mkdir(FEATURES_DIR)
-    joblib.dump(opensmile_valence_selector, f"{FEATURES_DIR}/opensmile_valence.{SELECTOR_EXT}")
-    joblib.dump(opensmile_arousal_selector, f"{FEATURES_DIR}/opensmile_arousal.{SELECTOR_EXT}")
+    joblib.dump(opensmile_valence_selector, f"{FEATURES_DIR}/fcnn_valence.{SELECTOR_EXT}")
+    joblib.dump(opensmile_arousal_selector, f"{FEATURES_DIR}/fcnn_arousal.{SELECTOR_EXT}")
 
 
 def get_best_opensmile_features(opensmile_features: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame]:
@@ -61,4 +61,4 @@ def get_best_opensmile_features(opensmile_features: pd.DataFrame) -> tuple[pd.Da
 
 
 if __name__ == "__main__":
-    print(get_best_opensmile_features(joblib.load(f"{FEATURES_DIR}/opensmile.{FEATURES_EXT}")))
+    _save_opensmile_feature_selectors()
