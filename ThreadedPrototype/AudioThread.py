@@ -34,7 +34,7 @@ class AudioThread(threading.Thread):
         self.starting_chunk_size = starting_chunk_size
         self.CHUNK = self.starting_chunk_size * self.CHANNELS
 
-        self.on_threshold = 0.003
+        self.on_threshold = 0.001
         self.input_on = False
 
         self.last_time_on = 0.0

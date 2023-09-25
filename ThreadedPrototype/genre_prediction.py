@@ -19,7 +19,7 @@ def get_subgenre(num):
 This class is a thread class that predicts the genre of input notes in real time.
 '''
 
-class GenrePredictorThread(threading.Thread):
+class ModifiedGenrePredictorThread(threading.Thread):
     
     """
     This function is called when a GenrePredictorThread is created. It sets the BasicPitchThread to grab MIDI data from.
@@ -28,11 +28,11 @@ class GenrePredictorThread(threading.Thread):
         BP_Thread: a reference to the BasicPitchThread to use
     Returns: nothing
     """ 
-    def __init__(self, name, MF_Thread, SM_Thread):
-        super(GenrePredictorThread, self).__init__()
+    def __init__(self, name, MF_Thread, SPA_Thread):
+        super(ModifiedGenrePredictorThread, self).__init__()
         self.name = name
         self.MF_Thread = MF_Thread
-        self.SM_Thread = SM_Thread
+        self.SPA_Thread = SPA_Thread
         self.genre_output = None
         self.stop_request = False
 
@@ -47,8 +47,8 @@ class GenrePredictorThread(threading.Thread):
     """
     def run(self):
         while not self.stop_request:
-            if not (self.MF_Thread.midi_features is None or self.SM_Thread.data is None):
-                smile_features = self.SM_Thread.data
+            if not (self.MF_Thread.midi_features is None or self.SPA_Thread.data is None):
+                _, smile_features = self.SPA_Thread.data
                 midi_features = self.MF_Thread.midi_features
                 
                 audio_features = np.concatenate((smile_features, midi_features), axis=1)
@@ -56,6 +56,5 @@ class GenrePredictorThread(threading.Thread):
                 
                 subgenre_num = self.genre_model.predict(audio_features)
                 self.genre_output = get_subgenre(np.argmax(subgenre_num))
-            else:
-                time.sleep(1)
+            time.sleep(0.5)
             
