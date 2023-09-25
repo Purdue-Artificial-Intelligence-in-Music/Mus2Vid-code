@@ -42,7 +42,6 @@ class ImageDisplayThread(threading.Thread):
         self.current_image = np.float32(self.current_image)
         self.current_image /= np.float32(256.0)
         self.current_image = cv2.cvtColor(self.current_image, cv2.COLOR_RGB2BGR)
-        print(self.current_image[0][0])
         if self.prompt_thread.prompt != "Black screen":
             # org
             org = (50, 50)
