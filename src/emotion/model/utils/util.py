@@ -12,10 +12,10 @@ TARGETS_EXT = "targets"
 MODEL_EXT = "model"
 
 def get_valence_selector():
-    return joblib.load(f"{FEATURES_DIR}/opensmile_valence.{SELECTOR_EXT}")
+    return joblib.load(f"{FEATURES_DIR}/fcnn_valence.{SELECTOR_EXT}")
 
 def get_arousal_selector():
-    return joblib.load(f"{FEATURES_DIR}/opensmile_arousal.{SELECTOR_EXT}")
+    return joblib.load(f"{FEATURES_DIR}/fcnn_arousal.{SELECTOR_EXT}")
 
 
 def get_features(filename) -> pd.DataFrame:

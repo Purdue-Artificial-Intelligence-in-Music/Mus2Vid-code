@@ -7,10 +7,10 @@ import pandas as pd
 import joblib
 from sklearn.svm import SVR
 
-MODEL_DIR = "."
+MODEL_DIR = "utils"
 MODEL_EXT = "model"
 SELECTOR_EXT = "selector"
-FEATURES_DIR = "."
+FEATURES_DIR = "utils"
 
 class EmotionRegressor():
     """A Support Vector Regressor (SVR) for predicting valence and
