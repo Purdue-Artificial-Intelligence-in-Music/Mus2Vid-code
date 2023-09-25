@@ -8,7 +8,7 @@ import time
 import os
 import cv2
 
-STARTING_CHUNK = 4096
+STARTING_CHUNK = 44100
 
 new_image = False
 
