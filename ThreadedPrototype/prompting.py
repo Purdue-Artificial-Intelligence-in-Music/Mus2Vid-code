@@ -257,8 +257,7 @@ def get_prompt(subgenre, valence, arousal):
 
 
 def get_prompt_2(subgenre, valence, arousal):
-    genre = get_genre(subgenre)
-    subject = get_subject(genre, valence, arousal)
+    subject = get_subject(subgenre, valence, arousal)
     emotion = get_emotion_from_values(arousal, valence)
     emotion_mod = get_emotion(emotion)
     result = [subject, emotion_mod, emotion]
