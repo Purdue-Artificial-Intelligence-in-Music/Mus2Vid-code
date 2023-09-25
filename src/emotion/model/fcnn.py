@@ -109,6 +109,7 @@ def build_model(type):
     hist.tail()
 
     test_preds = model.predict(test_features).flatten()
+    print(test_preds[:10])
     error = test_preds - test_labels
     plt.hist(error, bins=25)
     plt.xlabel("Prediction error (" + str(type) + ")")
@@ -126,4 +127,4 @@ def build_model(type):
 
 if __name__ == "__main__":
     build_model("valence")
-    build_model("arousal")
+    # build_model("arousal")

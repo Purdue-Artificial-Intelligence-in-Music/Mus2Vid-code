@@ -43,7 +43,7 @@ class EmotionClassificationThread(threading.Thread):
         while not self.stop_request:
             if not (self.SM_Thread is None or self.SM_Thread.data is None):
                 smile_features = self.SM_Thread.data
-                va_feats = self.valence_regressor.transform(smile_features)
+                va_feats = self.valence_selector.transform(smile_features)
                 ar_feats = self.arousal_selector.transform(smile_features)
 
                 self.emo_values = (self.valence_regressor.predict(va_feats)[0], self.arousal_regressor.predict(ar_feats)[0])
@@ -80,7 +80,7 @@ class EmotionClassificationThreadSPA(threading.Thread):
         while not self.stop_request:
             if not (self.SPA_Thread is None or self.SPA_Thread.data is None):
                 _, smile_features = self.SPA_Thread.data
-                va_feats = self.valence_regressor.transform(smile_features)
+                va_feats = self.valence_selector.transform(smile_features)
                 ar_feats = self.arousal_selector.transform(smile_features)
             
                 #if not (opensmile_arousal_features is None or opensmile_valence_features is None):
