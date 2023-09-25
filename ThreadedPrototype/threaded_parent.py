@@ -1,5 +1,5 @@
-from emotion_2 import *
-from features_2 import *
+from emotion import *
+from features import *
 from genre_prediction_2 import *
 from image_generation import *
 from prompting import *
