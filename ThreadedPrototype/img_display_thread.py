@@ -16,8 +16,12 @@ class ImageDisplayThread(threading.Thread):
     Returns: nothing
     """
 
-    def __init__(self, name, Prompt_Thread, Img_Thread, window_name="Image", static_dur=1200, blend_frames=50,
-                 blend_mspf=1):
+    def __init__(self, name, Prompt_Thread, Img_Thread,
+                 window_name="Image",
+                 static_dur=1200,
+                 blend_frames=50,
+                 blend_mspf=1,
+                 font=cv2.FONT_HERSHEY_SIMPLEX):
         super(ImageDisplayThread, self).__init__()
         self.name = name
         self.prompt_thread = Prompt_Thread
@@ -30,9 +34,28 @@ class ImageDisplayThread(threading.Thread):
         self.blend_mspf = blend_mspf
         self.stop_request = False
 
+        self.font = font
+
     def get_image(self):
         self.past_image = self.current_image
-        self.current_image = self.image_thread.output
+        self.current_image = np.ascontiguousarray(self.image_thread.output)
+        self.current_image = np.float32(self.current_image)
+        self.current_image /= np.float32(256.0)
+        self.current_image = cv2.cvtColor(self.current_image, cv2.COLOR_RGB2BGR)
+        print(self.current_image[0][0])
+        if self.prompt_thread.prompt != "Black screen":
+            # org
+            org = (50, 50)
+            # fontScale
+            fontScale = 0.7
+            # White color in BGR
+            color = (255, 255, 255)
+            # Line thickness of 2 px
+            thickness = 2
+
+            # Using cv2.putText() method
+            self.current_image = cv2.putText(self.current_image, self.prompt_thread.prompt, org, self.font,
+                                             fontScale, color, thickness, cv2.LINE_AA)
 
     """
     When the thread is started, this function is called which repeatedly displays new images.
@@ -51,7 +74,7 @@ class ImageDisplayThread(threading.Thread):
             self.get_image()
             for i in range(1, self.blend_frames):
                 dst = cv2.addWeighted(self.past_image, 1 - (i / float(self.blend_frames)), self.current_image,
-                                      i / float(self.blend_frames), 0.0, dtype=cv2.CV_8U)
+                                      i / float(self.blend_frames), 0.0, dtype=cv2.CV_32F)
                 cv2.imshow(self.window_name, dst)
                 cv2.waitKey(self.blend_mspf)
             cv2.imshow(self.window_name, self.current_image)

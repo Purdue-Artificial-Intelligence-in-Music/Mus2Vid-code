@@ -37,6 +37,8 @@ class AudioThread(threading.Thread):
         self.on_threshold = 0.003
         self.input_on = False
 
+        self.last_time_on = 0.0
+
         self.stop_request = False
 
         self.data = None
@@ -96,11 +98,12 @@ class AudioThread(threading.Thread):
         for val in audio:
             val_sum += val * val
         val_sum /= len(audio)
-        print(val_sum)
         if val_sum > self.on_threshold:
+            self.last_time_on = time.time()
             self.input_on = True
         else:
-            self.input_on = False
+            if time.time() - self.last_time_on > 5.0:
+                self.input_on = False
 
     def callback(self, in_data, frame_count, time_info, flag):
         """

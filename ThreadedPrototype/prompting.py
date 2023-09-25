@@ -285,13 +285,13 @@ class PromptGenerationThread(threading.Thread):
     Returns: nothing
     """
 
-    def __init__(self, name, genre_thread, emotion_thread):
+    def __init__(self, name, genre_thread, emotion_thread, audio_thread):
         super(PromptGenerationThread, self).__init__()
         self.name = name
         self.prompt = None
         self.genre_thread = genre_thread
         self.emotion_thread = emotion_thread
-
+        self.audio_thread = audio_thread
         self.stop_request = False
 
     """
@@ -302,8 +302,9 @@ class PromptGenerationThread(threading.Thread):
 
     def run(self):
         while not self.stop_request:
-            if (self.genre_thread is None or self.genre_thread.genre_output is None or
-                    self.emotion_thread is None or self.emotion_thread.emo_values is None):
+            if (not self.audio_thread.input_on or
+                    (self.genre_thread is None or self.genre_thread.genre_output is None or
+                     self.emotion_thread is None or self.emotion_thread.emo_values is None)):
                 self.prompt = "Black screen"
             else:
                 self.prompt = get_prompt_2(self.genre_thread.genre_output, self.emotion_thread.emo_values[0],

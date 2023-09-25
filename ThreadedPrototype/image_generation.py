@@ -84,7 +84,7 @@ class ImageGenerationThread(threading.Thread):
 
     def run(self):
         while not self.stop_request:
-            if self.audio_thread.input_on and not self.Prompt_Thread is None and not (
+            if not self.Prompt_Thread is None and not (
                     self.Prompt_Thread.prompt is None or self.Prompt_Thread.prompt == "" or self.Prompt_Thread.prompt == "Black screen"):
                 prompt = self.Prompt_Thread.prompt
                 images = self.pipe(
@@ -106,7 +106,7 @@ class ImageGenerationThread(threading.Thread):
             else:
                 print("No prompt or thread")
                 self.output = self.blank_image
-            time.sleep(0.4)
+            time.sleep(1)
 
 
 def main():

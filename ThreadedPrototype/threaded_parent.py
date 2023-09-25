@@ -32,7 +32,8 @@ def main():
 
     Prompt_Thread = PromptGenerationThread(name='Prompt_Thread',
                                            genre_thread=GP_Thread,
-                                           emotion_thread=Emo_Thread)
+                                           emotion_thread=Emo_Thread,
+                                           audio_thread=SPA_Thread)
 
     Img_Thread = ImageGenerationThread(name='Img_Thread',
                                        Prompt_Thread=Prompt_Thread,
