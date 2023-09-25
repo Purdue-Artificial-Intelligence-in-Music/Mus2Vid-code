@@ -4,7 +4,6 @@ import os
 import tensorflow as tf
 from tensorflow import keras
 import threading
-import pandas as pd
 import joblib
 
 MODEL_DIR = "utils"

@@ -1,6 +1,6 @@
 from emotion import *
 from features import *
-from genre_prediction_2 import *
+from genre_prediction import *
 from image_generation import *
 from prompting import *
 from img_display_thread import *
@@ -8,7 +8,7 @@ import time
 import os
 import cv2
 
-STARTING_CHUNK = 44100
+STARTING_CHUNK = 88200
 
 new_image = False
 
