@@ -4,7 +4,6 @@ import random
 import threading
 import time
 
-
 ## take float values and output emotion word
 ## values based on data csv file
 ## Some emotions based on VA model is not on there so I used the closest synonym
@@ -37,7 +36,6 @@ def get_emotion_from_values(arousal, valence):
             closest_emotion = emotion
 
     return closest_emotion
-
 
 ## use the emotions on the VA model
 ## output text for the different emotions for overall prompt generation
@@ -144,7 +142,6 @@ def get_emotion(emotion_input):
 
     return emotion_prompt
 
-
 def perspectiveRandom():
     angle_modifier = [
         "extreme close-up",
@@ -189,7 +186,6 @@ def perspectiveRandom():
 
     return [angle_random, lens_random, artstyle_random]
 
-
 ## function for different type of genre with date
 def get_genre(subgenre):
     prompt = ""
@@ -204,18 +200,17 @@ def get_genre(subgenre):
 
     return prompt
 
-
 # some more creative prompts adapted from chatGPT
 def get_subject(subgenre, valence, arousal):
-    quadrant = 0
+    quadrant = 2
     if (valence > 4.5 and arousal > 4.5):
-        quadrant = 1  # strong negative emotions
+        quadrant = 0  # strong negative emotions
     if (valence < 4.5 and arousal > 4.5):
-        quadrant = 2  # strong positive
+        quadrant = 1  # strong positive
     if (valence > 4.5 and arousal < 4.5):
-        quadrant = 3  # mild negative
+        quadrant = 2  # mild negative
     if (valence < 4.5 and arousal < 4.5):
-        quadrant = 4  # mild positive
+        quadrant = 3  # mild positive
 
     prompt = ""
     if subgenre == "Baroque":
@@ -257,10 +252,11 @@ def get_prompt(subgenre, valence, arousal):
 
 
 def get_prompt_2(subgenre, valence, arousal):
+    time = get_genre(subgenre)
     subject = get_subject(subgenre, valence, arousal)
     emotion = get_emotion_from_values(arousal, valence)
     emotion_mod = get_emotion(emotion)
-    result = [subject, emotion_mod, emotion]
+    result = [time, subject, emotion_mod, emotion]
     modify_str = [
         ", ".join(item) if isinstance(item, list) else item for item in result
     ]

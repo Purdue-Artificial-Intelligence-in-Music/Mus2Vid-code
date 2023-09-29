@@ -3,9 +3,11 @@ import os
 import pandas as pd
 import numpy as np
 import math
+import tensorflow as tf
 from tensorflow import keras
 import joblib
 import matplotlib.pyplot as plt
+from keras import backend as K
 
 def get_test_feats():
     pass
@@ -79,6 +81,7 @@ def test_load(model, test_feats, test_labels, path):
     # model = keras.models.load_model(path)
 
     test_preds = model.predict(test_feats).flatten()
+    print(test_preds[:10])
     error = test_preds - test_labels
     absolute = abs(error)
     print("avg error: ", sum(absolute)/len(absolute))
@@ -89,7 +92,8 @@ def test_load(model, test_feats, test_labels, path):
 
     return
 
-
+def custom_activation(x):
+    return (K.sigmoid(x) * 8) + 1
 
 def build_model(type):
     features = get_matrix(type)
@@ -105,13 +109,11 @@ def build_model(type):
 
     model = keras.Sequential([
         normalizer,
-        keras.layers.Dense(num_feats, kernel_regularizer='l2'),
-        keras.layers.ReLU(max_value = 10),
-        keras.layers.Dense(128, kernel_regularizer='l2'),
-        keras.layers.ReLU(max_value = 10),
-        keras.layers.Dense(64, kernel_regularizer='l2'),
-        keras.layers.ReLU(max_value = 10),
-        keras.layers.Dense(1)
+        keras.layers.Dense(num_feats, activation='relu', kernel_regularizer='l2'),
+        # keras.layers.ReLU(max_value = 10),
+        keras.layers.Dense(128, activation='relu', kernel_regularizer='l2'),
+        keras.layers.Dense(64, activation='relu', kernel_regularizer='l2'),
+        keras.layers.Dense(1, activation=custom_activation)
     ])
 
     model.compile(optimizer=keras.optimizers.Adam(learning_rate=0.0005), loss='mean_absolute_error')
@@ -132,7 +134,7 @@ def build_model(type):
 
     # plot_loss(history)
 
-    model.save(f"{MODEL_DIR}/{type}.keras")
+    model.save(f"{MODEL_DIR}/{type}_bounded.keras")
 
     test_load(model, test_features, test_labels, f"{MODEL_DIR}/{type}.keras")
 

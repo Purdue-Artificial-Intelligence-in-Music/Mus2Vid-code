@@ -8,6 +8,7 @@ import time
 import os
 import cv2
 
+
 STARTING_CHUNK = 88200
 
 new_image = False

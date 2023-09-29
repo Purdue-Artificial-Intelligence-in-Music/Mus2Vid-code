@@ -5,8 +5,13 @@ import tensorflow as tf
 from tensorflow import keras
 import threading
 import joblib
+from keras import backend as K
+
+def custom_activation(x):
+    return (K.sigmoid(x) * 8) + 1
 
 MODEL_DIR = "utils"
+BOUNDED = "_bounded"
 MODEL_EXT = "keras"
 SELECTOR_EXT = "selector"
 FEATURES_DIR = "utils"
@@ -29,8 +34,8 @@ class EmotionClassificationThreadSPA(threading.Thread):
         self.emo_values = None
         self.valence_selector = joblib.load(f"{FEATURES_DIR}/opensmile_valence.{SELECTOR_EXT}")
         self.arousal_selector = joblib.load(f"{FEATURES_DIR}/opensmile_arousal.{SELECTOR_EXT}")
-        self.valence_regressor = keras.models.load_model(f"{MODEL_DIR}/valence.{MODEL_EXT}")
-        self.arousal_regressor = keras.models.load_model(f"{MODEL_DIR}/arousal.{MODEL_EXT}")
+        self.valence_regressor = keras.models.load_model(f"{MODEL_DIR}/valence{BOUNDED}.{MODEL_EXT}", custom_objects={'custom_activation':custom_activation})
+        self.arousal_regressor = keras.models.load_model(f"{MODEL_DIR}/arousal{BOUNDED}.{MODEL_EXT}", custom_objects={'custom_activation':custom_activation})
 
     
     """
