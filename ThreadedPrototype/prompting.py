@@ -240,6 +240,7 @@ def get_subject(subgenre, valence, arousal):
 ## connect all the text into one prompt to send to SD
 def get_prompt(subgenre, valence, arousal):
     modify = perspectiveRandom()
+    modify = ""
     genre = get_genre(subgenre)
     emotion = get_emotion_from_values(arousal, valence)
     emotion_mod = get_emotion(emotion)
@@ -299,6 +300,6 @@ class PromptGenerationThread(threading.Thread):
                      self.emotion_thread is None or self.emotion_thread.emo_values is None)):
                 self.prompt = "Black screen"
             else:
-                self.prompt = get_prompt_2(self.genre_thread.genre_output, self.emotion_thread.emo_values[0],
+                self.prompt = get_prompt(self.genre_thread.genre_output, self.emotion_thread.emo_values[0],
                                            self.emotion_thread.emo_values[1])
             time.sleep(0.2)

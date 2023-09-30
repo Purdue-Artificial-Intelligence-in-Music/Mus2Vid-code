@@ -11,7 +11,7 @@ def custom_activation(x):
     return (K.sigmoid(x) * 8) + 1
 
 MODEL_DIR = "utils"
-BOUNDED = "_bounded"
+BOUNDED = ""
 MODEL_EXT = "keras"
 SELECTOR_EXT = "selector"
 FEATURES_DIR = "utils"
