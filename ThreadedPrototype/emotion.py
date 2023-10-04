@@ -40,15 +40,15 @@ class EmotionClassificationThreadSPA(threading.Thread):
         self.arousal_selector = joblib.load(f"{FEATURES_DIR}/opensmile_arousal.{SELECTOR_EXT}")
         self.average_count = 0
         self.average = [0.0, 0.0]
-        
+
         # self.valence_selector = joblib.load(f"{FEATURES_DIR}/svm_valence.{SELECTOR_EXT}")
         # self.arousal_selector = joblib.load(f"{FEATURES_DIR}/svm_arousal.{SELECTOR_EXT}")
 
         # self.valence_regressor = joblib.load(f"{FEATURES_DIR}/valence_svm.{MODEL_EXT}")
         # self.arousal_regressor = joblib.load(f"{FEATURES_DIR}/arousal_svm.{MODEL_EXT}")
 
-        self.valence_regressor = keras.models.load_model(f"{MODEL_DIR}/fcnn_valence{BOUNDED}.{MODEL_EXT}") #, custom_objects={'custom_activation':custom_activation})
-        self.arousal_regressor = keras.models.load_model(f"{MODEL_DIR}/fcnn_arousal{BOUNDED}.{MODEL_EXT}") #, custom_objects={'custom_activation':custom_activation})
+        self.valence_regressor = keras.models.load_model(f"{MODEL_DIR}/valence{BOUNDED}.{MODEL_EXT}") #, custom_objects={'custom_activation':custom_activation})
+        self.arousal_regressor = keras.models.load_model(f"{MODEL_DIR}/arousal{BOUNDED}.{MODEL_EXT}") #, custom_objects={'custom_activation':custom_activation})
 
     """
     When the thread is started, this function is called which repeatedly grabs the most recent
