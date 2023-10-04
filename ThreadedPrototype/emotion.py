@@ -40,8 +40,9 @@ class EmotionClassificationThreadSPA(threading.Thread):
         self.arousal_selector = joblib.load(f"{FEATURES_DIR}/opensmile_arousal.{SELECTOR_EXT}")
         self.average_count = 0
         self.average = [0.0, 0.0]
-        self.valence_selector = joblib.load(f"{FEATURES_DIR}/svm_valence.{SELECTOR_EXT}")
-        self.arousal_selector = joblib.load(f"{FEATURES_DIR}/svm_arousal.{SELECTOR_EXT}")
+        
+        # self.valence_selector = joblib.load(f"{FEATURES_DIR}/svm_valence.{SELECTOR_EXT}")
+        # self.arousal_selector = joblib.load(f"{FEATURES_DIR}/svm_arousal.{SELECTOR_EXT}")
 
         # self.valence_regressor = joblib.load(f"{FEATURES_DIR}/valence_svm.{MODEL_EXT}")
         # self.arousal_regressor = joblib.load(f"{FEATURES_DIR}/arousal_svm.{MODEL_EXT}")
