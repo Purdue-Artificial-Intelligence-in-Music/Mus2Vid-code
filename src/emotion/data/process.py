@@ -1,7 +1,7 @@
 import os
 import subprocess
 import pandas as pd
-from utils.util import RAW_ANNOTATIONS_DIR, RAW_AUDIO_DIR, PROCESSED_ANNOTATIONS_DIR, PROCESSED_AUDIO_DIR, ANNOTATIONS_FILE
+from utils.util import RAW_ANNOTATIONS_DIR, RAW_AUDIO_DIR, PROCESSED_ANNOTATIONS_DIR, PROCESSED_AUDIO_DIR, ANNOTATIONS_FILE, LOW_BIT_AUDIO_DIR
 
 
 def process_audio() -> None:
@@ -14,22 +14,24 @@ def process_audio() -> None:
     -------
     None
     """
-    if not os.path.exists(PROCESSED_AUDIO_DIR):
-        os.mkdir(PROCESSED_AUDIO_DIR)
+    if not os.path.exists(LOW_BIT_AUDIO_DIR):
+        os.mkdir(LOW_BIT_AUDIO_DIR)
 
     for filename in os.listdir(RAW_AUDIO_DIR):
         print(filename)
         root, ext = os.path.splitext(filename)
-        if ext == ".mp3" and not os.path.exists(f"{PROCESSED_AUDIO_DIR}/{root}.wav"):
+        if ext == ".mp3" and not os.path.exists(f"{LOW_BIT_AUDIO_DIR}/{root}.mp3"):
             subprocess.run([
                 "ffmpeg",
                 "-hide_banner",
                 "-loglevel",
                 "error",
                 "-y",
-                "-i",
+                "-i", 
                 f"{RAW_AUDIO_DIR}/{root}.mp3",
-                f"{PROCESSED_AUDIO_DIR}/{root}.wav",
+                "-q:a",
+                "9",
+                f"{LOW_BIT_AUDIO_DIR}/{root}.mp3",
             ])
 
 
@@ -57,4 +59,4 @@ def process_annotations() -> None:
 
 if __name__ == "__main__":
     process_audio()
-    process_annotations()
+    # process_annotations()

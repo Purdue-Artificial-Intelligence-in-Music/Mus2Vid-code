@@ -16,7 +16,7 @@ def get_test_feats():
     pass
 
 def get_matrix(type):
-    features = get_features("opensmile")
+    features = get_features("opensmile_lb")
     if (type == "valence"):
         targets = get_valence_targets()
         selector = get_valence_selector()
@@ -110,10 +110,21 @@ def build_model(type):
     model = keras.Sequential([
         normalizer,
         keras.layers.Dense(num_feats, activation='relu', kernel_regularizer='l2'),
+        keras.layers.Dropout(0.5),
         # keras.layers.ReLU(max_value = 10),
+        keras.layers.Dense(170, activation='relu', kernel_regularizer='l2'),
+        keras.layers.Dropout(0.5),
+
+        keras.layers.Dense(170, activation='relu', kernel_regularizer='l2'),
+        keras.layers.Dropout(0.5),
+
         keras.layers.Dense(128, activation='relu', kernel_regularizer='l2'),
+        keras.layers.Dropout(0.5),
+
         keras.layers.Dense(64, activation='relu', kernel_regularizer='l2'),
-        keras.layers.Dense(1, activation=custom_activation)
+        keras.layers.Dropout(0.5),
+        
+        keras.layers.Dense(1, activation='relu')
     ])
 
     model.compile(optimizer=keras.optimizers.Adam(learning_rate=0.0005), loss='mean_absolute_error')
@@ -134,15 +145,15 @@ def build_model(type):
 
     plot_loss(history)
 
-    # model.save(f"{MODEL_DIR}/{type}_bounded.keras")
+    model.save(f"{MODEL_DIR}/{type}_lb.keras")
 
-    # test_load(model, test_features, test_labels, f"{MODEL_DIR}/{type}.keras")
+    test_load(test_features, test_labels, f"{MODEL_DIR}/{type}_lb.keras")
 
     return
 
 if __name__ == "__main__":
     build_model("valence")
-    # build_model("arousal")
+    build_model("arousal")
     # features = get_matrix("valence")
     # train_features, test_features, validation_features, train_labels, test_labels, validation_labels = split(features)
     # test_load(test_features, test_labels, f"{MODEL_DIR}/valence_bounded.keras")

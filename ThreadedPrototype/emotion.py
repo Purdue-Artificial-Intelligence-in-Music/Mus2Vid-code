@@ -11,8 +11,8 @@ def custom_activation(x):
     return (K.sigmoid(x) * 8) + 1
 
 MODEL_DIR = "utils"
-BOUNDED = "_bounded"
-MODEL_EXT = "keras"
+BOUNDED = ""
+MODEL_EXT = "model"
 SELECTOR_EXT = "selector"
 FEATURES_DIR = "utils"
 
@@ -32,10 +32,14 @@ class EmotionClassificationThreadSPA(threading.Thread):
         self.stop_request = False
         self.SPA_Thread = SPA_Thread
         self.emo_values = None
-        self.valence_selector = joblib.load(f"{FEATURES_DIR}/opensmile_valence.{SELECTOR_EXT}")
-        self.arousal_selector = joblib.load(f"{FEATURES_DIR}/opensmile_arousal.{SELECTOR_EXT}")
-        self.valence_regressor = keras.models.load_model(f"{MODEL_DIR}/valence{BOUNDED}.{MODEL_EXT}", custom_objects={'custom_activation':custom_activation})
-        self.arousal_regressor = keras.models.load_model(f"{MODEL_DIR}/arousal{BOUNDED}.{MODEL_EXT}", custom_objects={'custom_activation':custom_activation})
+        self.valence_selector = joblib.load(f"{FEATURES_DIR}/svm_valence.{SELECTOR_EXT}")
+        self.arousal_selector = joblib.load(f"{FEATURES_DIR}/svm_arousal.{SELECTOR_EXT}")
+
+        self.valence_regressor = joblib.load(f"{FEATURES_DIR}/valence_svm.{MODEL_EXT}")
+        self.arousal_regressor = joblib.load(f"{FEATURES_DIR}/arousal_svm.{MODEL_EXT}")
+
+        # self.valence_regressor = keras.models.load_model(f"{MODEL_DIR}/valence_svm{BOUNDED}.{MODEL_EXT}") #, custom_objects={'custom_activation':custom_activation})
+        # self.arousal_regressor = keras.models.load_model(f"{MODEL_DIR}/arousal_svm{BOUNDED}.{MODEL_EXT}") #, custom_objects={'custom_activation':custom_activation})
 
     
     """

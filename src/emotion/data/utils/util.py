@@ -4,6 +4,7 @@ RAW_FEATURES_DIR = "./data/raw/deam_dataset/features/features"
 RAW_METADATA_DIR = "./data/raw/deam_dataset/metadata/metadata"
 PROCESSED_ANNOTATIONS_DIR = "./data/processed/annotations"
 PROCESSED_AUDIO_DIR = "./data/processed/audio"
+LOW_BIT_AUDIO_DIR = "./data/processed/low_bit"
 ANNOTATIONS_FILE = "static_annotations_averaged_songs_1_2000.csv"
 
 

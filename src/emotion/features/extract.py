@@ -32,7 +32,7 @@ def extract_opensmile_features(audio_filepaths: list[str]):
         opensmile_features_list.append(sum(smile.process_file(audio_filepath).values.tolist(), []))
 
     if not os.path.exists(FEATURES_DIR): os.mkdir(FEATURES_DIR)
-    joblib.dump(opensmile_features_list, f"{FEATURES_DIR}/opensmile.{FEATURES_EXT}")
+    joblib.dump(opensmile_features_list, f"{FEATURES_DIR}/opensmile_lb.{FEATURES_EXT}")
 
     return pd.DataFrame(data=opensmile_features_list)
 

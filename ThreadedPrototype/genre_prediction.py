@@ -7,7 +7,7 @@ import time
 import threading
 
 MODEL_DIR = "utils"
-MODEL_EXT = "model"
+MODEL_EXT = "keras"
 SELECTOR_EXT = "selector"
 FEATURES_DIR = "utils"
 
@@ -37,7 +37,7 @@ class ModifiedGenrePredictorThread(threading.Thread):
         self.stop_request = False
 
         self.selector = joblib.load(f"{FEATURES_DIR}/genre_features.{SELECTOR_EXT}")
-        self.genre_model = tf.keras.models.load_model(f"{MODEL_DIR}/my_model.{MODEL_EXT}")
+        self.genre_model = tf.keras.models.load_model(f"{MODEL_DIR}/genre_model.{MODEL_EXT}")
     
     """
     When the thread is started, this function is called which repeatedly grabs the most recent
