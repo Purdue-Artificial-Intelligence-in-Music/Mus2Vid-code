@@ -43,18 +43,23 @@ class ImageDisplayThread(threading.Thread):
         self.current_image /= np.float32(256.0)
         self.current_image = cv2.cvtColor(self.current_image, cv2.COLOR_RGB2BGR)
         if self.prompt_thread.prompt != "Black screen":
-            # org
-            org = (50, 50)
-            # fontScale
-            fontScale = 0.7
-            # White color in BGR
-            color = (255, 255, 255)
-            # Line thickness of 2 px
-            thickness = 2
+            prompt_split = self.prompt_thread.prompt.split("\n")
+            i = 0
+            for p in prompt_split:
+                # org
+                org = (50, 50 + i)
+                # fontScale
+                fontScale = 0.7
+                # White color in BGR
+                color = (255, 255, 255)
+                # Line thickness of 2 px
+                thickness = 2
 
-            # Using cv2.putText() method
-            self.current_image = cv2.putText(self.current_image, self.prompt_thread.prompt, org, self.font,
-                                             fontScale, color, thickness, cv2.LINE_AA)
+                # Using cv2.putText() method
+                self.current_image = cv2.putText(self.current_image, p, org, self.font,
+                                                 fontScale, color, thickness, cv2.LINE_AA)
+
+                i += 30
 
     """
     When the thread is started, this function is called which repeatedly displays new images.
