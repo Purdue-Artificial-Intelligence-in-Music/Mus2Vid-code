@@ -9,6 +9,9 @@ import joblib
 import matplotlib.pyplot as plt
 from keras import backend as K
 
+def custom_activation(x):
+    return (K.sigmoid(x) * 8) + 1
+
 def get_test_feats():
     pass
 
@@ -76,9 +79,9 @@ def split(labeled_features):
 
     return training_features, test_features, validation_features, training_labels, test_labels, validation_labels
 
-def test_load(model, test_feats, test_labels, path):
-    # print("loading...")
-    # model = keras.models.load_model(path)
+def test_load(test_feats, test_labels, path):
+    print("loading...")
+    model = keras.models.load_model(path, custom_objects={'custom_activation':custom_activation})
 
     test_preds = model.predict(test_feats).flatten()
     print(test_preds[:10])
@@ -91,9 +94,6 @@ def test_load(model, test_feats, test_labels, path):
     plt.show()
 
     return
-
-def custom_activation(x):
-    return (K.sigmoid(x) * 8) + 1
 
 def build_model(type):
     features = get_matrix(type)
@@ -132,14 +132,17 @@ def build_model(type):
     hist['epoch'] = history.epoch
     hist.tail()
 
-    # plot_loss(history)
+    plot_loss(history)
 
-    model.save(f"{MODEL_DIR}/{type}_bounded.keras")
+    # model.save(f"{MODEL_DIR}/{type}_bounded.keras")
 
-    test_load(model, test_features, test_labels, f"{MODEL_DIR}/{type}.keras")
+    # test_load(model, test_features, test_labels, f"{MODEL_DIR}/{type}.keras")
 
     return
 
 if __name__ == "__main__":
     build_model("valence")
-    build_model("arousal")
+    # build_model("arousal")
+    # features = get_matrix("valence")
+    # train_features, test_features, validation_features, train_labels, test_labels, validation_labels = split(features)
+    # test_load(test_features, test_labels, f"{MODEL_DIR}/valence_bounded.keras")
