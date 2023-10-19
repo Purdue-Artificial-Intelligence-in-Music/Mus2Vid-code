@@ -3,7 +3,6 @@ import pandas as pd
 
 ANNOTATIONS_PATH = "./data/processed/annotations/static_annotations_averaged_songs_1_2000.csv"
 AUDIO_DIR = "./data/processed/audio"
-LOW_BIT_AUDIO_DIR = "./data/processed/low_bit"
 FEATURES_DIR = "./data/interim/features"
 FEATURES_EXT = "features"
 SELECTOR_EXT = "selector"
@@ -16,7 +15,7 @@ def get_audio_filepaths() -> list[str]:
 
     audio_filepaths = []
     for song_id in song_id_list:
-        audio_filepaths.append(f"{LOW_BIT_AUDIO_DIR}/{song_id}.mp3")
+        audio_filepaths.append(f"{AUDIO_DIR}/{song_id}.mp3")
 
     return audio_filepaths
 
