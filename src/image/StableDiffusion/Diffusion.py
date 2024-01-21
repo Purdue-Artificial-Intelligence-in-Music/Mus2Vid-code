@@ -1,20 +1,26 @@
-from diffusers import DiffusionPipeline, DPMSolverMultistepScheduler
+from diffusers import DiffusionPipeline, DPMSolverMultistepScheduler, StableDiffusionImg2ImgPipeline
 import torch
 
 MODEL_ID = "stabilityai/stable-diffusion-2-1-base"
+IMG2IMG_ID = "runwayml/stable-diffusion-v1-5"
 NEGATIVE_PROMPTS = "ugly, tiling, poorly drawn hands, poorly drawn feet, poorly drawn face, out of frame, mutation, mutated, extra limbs, extra legs, extra arms, disfigured, deformed, cross-eye, body out of frame, blurry, bad art, bad anatomy, blurred, text, watermark, grainy, low resolution, cropped, beginner, amateur, oversaturated"
 
-def get_pipe():
+def get_pipe(i2i):
     """
-    Initializes a stable diffusion pipeline
+    Initializes a stable diffusion pipeline, with an option for img2img
     Parameters:
-        void
+        img2img: bool
     Returns:
         pipe: pipeline object
     """
-    pipe = DiffusionPipeline.from_pretrained(MODEL_ID, torch_dtype=torch.float16, revision="fp16")
+    if (i2i == False):
+        pipe = DiffusionPipeline.from_pretrained(MODEL_ID, torch_dtype=torch.float16, revision="fp16")
+    else:
+        pipe = StableDiffusionImg2ImgPipeline.from_pretrained(IMG2IMG_ID, torch_dtype=torch.float16)
+
     pipe.scheduler = DPMSolverMultistepScheduler.from_config(pipe.scheduler.config)
     pipe = pipe.to("cuda")
+
     return pipe
 
 def get_pic(prompt, 

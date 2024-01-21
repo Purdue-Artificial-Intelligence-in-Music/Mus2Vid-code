@@ -298,7 +298,7 @@ class PromptGenerationThread(threading.Thread):
             if (not self.audio_thread.input_on or
                     (self.genre_thread is None or self.genre_thread.genre_output is None or
                      self.emotion_thread is None or self.emotion_thread.emo_values is None)):
-                self.prompt = "Black screen"
+                self.prompt = "Blank screen"
             else:
                 self.prompt = get_prompt(self.genre_thread.genre_output, self.emotion_thread.emo_values[0],
                                            self.emotion_thread.emo_values[1])

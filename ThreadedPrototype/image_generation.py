@@ -1,6 +1,4 @@
-from diffusers import DiffusionPipeline, DPMSolverMultistepScheduler
-
-stable_diffusion_model_id = "stabilityai/stable-diffusion-2-1-base"
+from diffusers import DiffusionPipeline, DPMSolverMultistepScheduler, StableDiffusionImg2ImgPipeline
 import torch
 from realesrgan import RealESRGANer
 from basicsr.archs.rrdbnet_arch import RRDBNet
@@ -12,18 +10,52 @@ import prompting
 import time
 import numpy as np
 
-import sys
-
-sys.path.append("../")
-from src.image.StableDiffusion.Diffusion import get_pipe
-from src.image.Real_ESRGAN.upscale import get_upsampler
-
 DEFAULT_NEGATIVE_PROMPT = "ugly, tiling, poorly drawn hands, poorly drawn feet, poorly drawn face, out of frame, mutation, mutated, extra limbs, extra legs, extra arms, disfigured, deformed, cross-eye, body out of frame, blurry, bad art, bad anatomy, blurred, text, watermark, grainy, low resolution, cropped, beginner, amateur, oversaturated"
+MODEL_ID = "stabilityai/stable-diffusion-2-1-base"
+IMG2IMG_ID = "runwayml/stable-diffusion-v1-5"
+def get_pipe(img2img):
+    """
+    Initializes a stable diffusion pipeline
+    Parameters:
+
+    Returns:
+        pipe: pipeline object
+    """
+    if (img2img):
+        pipe = StableDiffusionImg2ImgPipeline.from_pretrained(IMG2IMG_ID, torch_dtype=torch.float16)
+    else:
+        pipe = DiffusionPipeline.from_pretrained(MODEL_ID, torch_dtype=torch.float16, revision="fp16")
+
+    pipe.scheduler = DPMSolverMultistepScheduler.from_config(pipe.scheduler.config)
+    pipe = pipe.to("cuda")
+
+    return pipe
+
+def get_upsampler(model_str = 'x2'):
+    """    
+    Downloads the real-ESRGAN model into an upsampler object
+
+    Parameters:
+        model_str (str): x2 or x4 default: x2
+        
+    Returns:
+    upsampler object
+    """
+    if (model_str == 'x2'):
+        model = RRDBNet(num_in_ch=3, num_out_ch=3, num_feat=64, num_block=23, num_grow_ch=32, scale=2)
+        netscale = 2
+        file_url = 'https://github.com/xinntao/Real-ESRGAN/releases/download/v0.2.1/RealESRGAN_x2plus.pth'
+    elif (model_str == 'x4'):
+        model = RRDBNet(num_in_ch=3, num_out_ch=3, num_feat=64, num_block=23, num_grow_ch=32, scale=4)
+        netscale = 4
+        file_url = 'https://github.com/xinntao/Real-ESRGAN/releases/download/v0.1.0/RealESRGAN_x4plus.pth'
+    model_path = load_file_from_url(url=file_url)
+    upsampler = RealESRGANer(scale=netscale,model_path=model_path,model=model,half=True)
+    return upsampler
 
 '''
 This class is a thread class that generates images procedurally in real time.
 '''
-
 
 class ImageGenerationThread(threading.Thread):
     """
@@ -39,8 +71,10 @@ class ImageGenerationThread(threading.Thread):
                  name,
                  Prompt_Thread,
                  audio_thread,
-                 blank_image=np.zeros((1024, 1024, 3)),
+                 blank_image = np.zeros((1024, 1024, 3)) + .65, # adding .65 was experimentally decided to provide neutral lighting
                  seed=None,
+                 img2img=False,
+                 strength = .8, # for img2img
                  inference=10,
                  guidance_scale=7.5,
                  imgs_per_prompt=1,
@@ -49,8 +83,10 @@ class ImageGenerationThread(threading.Thread):
                  display_func=None):
         super(ImageGenerationThread, self).__init__()
         self.name = name
-        self.pipe = get_pipe()
+        self.pipe = get_pipe(self.img2img)
         self.seed = seed
+        self.img2img = img2img
+        self.strength = strength
         self.Prompt_Thread = Prompt_Thread
         self.negative_prompt = DEFAULT_NEGATIVE_PROMPT
         self.inference = inference
@@ -85,16 +121,40 @@ class ImageGenerationThread(threading.Thread):
     def run(self):
         while not self.stop_request:
             if not self.Prompt_Thread is None and not (
-                    self.Prompt_Thread.prompt is None or self.Prompt_Thread.prompt == "" or self.Prompt_Thread.prompt == "Black screen"):
+                    self.Prompt_Thread.prompt is None or self.Prompt_Thread.prompt == "" or self.Prompt_Thread.prompt == "Blank screen"):
+                
+                # get prompt
                 prompt = self.Prompt_Thread.prompt
-                images = self.pipe(
-                    str(prompt),
-                    negative_prompt=self.negative_prompt,
-                    num_inference_steps=self.inference,
-                    guidance_scale=self.guidance_scale,
-                    num_images_per_prompt=self.imgs_per_prompt,
-                    generator=self.generator
-                ).images
+
+                # generate image
+                if (self.img2img): # send previous image as an arg
+                    if (self.output == None or self.output == self.blank_image): # if no previous image, use blank image and minimum image influence
+                        self.output = self.blank_image # if it was none
+                        image_strength = 1 # To base image only off of prompt
+                    else: # previous image exists
+                        image_strength = self.strength
+
+                    images = self.pipe(
+                        prompt=str(prompt),
+                        negative_prompt=self.negative_prompt,
+                        num_inference_steps=self.inference,
+                        guidance_scale=self.guidance_scale,
+                        num_images_per_prompt=self.imgs_per_prompt,
+                        generator=self.generator,
+                        image=self.output,
+                        strength = image_strength
+                    ).images
+
+                else: # no img-to-img diffusion or no previous image
+                    images = self.pipe(
+                        prompt=str(prompt),
+                        negative_prompt=self.negative_prompt,
+                        num_inference_steps=self.inference,
+                        guidance_scale=self.guidance_scale,
+                        num_images_per_prompt=self.imgs_per_prompt,
+                        generator=self.generator
+                    ).images
+
                 for image in images:
                     if not image is None:
                         img = numpy.array(image)
