@@ -11,13 +11,13 @@ pipe = StableDiffusionImg2ImgPipeline.from_pretrained(model_id_or_path, torch_dt
 pipe.scheduler = DPMSolverMultistepScheduler.from_config(pipe.scheduler.config)
 pipe = pipe.to(device)
 
-prompt = "A fantasy landscape, trending on artstation, very dark lighting"
+prompt = "A fantasy landscape, trending on artstation, bright, sunny, light"
 last_img = np.zeros((1024, 1024, 3)) + .65
 # Image.fromarray(last_img).save("seed.png")
 
-last_img = pipe(prompt=prompt, image=last_img, strength=1, guidance_scale=7.5, num_inference_steps=30).images
+last_img = pipe(prompt=prompt, image=last_img, strength=1, guidance_scale=7.5, num_inference_steps=10).images
 last_img[0].save("strength.png")
 
 for i in range (0,2):
-    last_img = pipe(prompt=prompt, image=last_img, strength=0.2, guidance_scale=7.5, num_inference_steps=30).images
+    last_img = pipe(prompt=prompt, image=last_img, strength=.8, guidance_scale=7.5, num_inference_steps=30).images
     last_img[0].save(str(i) + ".png")
