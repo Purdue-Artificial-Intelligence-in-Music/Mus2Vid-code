@@ -3,6 +3,7 @@ import matplotlib.image as mpimg
 import random
 import threading
 import time
+import random
 
 ## take float values and output emotion word
 ## values based on data csv file
@@ -39,231 +40,105 @@ def get_emotion_from_values(arousal, valence):
 
 ## use the emotions on the VA model
 ## output text for the different emotions for overall prompt generation
-def get_emotion(emotion_input):
-    emotion_prompt = []
+def get_modifiers(emotion_input):
+    word = ""
+    lighting = ""
+    color = ""
+
     if emotion_input == "surprised":
-        word = "surprised,astonished"
-        lighting = "bright areas with dark shadows"
+        word = "surprise and astonishment"
+        lighting = "bright areas with dark shadows for lighting"
         color = "vibrant and bold colors"
-        emotion_prompt.append(word)
-        emotion_prompt.append(lighting)
-        emotion_prompt.append(color)
+
     if emotion_input == "excited":
-        word = "excited,restless,agitated"
-        lighting = "lively atmosphere,energetic lighting"
+        word = "excitement, restlessness, and agitation"
+        lighting = "lively atmosphere, energetic lighting"
         color = "vibrant and saturated colors"
-        emotion_prompt.append(word)
-        emotion_prompt.append(lighting)
-        emotion_prompt.append(color)
+
     if emotion_input == "joyous":
-        word = "joyous"
+        word = "joy and pleasure"
         lighting = "soft and diffused lighting"
         color = "pastel shades, accents of vibrant colors"
-        emotion_prompt.append(word)
-        emotion_prompt.append(lighting)
-        emotion_prompt.append(color)
+
     if emotion_input == "happy":
-        word = "happy"
-        lighting = "sun lighting,golden hour"
+        word = "happiness"
+        lighting = "sun lighting at golden hour"
         color = "warm and bright colors"
-        emotion_prompt.append(word)
-        emotion_prompt.append(lighting)
-        emotion_prompt.append(color)
+
     if emotion_input == "content":
         word = "content"
         lighting = "soft and warm lighting"
         color = "neutral and earthy tones"
-        emotion_prompt.append(word)
-        emotion_prompt.append(lighting)
-        emotion_prompt.append(color)
+
     if emotion_input == "relaxed":
-        word = "relaxed,tranquil"
-        lighting = "soft lighting,low intensity"
+        word = "relaxation and tranquility"
+        lighting = "soft, low intensity lighting"
         color = "cool and muted tones"
-        emotion_prompt.append(word)
-        emotion_prompt.append(lighting)
-        emotion_prompt.append(color)
+
     if emotion_input == "calm":
-        word = "calm,peaceful"
-        lighting = "ambient lighting,warm and dim"
-        color = "cool and muted tones,pastel shades"
-        emotion_prompt.append(word)
-        emotion_prompt.append(lighting)
-        emotion_prompt.append(color)
+        word = "calm, peace"
+        lighting = "warm, dim, ambient lighting"
+        color = "cool and muted tones, pastel shades"
+
     if emotion_input == "sleepy":
-        word = "sleepy"
+        word = "sleepiness and relaxation"
         lighting = "moon lighting"
-        color = "subdued,warm neutrals"
-        emotion_prompt.append(word)
-        emotion_prompt.append(lighting)
-        emotion_prompt.append(color)
+        color = "subdued, warm neutrals"
+
     if emotion_input == "bored":
-        word = "bored"
-        lighting = "flat,uniform lighting"
+        word = "boredom"
+        lighting = "flat, uniform lighting"
         color = "dull colors"
-        emotion_prompt.append(word)
-        emotion_prompt.append(lighting)
-        emotion_prompt.append(color)
+
     if emotion_input == "sad":
-        word = "sad,melancholy"
+        word = "sadness and melancholy"
         lighting = "shadows and low lighting"
-        color = "dark,deep colors"
-        emotion_prompt.append(word)
-        emotion_prompt.append(lighting)
-        emotion_prompt.append(color)
+        color = "dark, deep colors"
+
     if emotion_input == "depressed":
-        word = "depressed"
-        lighting = "harsh shadows,minimal illumination"
+        word = "depression and woefulness"
+        lighting = "harsh shadows and minimal lighting"
         color = "dark desaturated tones"
-        emotion_prompt.append(word)
-        emotion_prompt.append(lighting)
-        emotion_prompt.append(color)
+
     if emotion_input == "distressed":
-        word = "distressed"
+        word = "distress and agitation"
         lighting = "flickering and unstable lighting"
-        color = "dark,intense colors"
-        emotion_prompt.append(word)
-        emotion_prompt.append(lighting)
-        emotion_prompt.append(color)
+        color = "dark, intense colors"
+
     if emotion_input == "angry":
-        word = "angry,aggressive"
+        word = "anger and aggressiveness"
         lighting = "harsh and intense lighting"
         color = "high contrast color combinations"
-        emotion_prompt.append(word)
-        emotion_prompt.append(lighting)
-        emotion_prompt.append(color)
+
     if emotion_input == "afraid":
-        word = "afraid,fearful"
+        word = "fear and distress"
         lighting = "dim and eerie lighting"
         color = "dark and muted hues"
-        emotion_prompt.append(word)
-        emotion_prompt.append(lighting)
-        emotion_prompt.append(color)
 
-    return emotion_prompt
-
-def perspectiveRandom():
-    angle_modifier = [
-        "extreme close-up",
-        "close-up",
-        "medium shot",
-        "waist and torso shot",
-        "long shot",
-        "wide shot",
-        "full body",
-        "extreme long shot",
-        "from a distance",
-    ]
-    lens_modifier = [
-        "fast shutter speed",
-        "1/1000 sec shutter",
-        "slow shutter speed",
-        "long exposure",
-        "tilt shift photography",
-        "macro lens",
-        "macro photo",
-        "Sigma 105mm f/2.8",
-        "wide angle lens",
-        "ultra-wide shot",
-        "4k",
-    ]
-    artstyle_modifier = [
-        "woodcut painting",
-        "charcoal sketch",
-        "watercolor",
-        "acrylic on canvas",
-        "colored pencil",
-        "oil painting",
-        "airbrush",
-        "digital painting",
-        "low poly,unreal engine,Blender render",
-        "isometric 3D, highest quality render",
-    ]
-
-    angle_random = random.choice(angle_modifier)
-    lens_random = random.choice(lens_modifier)
-    artstyle_random = random.choice(artstyle_modifier)
-
-    return [angle_random, lens_random, artstyle_random]
+    return word, lighting, color
 
 ## function for different type of genre with date
-def get_genre(subgenre):
+def get_subject(subgenre):
     prompt = ""
     if subgenre == "Baroque":
-        prompt = "Baroque Classical Music, 1600-1750"
+        prompt = "Baroque Classical Music, from the years 1600-1750."
     elif subgenre == "Classical":
-        prompt = "Classical music, 1750-1830"
+        prompt = "Classical music, from the years 1750-1830."
     elif subgenre == "Romantic":
-        prompt = "Romantic Classical Music, 1830-1920"
+        prompt = "Romantic Classical Music, from the years 1830-1920."
     elif subgenre == "20th Century":
-        prompt = "Classical Music, 1900-2000"
-
-    return prompt
-
-# some more creative prompts adapted from chatGPT
-def get_subject(subgenre, valence, arousal):
-    quadrant = 2
-    if (valence > 4.5 and arousal > 4.5):
-        quadrant = 0  # strong negative emotions
-    if (valence < 4.5 and arousal > 4.5):
-        quadrant = 1  # strong positive
-    if (valence > 4.5 and arousal < 4.5):
-        quadrant = 2  # mild negative
-    if (valence < 4.5 and arousal < 4.5):
-        quadrant = 3  # mild positive
-
-    prompt = ""
-    if subgenre == "Baroque":
-        prompt = ["baroque era battlefield, muddy, weary soldiers in tattered uniforms",
-                  "A grand baroque atrium, intricate designs, set in the 1700s",
-                  "moonlit baroque garden adorned with ornate statues and overgrown vines",
-                  "Sublime natural landscape, majestic sunrise"][quadrant]
-    elif subgenre == "Classical":
-        prompt = ["stormy, 18th-century ship's deck, with waves crashing against the vessel and wind howling through the sails",
-                "sun-drenched 18th-century countryside, where jubilant peasants gather for a bountiful harvest celebration",
-                "lavish 19th century drawing room filled with genteel society engaging in polite conversation"
-                "Serene countryside, meandering stream with rolling hills"][quadrant]
-    elif subgenre == "Romantic":
-        prompt = ["moonlit balcony in 19th-century Verona, two star-crossed lovers, separated by a tragic fate, pour out their hearts",
-            "breathtaking 19th-century Parisian ballroom, crystal chandeliers, beautiful men and women dancing in ornate suits and dresses.",
-            "tranquil, rain-kissed garden on the outskirts of a 19th-century European town, where a gentle rain showers the roses in bloom"
-            "quaint, sun-kissed garden in a 19th-century countryside. A couple strolls alone holding hands"][quadrant]
-    elif subgenre == "20th Century":
-        prompt = ["eerie, futuristic cityscape bathed in neon lights. Desolate, dilapidated, nighttime.",
-                  "bustling, contemporary city square filled with happy diverse people and cultures",
-                  "contemporary urban cafe with poor weather conditions outside and a few lonely patrons.",
-                  "view from inside a minimalist, sunlit art gallery adorned with abstract paintings."][quadrant]
+        prompt = "Modern Classical Music, from the years 1900-2000."
 
     return prompt
 
 
 ## connect all the text into one prompt to send to SD
 def get_prompt(subgenre, valence, arousal):
-    modify = perspectiveRandom()
-    modify = ""
-    genre = get_genre(subgenre)
+    subject = get_subject(subgenre)
     emotion = get_emotion_from_values(arousal, valence)
-    emotion_mod = get_emotion(emotion)
-    result = [genre, emotion_mod, modify]
-    modify_str = [
-        ", ".join(item) if isinstance(item, list) else item for item in result
-    ]
-    prompt = ", ".join(str(item) for item in modify_str)
+    emotions, lighting, colors = get_modifiers(emotion)
+    prompt = "Generate an artwork inspired by " + subject + "Convey a sense of " + emotions + ". Use exclusively " + lighting + ". Utilize a color pallete dominated by " + colors + "."
     return prompt
-
-
-def get_prompt_2(subgenre, valence, arousal):
-    time = get_genre(subgenre)
-    subject = get_subject(subgenre, valence, arousal)
-    emotion = get_emotion_from_values(arousal, valence)
-    emotion_mod = get_emotion(emotion)
-    result = [time, subject, emotion_mod, emotion]
-    modify_str = [
-        ", ".join(item) if isinstance(item, list) else item for item in result
-    ]
-    prompt = ", ".join(str(item) for item in modify_str)
-    return prompt
-
 
 """
 This class is a thread class that generates prompts procedurally in real time.
