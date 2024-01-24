@@ -1,5 +1,7 @@
+import sys
+sys.path.append("C:\\Users\\TPNml\\Documents\\GitHub\\Mus2Vid-code")
 from src.emotion.model.regressor import EmotionRegressor
-from src.emotion.model.utils.util import get_features, get_valence_targets, get_arousal_targets, FEATURES_DIR, SELECTOR_EXT
+from src.emotion.model.utils.util import get_features, get_valence_targets, get_arousal_targets, FEATURES_DIR, SELECTOR_EXT, MODEL_DIR
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error, mean_absolute_error
 import joblib
@@ -33,10 +35,13 @@ def test(
 def train_and_test() -> None:
     valence_regressor, arousal_regressor = EmotionRegressor(), EmotionRegressor()
 
-    opensmile_features = get_features("opensmile")
+    opensmile_features = get_features("opensmile_lb")
 
-    opensmile_valence_selector = joblib.load(f"{FEATURES_DIR}/opensmile_valence.{SELECTOR_EXT}")
-    opensmile_arousal_selector = joblib.load(f"{FEATURES_DIR}/opensmile_arousal.{SELECTOR_EXT}")
+    #opensmile_valence_selector = joblib.load(f"{FEATURES_DIR}/opensmile_valence.{SELECTOR_EXT}")
+    #opensmile_arousal_selector = joblib.load(f"{FEATURES_DIR}/opensmile_arousal.{SELECTOR_EXT}")
+
+    opensmile_valence_selector = joblib.load(f"{FEATURES_DIR}/fcnn_valence_lb.{SELECTOR_EXT}")
+    opensmile_arousal_selector = joblib.load(f"{FEATURES_DIR}/fcnn_arousal_lb.{SELECTOR_EXT}")
 
     valence_features = opensmile_valence_selector.transform(opensmile_features)
     arousal_features = opensmile_arousal_selector.transform(opensmile_features)

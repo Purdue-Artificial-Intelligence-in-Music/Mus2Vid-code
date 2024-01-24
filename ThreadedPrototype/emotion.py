@@ -13,8 +13,8 @@ def custom_activation(x):
 
 
 MODEL_DIR = "utils"
-BOUNDED = ""
-MODEL_EXT = "model"
+BOUNDED = "_lb"
+MODEL_EXT = "keras"
 SELECTOR_EXT = "selector"
 FEATURES_DIR = "utils"
 
@@ -36,8 +36,8 @@ class EmotionClassificationThreadSPA(threading.Thread):
         self.stop_request = False
         self.SPA_Thread = SPA_Thread
         self.emo_values = None
-        self.valence_selector = joblib.load(f"{FEATURES_DIR}/opensmile_valence.{SELECTOR_EXT}")
-        self.arousal_selector = joblib.load(f"{FEATURES_DIR}/opensmile_arousal.{SELECTOR_EXT}")
+        self.valence_selector = joblib.load(f"{FEATURES_DIR}/fcnn_valence_lb.{SELECTOR_EXT}")
+        self.arousal_selector = joblib.load(f"{FEATURES_DIR}/fcnn_arousal_lb.{SELECTOR_EXT}")
         self.average_count = 0
         self.average = [0.0, 0.0]
 
@@ -46,9 +46,11 @@ class EmotionClassificationThreadSPA(threading.Thread):
 
         # self.valence_regressor = joblib.load(f"{FEATURES_DIR}/valence_svm.{MODEL_EXT}")
         # self.arousal_regressor = joblib.load(f"{FEATURES_DIR}/arousal_svm.{MODEL_EXT}")
-
-        self.valence_regressor = keras.models.load_model(f"{MODEL_DIR}/valence{BOUNDED}.{MODEL_EXT}") #, custom_objects={'custom_activation':custom_activation})
-        self.arousal_regressor = keras.models.load_model(f"{MODEL_DIR}/arousal{BOUNDED}.{MODEL_EXT}") #, custom_objects={'custom_activation':custom_activation})
+        print(f"{MODEL_DIR}/valence{BOUNDED}.{MODEL_EXT}")
+        self.valence_regressor = keras.models.load_model(
+            f"./{MODEL_DIR}/valence{BOUNDED}.{MODEL_EXT}")  # , custom_objects={'custom_activation':custom_activation})
+        self.arousal_regressor = keras.models.load_model(
+            f"./{MODEL_DIR}/arousal{BOUNDED}.{MODEL_EXT}")  # , custom_objects={'custom_activation':custom_activation})
 
     """
     When the thread is started, this function is called which repeatedly grabs the most recent
@@ -70,16 +72,20 @@ class EmotionClassificationThreadSPA(threading.Thread):
                 # print(va_feats)
 
                 v_val = self.valence_regressor.predict(va_feats)
+                v_val = (v_val if v_val < 1.0 else 1.0) if v_val >= 0.0 else 0.0
+                v_val = 1 + 8 * v_val
                 a_val = self.arousal_regressor.predict(ar_feats)
+                a_val = (a_val if a_val < 1.0 else 1.0) if a_val >= 0.0 else 0.0
+                a_val = 1 + 8 * a_val
 
-                self.average[0] = ((self.average_count) / (self.average_count + 1) * self.average[0]
-                                   + v_val / (self.average_count + 1))
-                self.average[1] = ((self.average_count) / (self.average_count + 1) * self.average[1]
-                                   + v_val / (self.average_count + 1))
-                self.average_count += 1
+                # self.average[0] = ((self.average_count) / (self.average_count + 1) * self.average[0]
+                #                   + v_val / (self.average_count + 1))
+                # self.average[1] = ((self.average_count) / (self.average_count + 1) * self.average[1]
+                #                   + v_val / (self.average_count + 1))
+                # self.average_count += 1
 
                 print(f"Valence: %.2f, Arousal: %.2f" % (v_val, a_val))
-                print(f"Average Valence: %.2f, Arousal: %.2f" % (self.average[0], self.average[1]))
+                # print(f"Average Valence: %.2f, Arousal: %.2f" % (self.average[0], self.average[1]))
 
                 # if v_val is None or a_val is None:
                 #    print("prediction bad")

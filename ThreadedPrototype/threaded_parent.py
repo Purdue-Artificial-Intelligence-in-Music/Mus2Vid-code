@@ -1,5 +1,5 @@
 from emotion import *
-from features import *
+from features_modified import *
 from genre_prediction import *
 from image_generation import *
 from prompting import *
@@ -9,7 +9,7 @@ import os
 import cv2
 
 
-STARTING_CHUNK = 88200
+STARTING_CHUNK = 1024
 
 new_image = False
 
