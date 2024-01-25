@@ -4,7 +4,7 @@ import opensmile
 import time
 import threading
 from AudioThread import *
-from AudioThreadWithBuffer import *
+from AudioThreadWithBufferPorted import *
 from basic_pitch_modified.inference import predict_pyaudio
 from basic_pitch_modified import ICASSP_2022_MODEL_PATH
 
@@ -126,10 +126,13 @@ class ModifiedMIDIFeatureThread(threading.Thread):
                 time.sleep(1)
 
 
-class SinglePyAudioThread(AudioThreadWithBuffer):
+class SinglePyAudioThread(AudioThreadWithBufferPorted):
     basic_pitch_model = tf.saved_model.load(str(ICASSP_2022_MODEL_PATH))
 
     def process(self, signal):
+        if np.shape(signal)[0] < 4096:
+            return None
+
         _, midi_data, _ = predict_pyaudio(
             signal,
             SinglePyAudioThread.basic_pitch_model
@@ -153,7 +156,8 @@ class SinglePyAudioThread(AudioThreadWithBuffer):
         self.smile = opensmile.Smile(
             feature_set=F_SET,
             feature_level=F_LEVEL,
+            sampling_rate=44100,
         )
-        self.RATE = 44100
 
-        super().__init__(name, starting_chunk_size, self.process, (), ())
+        super().__init__(name, rate=44100, starting_chunk_size=starting_chunk_size, process_func=self.process,
+                         args_before=(), args_after=())

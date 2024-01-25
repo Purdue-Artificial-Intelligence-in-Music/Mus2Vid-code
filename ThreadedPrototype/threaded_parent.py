@@ -1,15 +1,16 @@
 from emotion import *
-from features import *
+from features_modified import *
 from genre_prediction import *
 from image_generation import *
 from prompting import *
 from img_display_thread import *
+from img_display_thread_amp import *
 import time
 import os
 import cv2
 
 
-STARTING_CHUNK = 88200
+STARTING_CHUNK = 1024
 
 new_image = False
 
@@ -40,12 +41,14 @@ def main():
                                        Prompt_Thread=Prompt_Thread,
                                        display_func=None,
                                        audio_thread=SPA_Thread)
-    Display_Thread = ImageDisplayThread(name="Display_Thread",
+    Display_Thread = ImageDisplayThreadWithAmpTracking(name="Display_Thread",
                                         Prompt_Thread=Prompt_Thread,
-                                        Img_Thread=Img_Thread)
+                                        Img_Thread=Img_Thread,
+                                        SPA_Thread=SPA_Thread)
 
     print("All threads init'ed")
     try:
+
         Display_Thread.start()
         print("============== Display started")
         SPA_Thread.start()
@@ -62,8 +65,11 @@ def main():
         print("============== Img started")
         while True:
             print("\n\n")
-            print(Prompt_Thread.prompt)
-            time.sleep(0.5)
+            print("Prompt: ", Prompt_Thread.prompt)
+            print("Buffer size: ", SPA_Thread.buffer_index)
+            if Emo_Thread.emo_values is not None:
+                print(f"Valence: %.2f, Arousal: %.2f" % (Emo_Thread.emo_values[0], Emo_Thread.emo_values[1]))
+            time.sleep(2)
     except KeyboardInterrupt:
         SPA_Thread.stop_request = True
         MMF_Thread.stop_request = True

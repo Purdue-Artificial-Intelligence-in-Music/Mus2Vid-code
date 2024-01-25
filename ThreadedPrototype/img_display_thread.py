@@ -18,12 +18,13 @@ class ImageDisplayThread(threading.Thread):
 
     def __init__(self, name, Prompt_Thread, Img_Thread,
                  window_name="Image",
-                 static_dur=1200,
-                 blend_frames=50,
+                 static_dur=1,
+                 blend_frames=100,
                  blend_mspf=1,
-                 font=cv2.FONT_HERSHEY_SIMPLEX):
+                 font=cv2.FONT_HERSHEY_TRIPLEX):
         super(ImageDisplayThread, self).__init__()
         self.name = name
+        self.blank_image = np.zeros((1024, 1024, 3)) + .65
         self.prompt_thread = Prompt_Thread
         self.image_thread = Img_Thread
         self.window_name = window_name
@@ -42,7 +43,7 @@ class ImageDisplayThread(threading.Thread):
         self.current_image = np.float32(self.current_image)
         self.current_image /= np.float32(256.0)
         self.current_image = cv2.cvtColor(self.current_image, cv2.COLOR_RGB2BGR)
-        if self.prompt_thread.prompt != "Black screen":
+        if self.prompt_thread.prompt != "Blank screen":
             prompt_split = self.prompt_thread.prompt.split("\n")
             i = 0
             for p in prompt_split:
@@ -60,6 +61,7 @@ class ImageDisplayThread(threading.Thread):
                                                  fontScale, color, thickness, cv2.LINE_AA)
 
                 i += 30
+        print("Get_image done")
 
     """
     When the thread is started, this function is called which repeatedly displays new images.
