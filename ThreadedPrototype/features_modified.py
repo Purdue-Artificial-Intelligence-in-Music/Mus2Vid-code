@@ -130,7 +130,7 @@ class SinglePyAudioThread(AudioThreadWithBufferPorted):
     basic_pitch_model = tf.saved_model.load(str(ICASSP_2022_MODEL_PATH))
 
     def process(self, signal):
-        if np.shape(signal)[0] < 1000:
+        if np.shape(signal)[0] < 4096:
             return None
 
         _, midi_data, _ = predict_pyaudio(
@@ -156,6 +156,7 @@ class SinglePyAudioThread(AudioThreadWithBufferPorted):
         self.smile = opensmile.Smile(
             feature_set=F_SET,
             feature_level=F_LEVEL,
+            sampling_rate=44100,
         )
 
         super().__init__(name, rate=44100, starting_chunk_size=starting_chunk_size, process_func=self.process,
