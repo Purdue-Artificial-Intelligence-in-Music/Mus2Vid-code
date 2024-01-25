@@ -167,9 +167,10 @@ class ImageGenerationThread(threading.Thread):
                 for image in images:
                     if not image is None:
                         img = numpy.array(image)
-                    sr_image, _ = self.upsampler.enhance(img)
+                    if(self.img2img):
+                        img, _ = self.upsampler.enhance(img)
                     # self.output = [Image.fromarray(sr_image)]
-                    self.output = sr_image
+                    self.output = img
                     if not self.display_func is None:
                         self.display_func(self.output)
             else:
