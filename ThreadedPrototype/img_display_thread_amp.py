@@ -57,6 +57,8 @@ class ImageDisplayThreadWithAmpTracking(threading.Thread):
 
     def get_image(self):
         if self.blending is False:
+            # Static image (no blending)
+            # Check if image needs to be updated
             if time.time() - self.time_last_change > self.static_dur:
                 self.time_last_change = time.time()
                 self.past_image = self.current_image
@@ -76,14 +78,20 @@ class ImageDisplayThreadWithAmpTracking(threading.Thread):
             else:
                 self.output_image = self.current_image
         else:
+            # Blending between past and current image
             if self.blend_time_reset is False:
                 self.blend_time_reset = True
                 self.time_blend_start = time.time()
 
             self.blend_i = min(1.0, (time.time() - self.time_blend_start) / self.blend_time)
-            self.output_image = cv2.addWeighted(self.past_image, 1 - self.blend_i,
-                                                self.current_image, self.blend_i,
-                                                0.0, dtype=cv2.CV_32F)
+            try:
+                self.output_image = cv2.addWeighted(self.past_image, 1 - self.blend_i,
+                                                    self.current_image, self.blend_i,
+                                                    0.0, dtype=cv2.CV_32F)
+            except Exception:
+                print(np.shape(self.current_image))
+                print(np.shape(self.past_image))
+                self.output_image = self.blank_image
             if self.blend_i == 1:
                 self.blending = False
 
@@ -100,7 +108,7 @@ class ImageDisplayThreadWithAmpTracking(threading.Thread):
                 if dB_val > self.bloom_threshold:
                     bloom_val = (-1 * dB_val / 0.6)
                     if bloom_val > self.bloom_val:
-                        self.bloom_val = bloom_val
+                        self.bloom_val = bloom_val  # The value by which to turn the screen white
                         self.time_last_bloom = time.time()
 
             # Apply bloom
@@ -108,7 +116,8 @@ class ImageDisplayThreadWithAmpTracking(threading.Thread):
             self.output_image *= 1 - (self.bloom_val * decay_mult)
             self.output_image += self.bloom_val * decay_mult
 
-            if (time.time() - self.time_prompt_update) > 1:
+            # Refresh prompt
+            if self.image_thread.refresh_prompt:
                 # Text prompt
                 word_split = self.prompt_thread.prompt.split(" ")
 
@@ -124,6 +133,7 @@ class ImageDisplayThreadWithAmpTracking(threading.Thread):
                 prompt_split.append(curr_str)
                 self.stored_prompt = prompt_split
                 self.time_prompt_update = time.time()
+                self.image_thread.refresh_prompt = False
 
             # Print text
             i = 0
@@ -136,11 +146,9 @@ class ImageDisplayThreadWithAmpTracking(threading.Thread):
                 color = (255, 255, 255)
                 # Line thickness of 2 px
                 thickness = 1
-
                 # Using cv2.putText() method
                 self.output_image = cv2.putText(self.output_image, p, org, self.font,
                                                 fontScale, color, thickness, cv2.LINE_AA)
-
                 i += 30
 
     """
