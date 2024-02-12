@@ -95,7 +95,7 @@ def test_load(test_feats, test_labels, path):
 
     return
 
-def build_model(type):
+def build_model(type, dropout=0.3):
     features = get_matrix(type)
     train_features, test_features, validation_features, train_labels, test_labels, validation_labels = split(features)
 
@@ -110,30 +110,30 @@ def build_model(type):
     model = keras.Sequential([
         normalizer,
         keras.layers.Dense(num_feats, activation='relu', kernel_regularizer='l2'),
-        keras.layers.Dropout(0.5),
+        keras.layers.Dropout(dropout),
         # keras.layers.ReLU(max_value = 10),
         keras.layers.Dense(170, activation='relu', kernel_regularizer='l2'),
-        keras.layers.Dropout(0.5),
+        keras.layers.Dropout(dropout),
 
         keras.layers.Dense(170, activation='relu', kernel_regularizer='l2'),
-        keras.layers.Dropout(0.5),
+        keras.layers.Dropout(dropout),
 
         keras.layers.Dense(128, activation='relu', kernel_regularizer='l2'),
-        keras.layers.Dropout(0.5),
+        keras.layers.Dropout(dropout),
 
         keras.layers.Dense(64, activation='relu', kernel_regularizer='l2'),
-        keras.layers.Dropout(0.5),
+        keras.layers.Dropout(dropout),
         
         keras.layers.Dense(1, activation='relu')
     ])
 
-    model.compile(optimizer=keras.optimizers.Adam(learning_rate=0.0005), loss='mean_absolute_error')
+    model.compile(optimizer=keras.optimizers.Adam(learning_rate=0.0005), loss='mean_square_error')
 
     history = model.fit(
         x = train_features,
         y = train_labels,
         validation_data = (validation_features, validation_labels),
-        epochs=100,
+        epochs=20,
         verbose=1,
         batch_size=8,
         callbacks=[keras.callbacks.EarlyStopping(monitor='val_loss', patience=10, restore_best_weights=True)]

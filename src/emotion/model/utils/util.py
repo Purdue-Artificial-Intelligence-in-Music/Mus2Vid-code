@@ -1,8 +1,8 @@
 import joblib
 import pandas as pd
 
-
-ANNOTATIONS_PATH = "./data/processed/annotations/static_annotations_averaged_songs_1_2000.csv"
+# ANNOTATIONS_PATH = "./data/processed/annotations/static_annotations_averaged_songs_1_2000.csv"
+ANNOTATIONS_PATH = "./data/processed/annotations/static_annotations_averaged_songs_all.csv"
 FEATURES_DIR = "./data/interim/features"
 TARGETS_DIR = "./data/interim/targets"
 MODEL_DIR = "./models/emotion"
@@ -11,8 +11,10 @@ SELECTOR_EXT = "selector"
 TARGETS_EXT = "targets"
 MODEL_EXT = "model"
 
+
 def get_valence_selector():
     return joblib.load(f"{FEATURES_DIR}/fcnn_valence_lb.{SELECTOR_EXT}")
+
 
 def get_arousal_selector():
     return joblib.load(f"{FEATURES_DIR}/fcnn_arousal_lb.{SELECTOR_EXT}")

@@ -17,7 +17,7 @@ def _save_opensmile_feature_selectors():
     -------
     None
     """
-    opensmile_features = joblib.load(f"{FEATURES_DIR}/opensmile.{FEATURES_EXT}")
+    opensmile_features = joblib.load(f"{FEATURES_DIR}/opensmile_lb.{FEATURES_EXT}")
     valence_targets = get_valence_targets()
     arousal_targets = get_arousal_targets()
 
@@ -46,13 +46,13 @@ def get_best_opensmile_features(opensmile_features: pd.DataFrame) -> tuple[pd.Da
     opensmile_arousal_features: pandas.DataFrame
     """
     if not (
-        os.path.exists(f"{FEATURES_DIR}/fcnn_valence.{SELECTOR_EXT}") and
-        os.path.exists(f"{FEATURES_DIR}/fcnn_arousal.{SELECTOR_EXT}")
+        os.path.exists(f"{FEATURES_DIR}/fcnn_valence_lb.{SELECTOR_EXT}") and
+        os.path.exists(f"{FEATURES_DIR}/fcnn_arousal_lb.{SELECTOR_EXT}")
     ):
         _save_opensmile_feature_selectors()
 
-    opensmile_valence_selector = joblib.load(f"{FEATURES_DIR}/fcnn_valence.{SELECTOR_EXT}")
-    opensmile_arousal_selector = joblib.load(f"{FEATURES_DIR}/fcnn_arousal.{SELECTOR_EXT}")
+    opensmile_valence_selector = joblib.load(f"{FEATURES_DIR}/fcnn_valence_lb.{SELECTOR_EXT}")
+    opensmile_arousal_selector = joblib.load(f"{FEATURES_DIR}/fcnn_arousal_lb.{SELECTOR_EXT}")
 
     opensmile_valence_features = opensmile_valence_selector.transform(opensmile_features)
     opensmile_arousal_features = opensmile_arousal_selector.transform(opensmile_features)

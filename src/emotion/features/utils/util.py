@@ -1,7 +1,7 @@
 import pandas as pd
 
 
-ANNOTATIONS_PATH = "./data/processed/annotations/static_annotations_averaged_songs_1_2000.csv"
+ANNOTATIONS_PATH = "./data/processed/annotations/static_annotations_averaged_songs_all.csv"
 AUDIO_DIR = "./data/processed/audio"
 FEATURES_DIR = "./data/interim/features"
 FEATURES_EXT = "features"

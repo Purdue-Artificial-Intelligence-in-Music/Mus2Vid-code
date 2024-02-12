@@ -3,12 +3,9 @@ from features_modified import *
 from genre_prediction import *
 from image_generation import *
 from prompting import *
-from img_display_thread import *
 from img_display_thread_amp import *
 import time
 import os
-import cv2
-
 
 STARTING_CHUNK = 1024
 
@@ -21,7 +18,7 @@ def display_images_old(pipe):
         image.save(name)
 
 def main():
-    dir = '../../Mus2Vid-code-old/ThreadedPrototype/image_output_cache'
+    dir = 'image_output_cache'
     for f in os.listdir(dir):
         os.remove(os.path.join(dir, f))
     SPA_Thread = SinglePyAudioThread(name="SPA_Thread", starting_chunk_size=STARTING_CHUNK)

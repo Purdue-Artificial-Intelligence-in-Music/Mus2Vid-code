@@ -1,8 +1,5 @@
-import numpy as np
 import tensorflow as tf
 import opensmile
-import time
-import threading
 from AudioThread import *
 from AudioThreadWithBufferPorted import *
 from basic_pitch_modified.inference import predict_pyaudio
