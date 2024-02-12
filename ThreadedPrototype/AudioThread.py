@@ -9,7 +9,7 @@ This class is a template class for a thread that reads in audio from PyAudio.
 
 
 class AudioThread(threading.Thread):
-    def __init__(self, name, rate, starting_chunk_size, process_func, args_before=(), args_after=()):
+    def __init__(self, name, starting_chunk_size, process_func, args_before=(), args_after=()):
         """
         Initializes an AudioThread.
         Parameters:
@@ -30,7 +30,7 @@ class AudioThread(threading.Thread):
         self.stream = None
         self.FORMAT = pyaudio.paFloat32
         self.CHANNELS = 1
-        self.RATE = rate
+        self.RATE = 44100
         self.starting_chunk_size = starting_chunk_size
         self.CHUNK = self.starting_chunk_size * self.CHANNELS
 
@@ -113,7 +113,6 @@ class AudioThread(threading.Thread):
         Parameters: none user-exposed
         Returns: nothing of importance to the user
         """
-        print("Started callback")
         numpy_array = np.frombuffer(in_data, dtype=np.float32)
         data = np.zeros(self.starting_chunk_size, dtype=np.float32)
         for i in range(0, self.CHANNELS):
@@ -121,5 +120,4 @@ class AudioThread(threading.Thread):
         data /= np.float32(self.CHANNELS)
         self.audio_on(data)
         self.data = self.process_func(*self.args_before, data, *self.args_after)
-        print("Finished callback")
         return None, pyaudio.paContinue

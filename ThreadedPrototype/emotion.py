@@ -14,11 +14,11 @@ def custom_activation(x):
     return (K.sigmoid(x) * 8) + 1
 
 
-MODEL_DIR = "utils"
+MODEL_DIR = "../../Mus2Vid-code-old/ThreadedPrototype/utils"
 BOUNDED = "_svm"
 MODEL_EXT = "model"
 SELECTOR_EXT = "selector"
-FEATURES_DIR = "utils"
+FEATURES_DIR = "../../Mus2Vid-code-old/ThreadedPrototype/utils"
 
 
 class EmotionClassificationThreadSPA(threading.Thread):

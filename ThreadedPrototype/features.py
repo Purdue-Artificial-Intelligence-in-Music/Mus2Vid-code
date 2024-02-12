@@ -4,17 +4,15 @@ import opensmile
 import time
 import threading
 from AudioThread import *
-from AudioThreadWithBuffer import *
 from basic_pitch_modified.inference import predict_pyaudio
 from basic_pitch_modified import ICASSP_2022_MODEL_PATH
-
 BASIC_PITCH_MODEL = tf.saved_model.load(str(ICASSP_2022_MODEL_PATH))
 
+        
 '''
 This class is a thread class that predicts the genre of input notes in real time.
 '''
-
-
+                
 class ModifiedMIDIFeatureThread(threading.Thread):
     def get_midi_features(midi_obj):
         """
@@ -59,11 +57,10 @@ class ModifiedMIDIFeatureThread(threading.Thread):
         pitch_class_hist = np.sum(chroma, axis=1)
 
         features = ModifiedMIDIFeatureThread.normalize_features([tempo, num_sig_changes, resolution, ts_1,
-                                                                 ts_2, melody_complexity, melody_range] + list(
-            pitch_class_hist))
+                                ts_2, melody_complexity, melody_range] + list(pitch_class_hist))
 
         features = np.asarray(features)
-        features = np.expand_dims(features, axis=0)
+        features = np.expand_dims(features, axis = 0)
 
         return features
 
@@ -90,8 +87,7 @@ class ModifiedMIDIFeatureThread(threading.Thread):
         pitch_class_hist = [((f - 0) / 100) for f in features[7:-1]]
 
         # Return the normalized feature vector
-        return [tempo, num_sig_changes, resolution, time_sig_1, time_sig_2, melody_complexity,
-                melody_range] + pitch_class_hist
+        return [tempo, num_sig_changes, resolution, time_sig_1, time_sig_2, melody_complexity, melody_range] + pitch_class_hist
 
     """
     This function is called when a GenrePredictorThread is created. It sets the BasicPitchThread to grab MIDI data from.
@@ -99,8 +95,7 @@ class ModifiedMIDIFeatureThread(threading.Thread):
         name: the name of the thread
         BP_Thread: a reference to the BasicPitchThread to use
     Returns: nothing
-    """
-
+    """ 
     def __init__(self, name, SinglePyAudioThread):
         super(ModifiedMIDIFeatureThread, self).__init__()
         self.SinglePyAudioThread = SinglePyAudioThread
@@ -114,21 +109,19 @@ class ModifiedMIDIFeatureThread(threading.Thread):
     Parameters: nothing
     Returns: nothing
     """
-
     def run(self):
         while not self.stop_request:
             if not self.SinglePyAudioThread.data is None:
                 midi_data, _ = self.SinglePyAudioThread.data
-                if (not midi_data is None) and (len(midi_data.instruments) != 0):
+                if (not midi_data is None) and (len(midi_data.instruments) != 0): 
                     self.midi_features = ModifiedMIDIFeatureThread.get_midi_features(midi_data)
                 time.sleep(0.2)
             else:
                 time.sleep(1)
 
-
-class SinglePyAudioThread(AudioThreadWithBuffer):
+class SinglePyAudioThread(AudioThread):
     basic_pitch_model = tf.saved_model.load(str(ICASSP_2022_MODEL_PATH))
-
+    
     def process(self, signal):
         _, midi_data, _ = predict_pyaudio(
             signal,
@@ -142,18 +135,17 @@ class SinglePyAudioThread(AudioThreadWithBuffer):
         # convert from 2d list to 1d list
         smile_feats = sum(smile_feats, [])
         # convert to numpy array
-        smile_feats = np.asarray(smile_feats).reshape(
-            (1, 988))  # there are 988 emobase features. 1 row = 1 audio clip, each column is a feature
+        smile_feats = np.asarray(smile_feats).reshape((1, 988)) # there are 988 emobase features. 1 row = 1 audio clip, each column is a feature
 
         return (midi_data, smile_feats)
-
-    def __init__(self, name, starting_chunk_size,
-                 F_SET=opensmile.FeatureSet.emobase,
-                 F_LEVEL=opensmile.FeatureLevel.Functionals):
+    
+    def __init__(self, name, starting_chunk_size, 
+                 F_SET = opensmile.FeatureSet.emobase, 
+                 F_LEVEL = opensmile.FeatureLevel.Functionals):
         self.smile = opensmile.Smile(
-            feature_set=F_SET,
-            feature_level=F_LEVEL,
-        )
+                                    feature_set = F_SET,
+                                    feature_level = F_LEVEL,
+                                )
         self.RATE = 44100
 
         super().__init__(name, starting_chunk_size, self.process, (), ())

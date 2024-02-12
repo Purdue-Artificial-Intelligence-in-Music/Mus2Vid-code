@@ -41,11 +41,12 @@ class AudioThreadWithBufferPorted(threading.Thread):
         self.stop_request = False
         self.data = None
 
-        self.pred_length = 4
-        self.desired_buffer_size = self.pred_length * self.RATE * self.CHANNELS
+        self.pred_length = 4    # number of seconds of audio the buffer should store
+        self.desired_buffer_size = self.pred_length * self.RATE * self.CHANNELS     # desired buffer size in samples
+        # round to nearest multiple of self.CHUNK
         self.buffer_size = self.desired_buffer_size + self.CHUNK - (self.desired_buffer_size % self.CHUNK)
         self.audio_buffer = np.zeros(self.buffer_size, dtype=self.dtype)  # set a zero array
-        self.buffer_index = 0
+        self.buffer_index = 0   # current last sample stored in buffer
 
     def set_args_before(self, a):
         """
@@ -125,6 +126,7 @@ class AudioThreadWithBufferPorted(threading.Thread):
         Parameters: none user-exposed
         Returns: nothing of importance to the user
         """
+        # Downsample audio to mono
         numpy_array = np.frombuffer(in_data, dtype=self.dtype)
         data = np.zeros(self.starting_chunk_size, dtype=np.float64)
         for i in range(0, self.CHANNELS):
@@ -134,19 +136,16 @@ class AudioThreadWithBufferPorted(threading.Thread):
         data = self.dtype(data)
         # self.data = self.process_func(*self.args_before, data, *self.args_after)
 
+        # Add audio to buffer
         if not self.buffer_index + len(data) <= self.buffer_size:
             # Overflow: Reset or handle as per your requirement
             # self.buffer_index = 0
             self.audio_buffer[:self.buffer_size - len(data)] = self.audio_buffer[len(data):self.buffer_size]
             self.buffer_index -= len(data)
-
         self.audio_buffer[self.buffer_index:self.buffer_index + len(data)] = data
         self.buffer_index += len(data)
 
-        #print(self.buffer_index)
-
-        #print("Added data")
-
+        # Run process_func
         self.data = self.process_func(*self.args_before, self.get_last_samples(self.pred_length * self.RATE),
                                       *self.args_after)
 

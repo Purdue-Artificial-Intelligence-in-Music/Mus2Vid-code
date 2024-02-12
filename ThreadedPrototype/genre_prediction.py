@@ -6,10 +6,10 @@ import joblib
 import time
 import threading
 
-MODEL_DIR = "utils"
+MODEL_DIR = "../../Mus2Vid-code-old/ThreadedPrototype/utils"
 MODEL_EXT = "keras"
 SELECTOR_EXT = "selector"
-FEATURES_DIR = "utils"
+FEATURES_DIR = "../../Mus2Vid-code-old/ThreadedPrototype/utils"
 
 def get_subgenre(num):
     genre_list = ['20th Century', 'Romantic', 'Classical', 'Baroque']

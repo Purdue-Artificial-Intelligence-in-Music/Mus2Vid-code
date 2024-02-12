@@ -21,7 +21,7 @@ def display_images_old(pipe):
         image.save(name)
 
 def main():
-    dir = 'image_output_cache'
+    dir = '../../Mus2Vid-code-old/ThreadedPrototype/image_output_cache'
     for f in os.listdir(dir):
         os.remove(os.path.join(dir, f))
     SPA_Thread = SinglePyAudioThread(name="SPA_Thread", starting_chunk_size=STARTING_CHUNK)
