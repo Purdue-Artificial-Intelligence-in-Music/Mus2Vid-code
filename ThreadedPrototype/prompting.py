@@ -134,7 +134,7 @@ def get_modifiers(emotion_input):
         color = "dark and muted hues"
         actions = ["depicting a lone violinist frozen mid-performance, their hands trembling and eyes darting nervously as they struggle to maintain composure", "portraying a hushed audience, their faces etched with worry as they exchange fearful whispers and steal nervous glances at the empty stage, anticipation of the unknown filling that air","depicting a lone figure in the corner of the music hall, their eyes wide with fear as they clutch onto their instrument, the eerie silence echoing their apprehension"]
         action = random.choice(actions)
-    return word, lighting, color
+    return word, lighting, color, action
 
 ## function for different type of genre with date
 def get_subject(subgenre):
