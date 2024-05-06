@@ -116,6 +116,8 @@ class ImageGenerationThread(threading.Thread):
 
         self.stop_request = False
 
+        self.refresh_prompt = True
+
     def set_negative_prompt(self, prompt):
         self.negative_prompt = prompt
 
@@ -170,6 +172,7 @@ class ImageGenerationThread(threading.Thread):
                     sr_image, _ = self.upsampler.enhance(img)
                     # self.output = [Image.fromarray(sr_image)]
                     self.output = sr_image
+                    self.refresh_prompt = True
                     if not self.display_func is None:
                         self.display_func(self.output)
             else:

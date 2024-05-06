@@ -55,6 +55,7 @@ class ImageDisplayThreadWithAmpTracking(threading.Thread):
         self.time_last_bloom = time.time()
         self.bloom_val = 0.0
 
+
     def get_image(self):
         if self.blending is False:
             # Static image (no blending)

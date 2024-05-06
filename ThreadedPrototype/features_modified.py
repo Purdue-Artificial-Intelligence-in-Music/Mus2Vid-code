@@ -1,6 +1,5 @@
 import tensorflow as tf
 import opensmile
-from AudioThread import *
 from AudioThreadWithBufferPorted import *
 from basic_pitch_modified.inference import predict_pyaudio
 from basic_pitch_modified import ICASSP_2022_MODEL_PATH
