@@ -5,6 +5,9 @@ import threading
 import time
 import random
 
+# Create OpenAI client instance
+client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
+
 ## take float values and output emotion word
 ## values based on data csv file
 ## Some emotions based on VA model is not on there so I used the closest synonym
@@ -162,6 +165,59 @@ def get_prompt(subgenre, valence, arousal):
     prompts = [prompt_one, prompt_two,prompt_three]
     prompt = random.choice(prompts)
     return prompt
+
+## function for the LLM model
+def get_prompt_llm(valence, arousal, genre):
+    while True:
+        emotion = get_emotion_from_values(arousal, valence)
+        prompt_template = """
+        Generate a prompt for a Stable Diffusion with valence: {valence}, arousal: {arousal}, genre: {genre}, emotion: {emotion}. 
+        Follow the format below to output the result:
+        "[emotion], [color], [background], [elements], [story], [prompt itself]"
+        """
+        prompt = prompt_template.format(valence=valence, arousal=arousal, genre=genre, emotion=emotion)
+
+        system_prompt = """
+
+You are an expert at crafting evocative and precise prompts for Stable Diffusion, an AI image generator. Your goal is to generate a prompt that meticulously captures a specific emotional and artistic atmosphere, with a strong focus on lighting, color, action, and potential elements within the scene.
+
+**Guidance:**
+
+1. **Color Psychology:**  Utilize the principles of color theory to evoke the desired emotional response. Leverage the relationship between colors and emotions, considering the impact of hue, saturation, and value.
+2. **Lighting:** Describe the type, direction, intensity, and color temperature of the light sources in the scene. Consider the interplay of light and shadow to create depth and atmosphere.
+3. **Action:**  Incorporate dynamic elements that infuse the scene with a sense of movement, energy, or change. This could involve characters engaged in activities, objects in motion, natural forces at play, or even abstract visual effects.
+4. **Composition and Elements:**  Strategically arrange elements within the frame to create a visually compelling composition that reinforces the intended emotional tone. Suggest potential elements that could be integrated into the scene, such as characters, creatures, objects, or natural features, ensuring they align with the specified genre and emotion.
+5. **Specific Details:** Employ precise and evocative language to describe the scene, characters, objects, lighting, and atmosphere. Articulate the desired artistic style within the chosen genre, referencing specific techniques or visual cues.
+6. **Prompt Format:** Ensure your generated prompt adheres to the correct syntax and structure for Stable Diffusion, including any relevant parameters or modifiers.
+
+**Example Output (with filled parameters):**
+
+Valence: 2.2 
+Arousal: 4.57
+Genre: Fantasy
+Emotion: Joy
+
+_(Your generated prompt could look something like this):_
+
+"A breathtaking fantasy landscape bathed in the warm, golden light of a late afternoon sun filtering through the emerald leaves of ancient trees. Vibrant wildflowers in full bloom sway rhythmically in a gentle breeze, their petals shimmering with dew. A cascading waterfall, crystal clear and invigorating, plunges down a moss-covered cliff face, its mist refracting the sunlight into a spectrum of iridescent colors. In the distance, a majestic castle, its turrets adorned with fluttering banners, basks in the warm glow of the setting sun. Consider incorporating a group of fairies reveling in the sunlight, their wings shimmering with iridescent hues, or a majestic unicorn gracefully grazing in the flower-filled meadow. The entire scene is infused with an overwhelming sense of joy and exuberance, as if nature itself is rejoicing."
+
+**Additional Considerations:**
+
+* You can further refine the prompt by specifying camera angles, focal points, or desired levels of detail.
+        """
+        completion = client.chat.completions.create(
+            model="gpt-4o",
+            messages=[
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": prompt},
+            ],
+        )
+        response = completion.choices[0].message.content
+        if "Error" in response:
+            print(response)
+            time.sleep(3)
+            continue
+        return response
 
 """
 This class is a thread class that generates prompts procedurally in real time.
