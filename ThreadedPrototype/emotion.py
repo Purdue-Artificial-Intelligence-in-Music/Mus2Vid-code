@@ -20,7 +20,9 @@ MODEL_EXT = "model"
 SELECTOR_EXT = "selector"
 FEATURES_DIR = "utils"
 
-
+"""
+This thread is responsible for reading the Basic Pitch data from the SinglePyAudio thread (SPA), and storing VA values in self.emo_values.
+"""
 class EmotionClassificationThreadSPA(threading.Thread):
     # Import model
 
