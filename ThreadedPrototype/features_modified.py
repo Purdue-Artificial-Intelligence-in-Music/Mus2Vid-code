@@ -9,8 +9,6 @@ BASIC_PITCH_MODEL = tf.saved_model.load(str(ICASSP_2022_MODEL_PATH))
 '''
 This class is a thread class that predicts the genre of input notes in real time.
 '''
-
-
 class ModifiedMIDIFeatureThread(threading.Thread):
     def get_midi_features(midi_obj):
         """
@@ -122,6 +120,9 @@ class ModifiedMIDIFeatureThread(threading.Thread):
                 time.sleep(1)
 
 
+'''
+This class is a thread class that is supposed to run Basic Pitch in real time while simultaneously storing audio for other threads to use.
+'''
 class SinglePyAudioThread(AudioThreadWithBufferPorted):
     basic_pitch_model = tf.saved_model.load(str(ICASSP_2022_MODEL_PATH))
 
